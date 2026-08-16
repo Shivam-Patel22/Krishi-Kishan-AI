@@ -299,15 +299,124 @@ def calculate_agronomic_recommendation(
     all_warnings.extend(micro_warnings)
     all_warnings.extend(weather_warnings)
 
-    # Step F: Rationale & Explainability
-    explanation = (
-        f"Recommendation Rationale for {crop_name} ({area_ha:.1f} Hectares):\n"
-        f"1. Soil Nitrogen is rated {n_rating.upper()} ({soil_n_val:.1f} kg/ha). Adjusted N target: {target_n_per_ha:.1f} kg/ha.\n"
-        f"2. Soil Phosphorus is rated {p_rating.upper()} ({soil_p_val:.1f} kg/ha). Recommending {dap_kg_per_ha:.1f} kg/ha DAP to supply {p_from_dap:.1f} kg P2O5 and {n_from_dap:.1f} kg N.\n"
-        f"3. Soil Potassium is rated {k_rating.upper()} ({soil_k_val:.1f} kg/ha). Recommending {mop_kg_per_ha:.1f} kg/ha MOP to supply {k_from_mop:.1f} kg K2O.\n"
-        f"4. Remaining Nitrogen balance of {remaining_n_per_ha:.1f} kg/ha is provided via {urea_kg_per_ha:.1f} kg/ha Urea split into 3 applications to minimize volatilization and leaching.\n"
-        f"5. Soil pH is {soil_ph_val:.1f} ({classify_nutrient_level(soil_ph_val, 'soil_ph')}). {ph_advice}"
+    # Step F: Scientifically Honest Rationale & Explainability
+    # Extract numerical inputs or record availability
+    n_input_str = f"{soil_n_val:.1f} kg/ha" if 'nitrogen' in soil_data else "Unavailable in provided data"
+    p_input_str = f"{soil_p_val:.1f} kg/ha" if 'phosphorus' in soil_data else "Unavailable in provided data"
+    k_input_str = f"{soil_k_val:.1f} kg/ha" if 'potassium' in soil_data else "Unavailable in provided data"
+
+    oc_val = soil_data.get('organic_carbon_pct')
+    if oc_val is not None:
+        oc_rating = classify_nutrient_level(float(oc_val), 'organic_carbon')
+        oc_str = f"{float(oc_val):.2f}% -> {oc_rating.upper()} (Reference scale: <0.50% Low, 0.50-0.75% Medium, >0.75% High)"
+        if oc_rating == 'Low':
+            oc_note = "  [Note on Organic Matter: Soil organic carbon is LOW. Regular application of organic manure, compost, or crop residue retention is beneficial for soil biological health and moisture retention. Chemical fertilizers do not directly supply organic carbon.]"
+        else:
+            oc_note = "  [Note on Organic Matter: Soil organic carbon is in an adequate/high range, supporting microbial nutrient mineralization.]"
+    else:
+        oc_str = "Unavailable in provided soil data"
+        oc_note = ""
+
+    # pH classification
+    if soil_ph_val < 6.0:
+        ph_cat = "ACIDIC"
+        ph_detail = "May restrict phosphorus availability and base cation saturation; liming or alkaline amendments recommended."
+    elif soil_ph_val <= 7.5:
+        ph_cat = "NEUTRAL / OPTIMAL"
+        ph_detail = "Ideal range for standard crop nutrient uptake and microbial activity."
+    elif soil_ph_val <= 8.5:
+        ph_cat = "MODERATELY ALKALINE"
+        ph_detail = "Nutrients remain generally accessible; avoid excessive alkaline-forming materials."
+    else:
+        ph_cat = "STRONGLY ALKALINE / SODIC"
+        ph_detail = "High alkalinity may reduce micronutrient bioavailability (Zn, Fe); gypsum application recommended."
+
+    # EC classification
+    ec_val = soil_data.get('electrical_conductivity')
+    if ec_val is not None:
+        ec_f = float(ec_val)
+        if ec_f <= 1.0:
+            ec_cat = "SALT-FREE / NORMAL"
+            ec_detail = "No osmotic salinity stress on root nutrient absorption."
+        elif ec_f <= 2.0:
+            ec_cat = "SLIGHTLY SALINE"
+            ec_detail = "Slight salinity present; ensure adequate drainage."
+        else:
+            ec_cat = "SALINE"
+            ec_detail = "Elevated salinity may restrict root water and nutrient uptake."
+        ec_str = f"{ec_f:.2f} dS/m -> {ec_cat} (Reference scale: <1.0 dS/m Salt-free). {ec_detail}"
+    else:
+        ec_str = "Unavailable in provided soil data"
+
+    # Specific Fertilizer Justifications based on actual values
+    # Phosphorus / DAP logic
+    if p_rating == 'High':
+        p_justification = (
+            f"Available soil phosphorus is already HIGH ({soil_p_val:.1f} kg/ha). There is no soil phosphorus deficiency. "
+            f"The model recommends {dap_kg_per_ha:.1f} kg/ha DAP primarily to supply starter basal nitrogen ({n_from_dap:.1f} kg N) "
+            f"and minimal starter phosphate ({p_from_dap:.1f} kg P2O5) for early root establishment, while relying largely on the existing high soil phosphorus pool."
+        )
+    elif p_rating == 'Low':
+        p_justification = (
+            f"Available soil phosphorus is LOW ({soil_p_val:.1f} kg/ha). "
+            f"The model recommends {dap_kg_per_ha:.1f} kg/ha DAP to supply {p_from_dap:.1f} kg P2O5 to correct the soil deficit and support root development."
+        )
+    else:
+        p_justification = (
+            f"Available soil phosphorus is in the MEDIUM range ({soil_p_val:.1f} kg/ha). "
+            f"The model recommends {dap_kg_per_ha:.1f} kg/ha DAP to meet standard crop demand ({p_from_dap:.1f} kg P2O5) and maintain soil fertility reserves."
+        )
+
+    # Nitrogen / Urea logic
+    n_justification = (
+        f"Available soil nitrogen is {n_rating.upper()} ({soil_n_val:.1f} kg/ha), leading to an adjusted crop target of {target_n_per_ha:.1f} kg/ha N. "
+        f"Accounting for {n_from_dap:.1f} kg N provided via DAP, the remaining {remaining_n_per_ha:.1f} kg/ha N is supplied through {urea_kg_per_ha:.1f} kg/ha Urea, "
+        f"applied in split doses across growth stages to improve Nitrogen Use Efficiency (NUE) and reduce losses."
     )
+
+    # Potassium / MOP logic
+    if k_rating == 'High':
+        k_justification = (
+            f"Available soil potassium is already HIGH ({soil_k_val:.1f} kg/ha). There is no soil potassium deficiency. "
+            f"The model recommends a maintenance dosage of {mop_kg_per_ha:.1f} kg/ha MOP based on crop removal rates to support pod/grain filling, "
+            f"rather than to correct a soil deficiency."
+        )
+    elif k_rating == 'Low':
+        k_justification = (
+            f"Available soil potassium is LOW ({soil_k_val:.1f} kg/ha). "
+            f"The model recommends {mop_kg_per_ha:.1f} kg/ha MOP to supply {k_from_mop:.1f} kg K2O to correct the soil deficit and enhance plant vigor."
+        )
+    else:
+        k_justification = (
+            f"Available soil potassium is in the MEDIUM range ({soil_k_val:.1f} kg/ha). "
+            f"The model recommends {mop_kg_per_ha:.1f} kg/ha MOP to supply {k_from_mop:.1f} kg K2O to meet standard crop uptake requirements."
+        )
+
+    explanation_sections = [
+        f"1. SOIL NUTRIENT STATUS (Input Data vs Reference Scale for {crop_name}):",
+        f"  • Available Nitrogen (N)   : {n_input_str} -> {n_rating.upper()} (Reference: <280 Low, 280-560 Medium, >560 High)",
+        f"  • Available Phosphorus (P) : {p_input_str} -> {p_rating.upper()} (Reference: <10 Low, 10-25 Medium, >25 High)",
+        f"  • Available Potassium (K)  : {k_input_str} -> {k_rating.upper()} (Reference: <110 Low, 110-280 Medium, >280 High)",
+        f"  • Soil Organic Carbon (OC) : {oc_str}",
+    ]
+    if oc_note:
+        explanation_sections.append(oc_note)
+
+    explanation_sections.extend([
+        f"  • Soil pH                  : {soil_ph_val:.1f} -> {ph_cat} (Reference: 6.0-7.5 Neutral, 7.5-8.5 Moderately Alkaline, >8.5 Alkaline). {ph_detail}",
+        f"  • Electrical Cond. (EC)    : {ec_str}",
+        "",
+        f"2. MODEL PREDICTION & FERTILIZER RECOMMENDATION JUSTIFICATION ({area_ha:.1f} Hectare Plot):",
+        f"  • Phosphorus Management: {p_justification}",
+        f"  • Nitrogen Management  : {n_justification}",
+        f"  • Potassium Management : {k_justification}",
+        "",
+        "3. SUMMARY:",
+        "  The recommended fertilizer quantities are generated by the AI model based on crop requirements and soil status. Soil test values reflect baseline fertility, while the fertilizer schedule provides targeted supplemental nutrients for the target crop."
+    ])
+
+    explanation = "\n".join(explanation_sections)
+
 
     supplemental = [
         {

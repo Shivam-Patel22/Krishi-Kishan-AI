@@ -136,7 +136,15 @@ def predict_fertilizer_ml(crop_name: str, soil_data: Dict[str, float], weather_d
     liebig_fe_quotient = fe / 4.5
     liebig_mn_quotient = mn / 3.0
     liebig_cu_quotient = cu / 0.2
-    min_micronutrient_factor = min(liebig_zn_quotient, liebig_b_quotient, liebig_s_quotient, liebig_fe_quotient)
+    min_micronutrient_factor = min(
+        liebig_zn_quotient,
+        liebig_b_quotient,
+        liebig_s_quotient,
+        liebig_fe_quotient,
+        liebig_mn_quotient,
+        liebig_cu_quotient
+    )
+
 
     crop_n_demand = meta['n_req']
     crop_p_demand = meta['p_req']
@@ -222,19 +230,31 @@ def predict_fertilizer_ml(crop_name: str, soil_data: Dict[str, float], weather_d
     # Explainable AI - Key Decision Drivers
     drivers = []
     if ph < 5.8:
-        drivers.append(f"Acidic soil pH ({ph:.1f}) strongly prioritizes calcium & phosphate buffering sources")
+        drivers.append(f"Acidic soil pH ({ph:.1f}) prioritizes calcium and phosphate buffering sources")
     elif ph > 8.0:
-        drivers.append(f"Alkaline soil pH ({ph:.1f}) prioritizes acidifying sulphate-based fertilizers")
+        drivers.append(f"Alkaline soil pH ({ph:.1f}) prioritizes acidifying sulphate-based fertilizer sources")
+    elif ph >= 7.5:
+        drivers.append(f"Soil pH is Moderately Alkaline ({ph:.1f}); nutrients remain generally accessible")
 
-    if p < 12.0:
-        drivers.append(f"Low Phosphorus ({p:.1f} kg/ha) is the primary growth-limiting factor (+38% weight)")
-    if k < 120.0:
-        drivers.append(f"Low Potassium ({k:.1f} kg/ha) increases lodging susceptibility; MOP essential")
+    if p < 10.0:
+        drivers.append(f"Available Phosphorus is Low ({p:.1f} kg/ha); the model prioritizes phosphate replenishment")
+    elif p > 25.0:
+        drivers.append(f"Available Phosphorus is High ({p:.1f} kg/ha); the model utilizes starter basal P while relying on soil reserves")
+
+    if k < 110.0:
+        drivers.append(f"Available Potassium is Low ({k:.1f} kg/ha); the model prioritizes potash supplementation")
+    elif k > 280.0:
+        drivers.append(f"Available Potassium is High ({k:.1f} kg/ha); the model allocates potash for crop maintenance rather than soil deficit")
+
+    if oc < 0.50:
+        drivers.append(f"Soil Organic Carbon is Low ({oc:.2f}%); organic matter/manure management is beneficial for soil biological health")
+
     if s < 10.0:
-        drivers.append(f"Sulphur deficiency ({s:.1f} ppm) detected; boosted sulphur complex formulation")
+        drivers.append(f"Available Sulphur is Low ({s:.1f} ppm); the model incorporates sulphur-bearing compounds")
 
     if not drivers:
-        drivers.append(f"Optimal multi-nutrient balance matching {clean_crop} yield curve")
+        drivers.append(f"Standard nutrient balance matching {clean_crop} target growth requirements")
+
 
     return {
         "recommended_product": pred_label,
@@ -242,6 +262,7 @@ def predict_fertilizer_ml(crop_name: str, soil_data: Dict[str, float], weather_d
         "confidence_pct": round(confidence * 100, 1),
         "alternatives": alternatives,
         "decision_drivers": drivers,
-        "model_version": "Ensemble-Agronomic-v4.0 Enterprise Ultra (250 RF + 250 ET + 250 HGB + Deep MLP)",
-        "accuracy_benchmark": "99.79% Top-1 Accuracy (100% Top-2)"
+        "model_version": "Weighted Soft-Voting Ensemble V2 (250 RF + 250 ET + 250 HGB + Deep MLP)",
+        "accuracy_benchmark": "Holdout evaluation on synthetic rule-derived labels"
     }
+
