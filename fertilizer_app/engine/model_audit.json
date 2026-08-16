@@ -1,0 +1,277 @@
+{
+  "dataset": {
+    "source_records_in_db": 10853209,
+    "synthetic_training_corpus": 80000,
+    "training_samples": 64000,
+    "validation_samples": 8000,
+    "final_holdout_test_samples": 8000,
+    "feature_count": 44,
+    "fertilizer_classes_count": 8
+  },
+  "preprocessing": {
+    "scaler": "RobustScaler",
+    "scaler_fit": "Training Set ONLY (Zero Data Leakage)",
+    "categorical_encoder": "LabelEncoder",
+    "features_list": [
+      "crop_encoded",
+      "nitrogen",
+      "phosphorus",
+      "potassium",
+      "soil_ph",
+      "organic_carbon",
+      "electrical_conductivity",
+      "zinc",
+      "boron",
+      "sulphur",
+      "iron",
+      "manganese",
+      "copper",
+      "temperature",
+      "humidity",
+      "rainfall",
+      "np_ratio",
+      "nk_ratio",
+      "pk_ratio",
+      "np_k_ratio",
+      "nk_p_ratio",
+      "total_nutrient_sum",
+      "ph_deficit",
+      "soil_buffer_capacity",
+      "acid_p_fixation_risk",
+      "alkaline_volatilization_risk",
+      "salinity_stress_index",
+      "bio_n_mineralization",
+      "liebig_zn_quotient",
+      "liebig_b_quotient",
+      "liebig_s_quotient",
+      "liebig_fe_quotient",
+      "liebig_mn_quotient",
+      "liebig_cu_quotient",
+      "min_micronutrient_factor",
+      "crop_n_demand",
+      "crop_p_demand",
+      "crop_k_demand",
+      "net_n_deficit",
+      "net_p_deficit",
+      "net_k_deficit",
+      "weather_leach_risk",
+      "temp_stress",
+      "spray_safety_score"
+    ]
+  },
+  "baseline_comparison": {
+    "majority_baseline_accuracy_pct": 29.625,
+    "majority_baseline_macro_f1_pct": 5.714,
+    "simple_rf_accuracy_pct": 99.825,
+    "simple_rf_macro_f1_pct": 99.503,
+    "weighted_soft_voting_accuracy_pct": 99.887,
+    "weighted_soft_voting_macro_f1_pct": 99.838,
+    "ensemble_net_gain_pct": 0.062
+  },
+  "cross_validation_5fold": {
+    "accuracy_mean": 0.99969,
+    "accuracy_std": 9e-05,
+    "macro_f1_mean": 0.99911,
+    "macro_f1_std": 0.00034,
+    "weighted_f3_mean": 0.99969,
+    "weighted_f3_std": 9e-05,
+    "min_accuracy": 0.99961,
+    "max_accuracy": 0.99984
+  },
+  "synthetic_test_evaluation": {
+    "accuracy": 0.99887,
+    "accuracy_pct": 99.887,
+    "weighted_f1": 0.99887,
+    "macro_f1": 0.99838,
+    "weighted_f3": 0.99887,
+    "macro_f3": 0.99812,
+    "weighted_precision": 0.99888,
+    "weighted_recall": 0.99887,
+    "top2_accuracy_pct": 100.0,
+    "top3_accuracy_pct": 100.0,
+    "log_loss": 0.05819,
+    "macro_brier_score": 0.00147,
+    "rule_reproduction_agreement_pct": 99.887
+  },
+  "regional_validation": {
+    "status": "EVALUATED (Empirical Distributions Verified)",
+    "regional_coverage_records": [
+      {
+        "state": "Madhya Pradesh",
+        "records_count": 1533859
+      },
+      {
+        "state": "West Bengal",
+        "records_count": 1258194
+      },
+      {
+        "state": "Bihar",
+        "records_count": 1165274
+      },
+      {
+        "state": "Rajasthan",
+        "records_count": 1078501
+      },
+      {
+        "state": "Gujarat",
+        "records_count": 1035050
+      },
+      {
+        "state": "Odisha",
+        "records_count": 710782
+      }
+    ],
+    "limitation_note": "National soil database contains unpivoted survey test frequency distributions across Indian states, but does not contain paired farmer field crop yield trial outcomes."
+  },
+  "expert_validation": {
+    "status": "NOT AVAILABLE",
+    "reason": "No expert-labeled validation dataset supplied. Use data/expert_validation/expert_validation_template.csv to provide agronomist case studies.",
+    "template_available": true
+  },
+  "robustness_test_suite": {
+    "robustness_results": [
+      {
+        "test_case": "Normal Wheat (Standard Soil)",
+        "predicted_product": "DAP (Diammonium Phosphate) + Urea + MOP",
+        "confidence_pct": 97.18,
+        "status": "PASSED (Numerically Stable)"
+      },
+      {
+        "test_case": "Boundary Acidic Soil (pH=5.75)",
+        "predicted_product": "SSP (Single Super Phosphate) + Urea + MOP + Lime",
+        "confidence_pct": 75.33,
+        "status": "PASSED (Numerically Stable)"
+      },
+      {
+        "test_case": "Boundary Alkaline Soil (pH=8.25)",
+        "predicted_product": "Ammonium Sulphate + DAP + MOP + Gypsum",
+        "confidence_pct": 68.51,
+        "status": "PASSED (Numerically Stable)"
+      },
+      {
+        "test_case": "Sulphur Deficient Groundnut (S=4.5 ppm)",
+        "predicted_product": "NPK 12:32:16 + Single Super Phosphate (Sulphur enriched)",
+        "confidence_pct": 96.16,
+        "status": "PASSED (Numerically Stable)"
+      },
+      {
+        "test_case": "Extreme High Potassium (K=750 kg/ha)",
+        "predicted_product": "NPK 19:19:19 Complex + Urea",
+        "confidence_pct": 92.64,
+        "status": "PASSED (Numerically Stable)"
+      },
+      {
+        "test_case": "Extreme Low Phosphorus (P=1.5 kg/ha)",
+        "predicted_product": "DAP (Diammonium Phosphate) + Urea + MOP",
+        "confidence_pct": 95.87,
+        "status": "PASSED (Numerically Stable)"
+      }
+    ],
+    "all_passed": true
+  },
+  "top_features_rf": [
+    [
+      "crop_n_demand",
+      0.13003609322017032
+    ],
+    [
+      "soil_ph",
+      0.10544248392123118
+    ],
+    [
+      "potassium",
+      0.09594626527498816
+    ],
+    [
+      "phosphorus",
+      0.09339128284483816
+    ],
+    [
+      "acid_p_fixation_risk",
+      0.06253905236813874
+    ],
+    [
+      "crop_p_demand",
+      0.04769904412286084
+    ],
+    [
+      "liebig_s_quotient",
+      0.04467491854146678
+    ],
+    [
+      "sulphur",
+      0.042745755806609706
+    ],
+    [
+      "net_p_deficit",
+      0.04263446600508738
+    ],
+    [
+      "crop_encoded",
+      0.03968358716207804
+    ],
+    [
+      "net_k_deficit",
+      0.038826731687183605
+    ],
+    [
+      "crop_k_demand",
+      0.03881645958449069
+    ],
+    [
+      "net_n_deficit",
+      0.036642772830669114
+    ],
+    [
+      "pk_ratio",
+      0.03398855640308539
+    ],
+    [
+      "ph_deficit",
+      0.024839990124802376
+    ],
+    [
+      "nk_p_ratio",
+      0.024764043927728453
+    ],
+    [
+      "total_nutrient_sum",
+      0.01861727764670297
+    ],
+    [
+      "np_k_ratio",
+      0.014837000089142693
+    ],
+    [
+      "nk_ratio",
+      0.012653835494957417
+    ],
+    [
+      "alkaline_volatilization_risk",
+      0.012062464748643122
+    ]
+  ],
+  "training_duration_seconds": 265.78,
+  "acceptance_criteria": {
+    "technical_validation": {
+      "cross_validation_stable": true,
+      "no_preprocessing_leakage": true,
+      "independent_holdout_test_verified": true,
+      "macro_performance_acceptable": true,
+      "calibration_acceptable": true
+    },
+    "real_world_validation": {
+      "real_labeled_yield_trial_data_available": false,
+      "expert_validation_dataset_available": false,
+      "regional_soil_distributions_available": true,
+      "quantity_validation_available": false
+    },
+    "final_validation_status": "PARTIALLY VALIDATED (Technical & Synthetic Validation: PASSED | Real-World Yield Trials: NOT YET VALIDATED)"
+  },
+  "limitations": [
+    "Synthetic labels are rule-derived from ICAR stoichiometry and do not represent longitudinal physical farm yield trials.",
+    "Real national soil database (10.85M rows) contains empirical survey distributions, not paired historical farmer yield logs.",
+    "Fertilizer quantities are determined via exact stoichiometric chemical balance calculations, not direct regression.",
+    "Agricultural expert field trials are required before claiming commercial yield improvements."
+  ]
+}

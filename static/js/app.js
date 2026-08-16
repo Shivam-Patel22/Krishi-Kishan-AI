@@ -270,6 +270,8 @@ async function handleGenerateRecommendation(e) {
     const fieldId = fieldSelectElem ? fieldSelectElem.value : null;
     const cropId = document.getElementById('cropSelect').value;
     const areaHa = document.getElementById('fieldArea').value;
+    const soilTypeElem = document.getElementById('soilType');
+    const soilTypeVal = soilTypeElem ? soilTypeElem.value : "Loamy Soil";
     const btn = document.getElementById('btnGenerateRec');
 
     if (!cropId) {
@@ -281,7 +283,7 @@ async function handleGenerateRecommendation(e) {
         crop_id: parseInt(cropId),
         area_hectares: parseFloat(areaHa) || 1.0,
         soil_data: {
-
+            soil_type: soilTypeVal,
             nitrogen: parseFloat(document.getElementById('soilN').value || 140.0),
             phosphorus: parseFloat(document.getElementById('soilP').value || 18.0),
             potassium: parseFloat(document.getElementById('soilK').value || 180.0),
@@ -295,6 +297,7 @@ async function handleGenerateRecommendation(e) {
             source: "Field Diagnostic Input"
         }
     };
+
 
     if (fieldId) {
         payload.field_id = parseInt(fieldId);

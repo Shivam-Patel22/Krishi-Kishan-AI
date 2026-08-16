@@ -129,6 +129,10 @@ class GenerateRecommendationAPIView(APIView):
 
             # Resolve soil data
             if custom_soil:
+                if custom_soil.get('soil_type') and field:
+                    field.soil_type = custom_soil.get('soil_type')
+                    field.save(update_fields=['soil_type'])
+
                 soil_data = {
                     'nitrogen': float(custom_soil.get('nitrogen', 140.0)),
                     'phosphorus': float(custom_soil.get('phosphorus', 18.0)),
@@ -143,6 +147,7 @@ class GenerateRecommendationAPIView(APIView):
                     'source': custom_soil.get('source', 'Field Test / User Input')
                 }
             else:
+
                 latest_test = field.soil_tests.order_by('-test_date').first()
                 if latest_test:
                     soil_data = {
