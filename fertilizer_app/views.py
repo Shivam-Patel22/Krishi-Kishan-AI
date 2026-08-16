@@ -102,16 +102,30 @@ class GenerateRecommendationAPIView(APIView):
             area_ha = request.data.get('area_hectares')
             custom_soil = request.data.get('soil_data')
 
-            if not field_id or not crop_id:
+            if not crop_id:
                 return Response(
-                    {"error": "Both 'field_id' and 'crop_id' are required."},
+                    {"error": "'crop_id' is required."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
 
-            field = get_object_or_404(Field, pk=field_id)
-            crop = get_object_or_404(Crop, pk=crop_id)
+            if field_id:
+                field = get_object_or_404(Field, pk=field_id)
+            else:
+                field = Field.objects.first()
+                if not field:
+                    farm, _ = Farm.objects.get_or_create(
+                        name="Default Farm",
+                        defaults={"farmer_name": "Farmer", "state_name": "Maharashtra", "district_name": "Pune"}
+                    )
+                    field, _ = Field.objects.get_or_create(
+                        farm=farm,
+                        field_name="Main Plot",
+                        defaults={"area_hectares": 1.0, "soil_type": "Loamy"}
+                    )
 
+            crop = get_object_or_404(Crop, pk=crop_id)
             field_area = float(area_ha) if area_ha else float(field.area_hectares)
+
 
             # Resolve soil data
             if custom_soil:

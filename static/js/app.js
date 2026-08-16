@@ -266,21 +266,22 @@ function setupEventListeners() {
 async function handleGenerateRecommendation(e) {
     e.preventDefault();
 
-    const fieldId = document.getElementById('fieldSelect').value;
+    const fieldSelectElem = document.getElementById('fieldSelect');
+    const fieldId = fieldSelectElem ? fieldSelectElem.value : null;
     const cropId = document.getElementById('cropSelect').value;
     const areaHa = document.getElementById('fieldArea').value;
     const btn = document.getElementById('btnGenerateRec');
 
-    if (!fieldId || !cropId) {
-        alert("Please select both a Farm Field and a Target Crop.");
+    if (!cropId) {
+        alert("Please select a Target Crop.");
         return;
     }
 
     const payload = {
-        field_id: parseInt(fieldId),
         crop_id: parseInt(cropId),
-        area_hectares: parseFloat(areaHa),
+        area_hectares: parseFloat(areaHa) || 1.0,
         soil_data: {
+
             nitrogen: parseFloat(document.getElementById('soilN').value || 140.0),
             phosphorus: parseFloat(document.getElementById('soilP').value || 18.0),
             potassium: parseFloat(document.getElementById('soilK').value || 180.0),
@@ -295,8 +296,13 @@ async function handleGenerateRecommendation(e) {
         }
     };
 
+    if (fieldId) {
+        payload.field_id = parseInt(fieldId);
+    }
+
     btn.disabled = true;
     btn.innerHTML = `<span>⏳</span> Calculating Agronomic & AI Dosage...`;
+
 
     try {
         const res = await fetch('/api/recommendations/generate/', {
