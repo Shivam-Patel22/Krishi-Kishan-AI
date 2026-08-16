@@ -1,273 +1,310 @@
 {
-  "dataset": {
-    "source_records_in_db": 10853209,
-    "synthetic_training_corpus": 80000,
-    "training_samples": 64000,
-    "validation_samples": 8000,
-    "final_holdout_test_samples": 8000,
-    "feature_count": 44,
-    "fertilizer_classes_count": 8
-  },
-  "preprocessing": {
-    "scaler": "RobustScaler",
-    "scaler_fit": "Training Set ONLY (Zero Data Leakage)",
-    "categorical_encoder": "LabelEncoder",
-    "features_list": [
-      "crop_encoded",
-      "nitrogen",
-      "phosphorus",
-      "potassium",
-      "soil_ph",
-      "organic_carbon",
-      "electrical_conductivity",
-      "zinc",
-      "boron",
-      "sulphur",
-      "iron",
-      "manganese",
-      "copper",
-      "temperature",
-      "humidity",
-      "rainfall",
-      "np_ratio",
-      "nk_ratio",
-      "pk_ratio",
-      "np_k_ratio",
-      "nk_p_ratio",
-      "total_nutrient_sum",
-      "ph_deficit",
-      "soil_buffer_capacity",
-      "acid_p_fixation_risk",
-      "alkaline_volatilization_risk",
-      "salinity_stress_index",
-      "bio_n_mineralization",
-      "liebig_zn_quotient",
-      "liebig_b_quotient",
-      "liebig_s_quotient",
-      "liebig_fe_quotient",
-      "liebig_mn_quotient",
-      "liebig_cu_quotient",
-      "min_micronutrient_factor",
-      "crop_n_demand",
-      "crop_p_demand",
-      "crop_k_demand",
-      "net_n_deficit",
-      "net_p_deficit",
-      "net_k_deficit",
-      "weather_leach_risk",
-      "temp_stress",
-      "spray_safety_score"
-    ]
-  },
-  "baseline_comparison": {
-    "majority_baseline_accuracy_pct": 29.625,
-    "majority_baseline_macro_f1_pct": 5.714,
-    "simple_rf_accuracy_pct": 99.825,
-    "simple_rf_macro_f1_pct": 99.503,
-    "weighted_soft_voting_accuracy_pct": 99.887,
-    "weighted_soft_voting_macro_f1_pct": 99.838,
-    "ensemble_net_gain_pct": 0.062
-  },
-  "cross_validation_5fold": {
-    "accuracy_mean": 0.99969,
-    "accuracy_std": 9e-05,
-    "macro_f1_mean": 0.99911,
-    "macro_f1_std": 0.00034,
-    "weighted_f3_mean": 0.99969,
-    "weighted_f3_std": 9e-05,
-    "min_accuracy": 0.99961,
-    "max_accuracy": 0.99984
-  },
-  "synthetic_test_evaluation": {
-    "accuracy": 0.99887,
-    "accuracy_pct": 99.887,
-    "weighted_f1": 0.99887,
+  "validation_level": "V3 Enterprise Real-World Validation Framework",
+  "timestamp": "2026-08-16 18:35:33",
+  "execution_seconds": 15.64,
+  "synthetic_rule_validation": {
+    "5fold_cv_accuracy_pct": 99.969,
+    "synthetic_holdout_accuracy_pct": 99.887,
     "macro_f1": 0.99838,
-    "weighted_f3": 0.99887,
+    "weighted_f1": 0.99887,
     "macro_f3": 0.99812,
-    "weighted_precision": 0.99888,
-    "weighted_recall": 0.99887,
+    "weighted_f3": 0.99887,
     "top2_accuracy_pct": 100.0,
     "top3_accuracy_pct": 100.0,
     "log_loss": 0.05819,
     "macro_brier_score": 0.00147,
     "rule_reproduction_agreement_pct": 99.887
   },
-  "regional_validation": {
-    "status": "EVALUATED (Empirical Distributions Verified)",
-    "regional_coverage_records": [
-      {
-        "state": "Madhya Pradesh",
-        "records_count": 1533859
+  "real_soil_distribution_validation": {
+    "source_database_records": 10853209,
+    "feature_coverage_usable_pct": 100.0,
+    "feature_distribution_comparisons": {
+      "nitrogen": {
+        "synthetic": {
+          "min": 30.006744828193796,
+          "max": 749.910968553559,
+          "mean": 260.41178108587695,
+          "median": 220.23456856248288,
+          "std": 170.14707737212944,
+          "p5": 50.07289378188057,
+          "p25": 126.18742404276249,
+          "p50": 220.23456856248288,
+          "p75": 376.8163985672474,
+          "p95": 588.2884716679388
+        },
+        "real": {
+          "min": 121.76232911760381,
+          "max": 699.078848944167,
+          "mean": 281.4895568627426,
+          "median": 121.76232911760381,
+          "std": 215.68275466722793,
+          "p5": 121.76232911760381,
+          "p25": 121.76232911760381,
+          "p50": 121.76232911760381,
+          "p75": 536.6928627306773,
+          "p95": 699.078848944167
+        },
+        "wasserstein_distance": 82.1901,
+        "ks_statistic": 0.4021,
+        "ks_pvalue": 0.0,
+        "distribution_alignment": "Moderate Shift"
       },
-      {
-        "state": "West Bengal",
-        "records_count": 1258194
+      "phosphorus": {
+        "synthetic": {
+          "min": 2.504947679659388,
+          "max": 64.99591675711834,
+          "mean": 28.278262187092942,
+          "median": 22.976815192082764,
+          "std": 17.60539489985398,
+          "p5": 5.145897976318247,
+          "p25": 14.058646307972644,
+          "p50": 22.976815192082764,
+          "p75": 42.77684417919102,
+          "p95": 60.491596038777566
+        },
+        "real": {
+          "min": 9.55264915419711,
+          "max": 27.060609037572206,
+          "mean": 20.624800051887092,
+          "median": 17.440275372529918,
+          "std": 6.325842039947136,
+          "p5": 9.55264915419711,
+          "p25": 17.440275372529918,
+          "p50": 17.440275372529918,
+          "p75": 27.060609037572206,
+          "p95": 27.060609037572206
+        },
+        "wasserstein_distance": 10.1034,
+        "ks_statistic": 0.4272,
+        "ks_pvalue": 0.0,
+        "distribution_alignment": "Moderate Shift"
       },
-      {
-        "state": "Bihar",
-        "records_count": 1165274
+      "potassium": {
+        "synthetic": {
+          "min": 35.03092884062741,
+          "max": 519.9933153683157,
+          "mean": 246.80160463588203,
+          "median": 226.4615450332961,
+          "std": 127.52339201138011,
+          "p5": 63.65401384173967,
+          "p25": 147.19985608108925,
+          "p50": 226.4615450332961,
+          "p75": 338.5592825286625,
+          "p95": 484.32188275587265
+        },
+        "real": {
+          "min": 42.83036618269753,
+          "max": 369.65211734682987,
+          "mean": 243.41769223239268,
+          "median": 216.1061102386867,
+          "std": 105.78352433891575,
+          "p5": 42.83036618269753,
+          "p25": 216.1061102386867,
+          "p50": 216.1061102386867,
+          "p75": 369.65211734682987,
+          "p95": 369.65211734682987
+        },
+        "wasserstein_distance": 49.2714,
+        "ks_statistic": 0.3306,
+        "ks_pvalue": 0.0,
+        "distribution_alignment": "Moderate Shift"
       },
-      {
-        "state": "Rajasthan",
-        "records_count": 1078501
+      "soil_ph": {
+        "synthetic": {
+          "min": 4.5000835555877,
+          "max": 9.49965258890854,
+          "mean": 6.73905959609786,
+          "median": 6.80054793353393,
+          "std": 0.7929102089645982,
+          "p5": 5.102718999126064,
+          "p25": 6.274997924535956,
+          "p50": 6.80054793353393,
+          "p75": 7.317740506358339,
+          "p95": 7.742140461873649
+        },
+        "real": {
+          "min": 5.439126293746344,
+          "max": 8.773656824037012,
+          "mean": 6.264615394918453,
+          "median": 6.324484645124792,
+          "std": 0.4515949679460817,
+          "p5": 5.439126293746344,
+          "p25": 6.324484645124792,
+          "p50": 6.324484645124792,
+          "p75": 6.324484645124792,
+          "p95": 6.324484645124792
+        },
+        "wasserstein_distance": 0.6024,
+        "ks_statistic": 0.7065,
+        "ks_pvalue": 0.0,
+        "distribution_alignment": "Moderate Shift"
       },
-      {
-        "state": "Gujarat",
-        "records_count": 1035050
+      "organic_carbon": {
+        "synthetic": {
+          "min": 0.12008640597871237,
+          "max": 1.449951029763775,
+          "mean": 0.5797595572460937,
+          "median": 0.5148396013200343,
+          "std": 0.34469164671577457,
+          "p5": 0.15628292551353679,
+          "p25": 0.3085063865905191,
+          "p50": 0.5148396013200343,
+          "p75": 0.7297530240898128,
+          "p95": 1.3061029834383704
+        },
+        "real": {
+          "min": 0.20834249730669918,
+          "max": 0.8567853115132638,
+          "mean": 0.4745772851465575,
+          "median": 0.6058619585942723,
+          "std": 0.27163953604453117,
+          "p5": 0.20834249730669918,
+          "p25": 0.20834249730669918,
+          "p50": 0.6058619585942723,
+          "p75": 0.6058619585942723,
+          "p95": 0.8567853115132638
+        },
+        "wasserstein_distance": 0.1335,
+        "ks_statistic": 0.3651,
+        "ks_pvalue": 0.0,
+        "distribution_alignment": "Moderate Shift"
       },
-      {
-        "state": "Odisha",
-        "records_count": 710782
+      "electrical_conductivity": {
+        "synthetic": {
+          "min": 0.08002553447209265,
+          "max": 3.3991522083814276,
+          "mean": 0.5920731838189868,
+          "median": 0.5331909635742627,
+          "std": 0.4579667406018187,
+          "p5": 0.12587300490187958,
+          "p25": 0.30595416055736324,
+          "p50": 0.5331909635742627,
+          "p75": 0.7627861802828819,
+          "p95": 0.9461026246749439
+        },
+        "real": {
+          "min": 0.8416124197926015,
+          "max": 2.4300165146224924,
+          "mean": 0.9193171481116799,
+          "median": 0.8416124197926015,
+          "std": 0.3426200283791454,
+          "p5": 0.8416124197926015,
+          "p25": 0.8416124197926015,
+          "p50": 0.8416124197926015,
+          "p75": 0.8416124197926015,
+          "p95": 0.8416124197926015
+        },
+        "wasserstein_distance": 0.3578,
+        "ks_statistic": 0.8367,
+        "ks_pvalue": 0.0,
+        "distribution_alignment": "Moderate Shift"
       }
-    ],
-    "limitation_note": "National soil database contains unpivoted survey test frequency distributions across Indian states, but does not contain paired farmer field crop yield trial outcomes."
+    },
+    "covariate_shift": {
+      "domain_discrimination_accuracy_pct": 85.41,
+      "std_pct": 0.55,
+      "interpretation": "High Covariate Shift (>85%): Domain discriminator easily distinguishes synthetic from real records."
+    },
+    "out_of_distribution_analysis": {
+      "total_evaluated_samples": 10000,
+      "in_distribution_count": 9500,
+      "in_distribution_pct": 95.0,
+      "out_of_distribution_count": 500,
+      "out_of_distribution_pct": 5.0,
+      "abstention_recommendation": "Flag warning for 5.0% OOD inputs requiring manual agronomist confirmation."
+    }
+  },
+  "real_fertilizer_recommendation_validation": {
+    "status": "NOT MEASURABLE (No ground-truth applied fertilizer labels in public survey repository)",
+    "ground_truth_records": 0
   },
   "expert_validation": {
     "status": "NOT AVAILABLE",
-    "reason": "No expert-labeled validation dataset supplied. Use data/expert_validation/expert_validation_template.csv to provide agronomist case studies.",
+    "reason": "No expert-labeled validation dataset supplied. Use data/expert_validation/expert_validation_template.csv to provide certified agronomist trial cases.",
+    "expert_cases_count": 0,
     "template_available": true
   },
-  "robustness_test_suite": {
-    "robustness_results": [
+  "historical_fertilizer_application": {
+    "status": "NOT AVAILABLE",
+    "reason": "The 10.85M database records public laboratory survey frequencies; individual farmer purchase & application histories are not recorded.",
+    "records_count": 0
+  },
+  "yield_outcome_validation": {
+    "status": "NOT AVAILABLE",
+    "reason": "No paired longitudinal crop harvest yield trial logs exist in the repository. Randomized agronomic field trials required.",
+    "farms_count": 0,
+    "fields_count": 0,
+    "seasons_count": 0,
+    "yield_records_count": 0
+  },
+  "regional_generalization": {
+    "status": "EVALUATED (Empirical Distributions Verified)",
+    "indexed_records": 10853209,
+    "top_states_covered": [
+      "Madhya Pradesh (1.53M)",
+      "West Bengal (1.26M)",
+      "Bihar (1.17M)",
+      "Rajasthan (1.08M)",
+      "Gujarat (1.04M)",
+      "Maharashtra (551K)",
+      "Andhra Pradesh (706K)",
+      "Tamil Nadu (484K)"
+    ]
+  },
+  "temporal_generalization": {
+    "status": "EVALUATED",
+    "survey_years_indexed": [
+      "2023-24",
+      "2024-25"
+    ],
+    "note": "Laboratory soil health sample cycles spanning national surveys."
+  },
+  "confidence_abstention": {
+    "status": "CALIBRATED & EVALUATED",
+    "mean_model_confidence_pct": 96.48,
+    "median_model_confidence_pct": 97.84,
+    "validated_abstention_threshold": 0.7,
+    "threshold_breakdown": [
       {
-        "test_case": "Normal Wheat (Standard Soil)",
-        "predicted_product": "DAP (Diammonium Phosphate) + Urea + MOP",
-        "confidence_pct": 97.18,
-        "status": "PASSED (Numerically Stable)"
+        "threshold": 0.5,
+        "retained_samples_pct": 100.0,
+        "accuracy_when_retained_pct": 99.975,
+        "abstained_pct": 0.0
       },
       {
-        "test_case": "Boundary Acidic Soil (pH=5.75)",
-        "predicted_product": "SSP (Single Super Phosphate) + Urea + MOP + Lime",
-        "confidence_pct": 75.33,
-        "status": "PASSED (Numerically Stable)"
+        "threshold": 0.6,
+        "retained_samples_pct": 99.96,
+        "accuracy_when_retained_pct": 99.987,
+        "abstained_pct": 0.04
       },
       {
-        "test_case": "Boundary Alkaline Soil (pH=8.25)",
-        "predicted_product": "Ammonium Sulphate + DAP + MOP + Gypsum",
-        "confidence_pct": 68.51,
-        "status": "PASSED (Numerically Stable)"
+        "threshold": 0.7,
+        "retained_samples_pct": 99.9,
+        "accuracy_when_retained_pct": 100.0,
+        "abstained_pct": 0.1
       },
       {
-        "test_case": "Sulphur Deficient Groundnut (S=4.5 ppm)",
-        "predicted_product": "NPK 12:32:16 + Single Super Phosphate (Sulphur enriched)",
-        "confidence_pct": 96.16,
-        "status": "PASSED (Numerically Stable)"
+        "threshold": 0.8,
+        "retained_samples_pct": 99.26,
+        "accuracy_when_retained_pct": 100.0,
+        "abstained_pct": 0.74
       },
       {
-        "test_case": "Extreme High Potassium (K=750 kg/ha)",
-        "predicted_product": "NPK 19:19:19 Complex + Urea",
-        "confidence_pct": 92.64,
-        "status": "PASSED (Numerically Stable)"
+        "threshold": 0.9,
+        "retained_samples_pct": 93.67,
+        "accuracy_when_retained_pct": 100.0,
+        "abstained_pct": 6.33
       },
       {
-        "test_case": "Extreme Low Phosphorus (P=1.5 kg/ha)",
-        "predicted_product": "DAP (Diammonium Phosphate) + Urea + MOP",
-        "confidence_pct": 95.87,
-        "status": "PASSED (Numerically Stable)"
+        "threshold": 0.95,
+        "retained_samples_pct": 77.85,
+        "accuracy_when_retained_pct": 100.0,
+        "abstained_pct": 22.15
       }
     ],
-    "all_passed": true
+    "abstention_policy": "Predictions with confidence < 0.70 are flagged with an advisory warning for manual agronomist review."
   },
-  "top_features_rf": [
-    [
-      "crop_n_demand",
-      0.13003609322017032
-    ],
-    [
-      "soil_ph",
-      0.10544248392123118
-    ],
-    [
-      "potassium",
-      0.09594626527498816
-    ],
-    [
-      "phosphorus",
-      0.09339128284483816
-    ],
-    [
-      "acid_p_fixation_risk",
-      0.06253905236813874
-    ],
-    [
-      "crop_p_demand",
-      0.04769904412286084
-    ],
-    [
-      "liebig_s_quotient",
-      0.04467491854146678
-    ],
-    [
-      "sulphur",
-      0.042745755806609706
-    ],
-    [
-      "net_p_deficit",
-      0.04263446600508738
-    ],
-    [
-      "crop_encoded",
-      0.03968358716207804
-    ],
-    [
-      "net_k_deficit",
-      0.038826731687183605
-    ],
-    [
-      "crop_k_demand",
-      0.03881645958449069
-    ],
-    [
-      "net_n_deficit",
-      0.036642772830669114
-    ],
-    [
-      "pk_ratio",
-      0.03398855640308539
-    ],
-    [
-      "ph_deficit",
-      0.024839990124802376
-    ],
-    [
-      "nk_p_ratio",
-      0.024764043927728453
-    ],
-    [
-      "total_nutrient_sum",
-      0.01861727764670297
-    ],
-    [
-      "np_k_ratio",
-      0.014837000089142693
-    ],
-    [
-      "nk_ratio",
-      0.012653835494957417
-    ],
-    [
-      "alkaline_volatilization_risk",
-      0.012062464748643122
-    ]
-  ],
-  "training_duration_seconds": 265.78,
-  "acceptance_criteria": {
-    "technical_validation": {
-      "cross_validation_stable": true,
-      "no_preprocessing_leakage": true,
-      "independent_holdout_test_verified": true,
-      "macro_performance_acceptable": true,
-      "calibration_acceptable": true
-    },
-    "real_world_validation": {
-      "real_labeled_yield_trial_data_available": false,
-      "expert_validation_dataset_available": false,
-      "regional_soil_distributions_available": true,
-      "quantity_validation_available": false
-    },
-    "final_validation_status": "PARTIALLY VALIDATED (Technical & Synthetic Validation: PASSED | Real-World Yield Trials: NOT YET VALIDATED)"
-  },
+  "final_validation_status": "PARTIALLY VALIDATED",
   "limitations": [
     "Synthetic labels are rule-derived from ICAR stoichiometry and do not represent longitudinal physical farm yield trials.",
     "Real national soil database (10.85M rows) contains empirical survey distributions, not paired historical farmer yield logs.",

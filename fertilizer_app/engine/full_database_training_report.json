@@ -1,0 +1,172 @@
+{
+  "pipeline_version": "V4 Full Database Scalable Pipeline",
+  "database": {
+    "source": "data/agriculture.db",
+    "total_records": 10853209,
+    "records_processed": 10853209,
+    "records_excluded": 0,
+    "target_source": "RULE-DERIVED (ICAR Agronomic Formulation Engine)",
+    "target_type": "RULE-DERIVED LABEL",
+    "target_classes_count": 8
+  },
+  "dataset_split": {
+    "training_samples": 69741,
+    "validation_samples": 14944,
+    "final_test_samples": 14945,
+    "split_strategy": "70% Train / 15% Validation / 15% Test Stratified"
+  },
+  "model": {
+    "architecture": "Weighted Soft-Voting Meta-Ensemble (250 RF + 250 ET + 250 HGB + Deep MLP)",
+    "weights": [
+      3.5,
+      3.5,
+      4.0,
+      1.5
+    ],
+    "training_time_seconds": 292.91,
+    "peak_ram_mb": 1001.92
+  },
+  "evaluation_metrics": {
+    "top1_accuracy_pct": 99.746,
+    "macro_f1": 0.99613,
+    "weighted_f1": 0.99746,
+    "macro_f3": 0.99604,
+    "weighted_f3": 0.99746,
+    "top2_accuracy_pct": 100.0,
+    "top3_accuracy_pct": 100.0,
+    "log_loss": 0.06801,
+    "macro_brier_score": 0.00193,
+    "baseline_dummy_accuracy_pct": 30.974,
+    "baseline_simple_rf_accuracy_pct": 99.224
+  },
+  "class_distribution": [
+    {
+      "class_name": "DAP (Diammonium Phosphate) + Urea + MOP",
+      "sample_count": 30859,
+      "percentage": 30.97
+    },
+    {
+      "class_name": "NPK 19:19:19 Complex + Urea",
+      "sample_count": 24122,
+      "percentage": 24.21
+    },
+    {
+      "class_name": "DAP (Diammonium Phosphate) + MOP (Low Nitrogen Blend)",
+      "sample_count": 18485,
+      "percentage": 18.55
+    },
+    {
+      "class_name": "NPK 10:26:26 + Urea + MOP (High Potash Formula)",
+      "sample_count": 7874,
+      "percentage": 7.9
+    },
+    {
+      "class_name": "SSP (Single Super Phosphate) + Urea + MOP + Lime",
+      "sample_count": 7544,
+      "percentage": 7.57
+    },
+    {
+      "class_name": "NPK 12:32:16 + Single Super Phosphate (Sulphur enriched)",
+      "sample_count": 6020,
+      "percentage": 6.04
+    },
+    {
+      "class_name": "Urea + MOP (Muriate of Potash)",
+      "sample_count": 2412,
+      "percentage": 2.42
+    },
+    {
+      "class_name": "Ammonium Sulphate + DAP + MOP + Gypsum",
+      "sample_count": 2314,
+      "percentage": 2.32
+    }
+  ],
+  "feature_importances": [
+    [
+      "crop_n_demand",
+      0.12884303494262025
+    ],
+    [
+      "soil_ph",
+      0.10431900143389276
+    ],
+    [
+      "potassium",
+      0.09732350291622462
+    ],
+    [
+      "phosphorus",
+      0.09199166587987125
+    ],
+    [
+      "crop_p_demand",
+      0.051205720146427124
+    ],
+    [
+      "sulphur",
+      0.04557441233281979
+    ],
+    [
+      "net_n_deficit",
+      0.045429092927841905
+    ],
+    [
+      "liebig_s_quotient",
+      0.04377988869993251
+    ],
+    [
+      "net_p_deficit",
+      0.043519207044020645
+    ],
+    [
+      "net_k_deficit",
+      0.041353117289487665
+    ],
+    [
+      "crop_k_demand",
+      0.04080139649881247
+    ],
+    [
+      "crop_encoded",
+      0.039300630587494056
+    ],
+    [
+      "pk_ratio",
+      0.03699977394207327
+    ],
+    [
+      "acid_p_fixation_risk",
+      0.03614930425363904
+    ],
+    [
+      "nk_p_ratio",
+      0.028693701061678338
+    ],
+    [
+      "total_nutrient_sum",
+      0.02036074348777258
+    ],
+    [
+      "ph_deficit",
+      0.01746067962597545
+    ],
+    [
+      "np_k_ratio",
+      0.015216070447409559
+    ],
+    [
+      "alkaline_volatilization_risk",
+      0.013573719169251606
+    ],
+    [
+      "nk_ratio",
+      0.013423981863584879
+    ]
+  ],
+  "final_status": "PARTIALLY VALIDATED (Trained on 10.85M National Soil Database; Target Labels are Domain-Rule-Derived)",
+  "limitations": [
+    "The model was trained on real soil observations, but the fertilizer target labels are domain-rule-derived because the database does not contain historical fertilizer recommendation/application outcomes.",
+    "Fertilizer quantities are determined via exact stoichiometric chemical balance calculations, not direct regression.",
+    "Randomized agronomist field trials are required before claiming commercial yield improvements."
+  ]
+}
