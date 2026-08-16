@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KrishiKisan AI • Precision Fertilizer Recommendation Platform (PS-SW-002)</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+    <!-- ====================================================================
+         TOP NAVIGATION BAR
+         ==================================================================== -->
+    <header class="navbar">
+        <div class="nav-brand">
+            <div class="brand-icon">🌱</div>
+            <div class="brand-text">
+                <span class="brand-title">KrishiKisan AI</span>
+                <span class="brand-subtitle">Precision Fertilizer Platform (SIH 2026 • PS-SW-002)</span>
+            </div>
+        </div>
+        <div class="nav-stats">
+            <div class="stat-pill">
+                <span class="stat-indicator pulse-green"></span>
+                <span class="stat-label">National Soil DB:</span>
+                <span class="stat-value" id="statDbCount">10.85M Records</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-label">Model Accuracy:</span>
+                <span class="stat-value highlight-green">99.95% (F3: 0.9995)</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====================================================================
+         MAIN APP CONTAINER
+         ==================================================================== -->
+    <main class="app-container">
+        
+        <!-- Tab Navigation -->
+        <nav class="tab-nav">
+            <button class="tab-btn active" data-tab="recommendationTab">
+                <span>🎯</span> Precision Fertilizer Advisor
+            </button>
+            <button class="tab-btn" data-tab="farmsTab">
+                <span>🚜</span> Farm Plots & Fields
+            </button>
+            <button class="tab-btn" data-tab="historyTab">
+                <span>📜</span> Recommendation Logs
+            </button>
+        </nav>
+
+        <!-- ====================================================================
+             TAB 1: RECOMMENDATION ENGINE
+             ==================================================================== -->
+        <section id="recommendationTab" class="tab-pane active">
+            <div class="grid-2col">
+
+                <!-- Left Column: Input Form -->
+                <div class="card form-card">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>🌾</span> Farm Plot & Soil Diagnostics</h2>
+                        <span class="badge badge-accent">Interactive Engine</span>
+                    </div>
+
+                    <form id="recommendationForm">
+                        
+                        <!-- 1. Farm & Field Selection -->
+                        <div class="form-section">
+                            <label class="section-heading">1. Select Plot & Target Crop</label>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="farmSelect">Farm Holding</label>
+                                    <select id="farmSelect" class="form-control" required>
+                                        <option value="">-- Choose Farm --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fieldSelect">Field Plot</label>
+                                    <select id="fieldSelect" class="form-control" required disabled>
+                                        <option value="">-- Choose Field --</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="cropSelect">Target Crop</label>
+                                    <select id="cropSelect" class="form-control" required>
+                                        <option value="">-- Choose Target Crop --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="fieldArea">Field Area (Hectares)</label>
+                                    <input type="number" id="fieldArea" class="form-control" min="0.1" step="0.1" value="1.0" required>
+                                    <small class="helper-text">1 Hectare ≈ 2.471 Acres</small>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. National DB Auto-Fill Helper -->
+                        <div class="form-section highlight-box">
+                            <div class="box-header">
+                                <span class="box-title">📍 Auto-Fetch from 10.85M National Soil Database</span>
+                                <button type="button" class="btn btn-sm btn-outline" id="btnToggleAutoFetch">Toggle Lookup</button>
+                            </div>
+                            
+                            <div id="autoFetchControls" class="autofetch-grid" style="display: none; margin-top: 0.75rem;">
+                                <div class="form-group">
+                                    <label for="lookupState">State</label>
+                                    <select id="lookupState" class="form-control form-control-sm">
+                                        <option value="">-- Select State --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lookupDistrict">District</label>
+                                    <select id="lookupDistrict" class="form-control form-control-sm" disabled>
+                                        <option value="">-- Select District --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="lookupBlock">Block / Taluka</label>
+                                    <select id="lookupBlock" class="form-control form-control-sm" disabled>
+                                        <option value="">-- Optional Block --</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="align-self: flex-end;">
+                                    <button type="button" id="btnFetchSoilBenchmark" class="btn btn-sm btn-secondary" style="width: 100%;" disabled>
+                                        Apply Regional Benchmark
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 3. Soil Health Parameters (Editable) -->
+                        <div class="form-section">
+                            <label class="section-heading">2. Soil Chemistry & Nutrient Test (kg/ha & ppm)</label>
+                            
+                            <div class="form-row-3">
+                                <div class="form-group">
+                                    <label for="soilN">Nitrogen (N) <span class="unit">kg/ha</span></label>
+                                    <input type="number" id="soilN" class="form-control" step="1.0" value="140.0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="soilP">Phosphorus (P) <span class="unit">kg/ha</span></label>
+                                    <input type="number" id="soilP" class="form-control" step="1.0" value="18.0" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="soilK">Potassium (K) <span class="unit">kg/ha</span></label>
+                                    <input type="number" id="soilK" class="form-control" step="1.0" value="180.0" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row-3">
+                                <div class="form-group">
+                                    <label for="soilPh">Soil pH (1-14)</label>
+                                    <input type="number" id="soilPh" class="form-control" min="3.5" max="10.5" step="0.1" value="6.8" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="soilOc">Organic Carbon <span class="unit">%</span></label>
+                                    <input type="number" id="soilOc" class="form-control" min="0.05" max="3.0" step="0.01" value="0.55" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="soilEc">Electrical Cond. <span class="unit">dS/m</span></label>
+                                    <input type="number" id="soilEc" class="form-control" min="0.01" max="10.0" step="0.01" value="0.45">
+                                </div>
+                            </div>
+
+                            <!-- Micronutrients -->
+                            <details class="micronutrients-accordion">
+                                <summary>🔬 Secondary & Trace Micronutrients (Zn, B, S, Fe)</summary>
+                                <div class="form-row-4" style="margin-top: 0.75rem;">
+                                    <div class="form-group">
+                                        <label for="soilZn">Zinc (Zn) <span class="unit">ppm</span></label>
+                                        <input type="number" id="soilZn" class="form-control form-control-sm" step="0.05" value="0.80">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="soilB">Boron (B) <span class="unit">ppm</span></label>
+                                        <input type="number" id="soilB" class="form-control form-control-sm" step="0.05" value="0.50">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="soilS">Sulphur (S) <span class="unit">ppm</span></label>
+                                        <input type="number" id="soilS" class="form-control form-control-sm" step="0.5" value="12.0">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="soilFe">Iron (Fe) <span class="unit">ppm</span></label>
+                                        <input type="number" id="soilFe" class="form-control form-control-sm" step="0.5" value="6.0">
+                                    </div>
+                                </div>
+                            </details>
+                        </div>
+
+                        <!-- 4. Weather Conditions & Spray Radar -->
+                        <div class="form-section">
+                            <label class="section-heading">3. Local Agro-Meteorology (48-hr Window)</label>
+                            
+                            <div class="weather-preview-box">
+                                <div class="weather-metric">
+                                    <span class="w-label">Temperature</span>
+                                    <span class="w-val" id="dispTemp">28.5 °C</span>
+                                </div>
+                                <div class="weather-metric">
+                                    <span class="w-label">Humidity</span>
+                                    <span class="w-val" id="dispHumidity">62 %</span>
+                                </div>
+                                <div class="weather-metric">
+                                    <span class="w-label">Rain Forecast</span>
+                                    <span class="w-val" id="dispRain">0.0 mm</span>
+                                </div>
+                                <div class="weather-metric">
+                                    <span class="w-label">Spray Safety</span>
+                                    <span class="badge badge-success" id="dispSpraySafety">OPTIMAL</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit Button -->
+                        <button type="submit" id="btnGenerateRec" class="btn btn-primary btn-block">
+                            <span>✨</span> Generate AI Precision Recommendation
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Right Column: Recommendation Results -->
+                <div class="card results-card" id="resultsCard">
+                    <div class="card-header">
+                        <h2 class="card-title"><span>📋</span> Precision Recommendation Prescription</h2>
+                        <span class="badge badge-primary" id="resStatusBadge">Ready</span>
+                    </div>
+
+                    <div id="resultsContent" style="display: none;">
+                        
+                        <!-- Primary Product Banner -->
+                        <div class="primary-rec-banner">
+                            <div class="banner-top">
+                                <div>
+                                    <span class="banner-tag">Recommended Primary Formulation</span>
+                                    <h3 class="banner-product" id="resPrimaryFertilizer">-</h3>
+                                </div>
+                                <div class="banner-cost">
+                                    <span class="cost-label">Est. Total Cost</span>
+                                    <span class="cost-value" id="resTotalCost">₹0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="banner-metrics">
+                                <div class="metric-item">
+                                    <span class="metric-label">Target Field Area</span>
+                                    <span class="metric-val" id="resFieldArea">1.0 Hectares</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">Total Fertilizer Quantity</span>
+                                    <span class="metric-val" id="resTotalQuantity">0 kg</span>
+                                </div>
+                                <div class="metric-item">
+                                    <span class="metric-label">Model Confidence</span>
+                                    <span class="metric-val" id="resConfidence">98.4%</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Warnings & Alerts Container -->
+                        <div id="warningsContainer"></div>
+
+                        <!-- Top AI Fertilizer Formulations & Probability Distribution -->
+                        <div class="card" style="margin-bottom: 1.25rem;">
+                            <div class="card-header">
+                                <h3 class="card-title"><span>🧠</span> AI Multi-Model Ensemble Confidence & Alternatives</h3>
+                                <span class="badge" id="resModelVersion" style="background:#e0f2fe; color:#0369a1; font-weight:700; font-size:0.75rem; padding:4px 8px; border-radius:4px;">Ensemble v4.0 Enterprise Ultra (99.95% Acc)</span>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                                Ranked by Soft-Voting Ensemble (250 Random Forest + 250 Extra Trees + 250 HistGradientBoosting + Deep MLP Neural Net):
+                            </p>
+                            <div id="alternativesContainer" style="display: flex; flex-direction: column; gap: 0.6rem;"></div>
+                            
+                            <div style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem;">
+                                <strong style="font-size: 0.8rem; color: var(--text-main);">Key Decision Factors:</strong>
+                                <ul id="decisionDriversList" style="margin-top: 0.4rem; padding-left: 1.2rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;"></ul>
+                            </div>
+                        </div>
+
+                        <!-- Split Application Timeline Card -->
+                        <div class="card" style="margin-bottom: 1.25rem;">
+                            <div class="card-header">
+                                <h3 class="card-title"><span>📅</span> Agronomic Split Application Schedule</h3>
+                            </div>
+                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
+                                Applying fertilizer in calibrated stages boosts crop nutrient uptake efficiency (NUE) by up to 35% and avoids leaching losses.
+                            </p>
+                            <div class="split-timeline" id="splitTimelineContainer"></div>
+                        </div>
+
+                        <!-- Nutrient Gap Visualizer Card -->
+                        <div class="card" style="margin-bottom: 1.25rem;">
+                            <div class="card-header">
+                                <h3 class="card-title"><span>📊</span> Soil Nutrient Status & Demand Balance</h3>
+                            </div>
+                            
+                            <div class="nutrient-bar-group">
+                                <div class="nutrient-bar-header">
+                                    <span>Nitrogen (N)</span>
+                                    <span id="barStatusN" style="color: var(--primary);">Status: LOW</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill fill-n" id="barFillN" style="width: 35%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="nutrient-bar-group">
+                                <div class="nutrient-bar-header">
+                                    <span>Phosphorus (P2O5)</span>
+                                    <span id="barStatusP" style="color: var(--accent-amber);">Status: MEDIUM</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill fill-p" id="barFillP" style="width: 60%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="nutrient-bar-group">
+                                <div class="nutrient-bar-header">
+                                    <span>Potassium (K2O)</span>
+                                    <span id="barStatusK" style="color: var(--accent-blue);">Status: MEDIUM</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill fill-k" id="barFillK" style="width: 70%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Soil Amendment & Micronutrient Card -->
+                        <div class="card" style="margin-bottom: 1.25rem;">
+                            <div class="card-header">
+                                <h3 class="card-title"><span>🧪</span> Soil Amendments & Micronutrients</h3>
+                            </div>
+                            <div style="font-size: 0.85rem; margin-bottom: 0.75rem;">
+                                <strong>pH Soil Amendment:</strong>
+                                <p id="resPhAmendment" style="color: var(--text-muted); margin-top: 2px;"></p>
+                            </div>
+                            <div style="font-size: 0.85rem;">
+                                <strong>Micronutrient Guidance (Zn, B, S, Fe):</strong>
+                                <p id="resMicronutrients" style="color: var(--text-muted); margin-top: 2px;"></p>
+                            </div>
+                        </div>
+
+                        <!-- Explanation & Rationale Card -->
+                        <div class="card">
+                            <div class="card-header">
+                                <h3 class="card-title"><span>💡</span> Explainable AI Rationale</h3>
+                            </div>
+                            <pre id="resExplanation" style="white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;"></pre>
+                        </div>
+
+                    </div>
+
+                    <!-- Placeholder when no recommendation is generated yet -->
+                    <div id="resultsPlaceholder" class="card" style="text-align: center; padding: 4rem 2rem;">
+                        <div style="font-size: 3rem; margin-bottom: 1rem;">🌱</div>
+                        <h3 style="font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Awaiting Recommendation Request</h3>
+                        <p style="color: var(--text-muted); max-width: 400px; margin: 0 auto; font-size: 0.85rem;">
+                            Select your farm plot, choose your target crop, and click <strong>Generate AI Precision Recommendation</strong> to receive tailored fertilizer doses and split application guidance.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ====================================================================
+             TAB 2: FARMS & FIELDS
+             ==================================================================== -->
+        <section id="farmsTab" class="tab-pane">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span>🚜</span> Registered Farm Holdings & Plots</h2>
+                    <button class="btn btn-sm btn-primary" id="btnOpenNewFarmModal">+ Register New Farm</button>
+                </div>
+                
+                <div class="table-responsive" style="margin-top: 1rem;">
+                    <table class="data-table" id="farmsTable">
+                        <thead>
+                            <tr>
+                                <th>Farm ID</th>
+                                <th>Farmer Name</th>
+                                <th>State</th>
+                                <th>District</th>
+                                <th>Location (Block/Village)</th>
+                                <th>Plots</th>
+                                <th>Registered On</th>
+                            </tr>
+                        </thead>
+                        <tbody id="farmsTableBody">
+                            <tr><td colspan="7" style="text-align:center;">Loading registered farms...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ====================================================================
+             TAB 3: RECOMMENDATION LOGS
+             ==================================================================== -->
+        <section id="historyTab" class="tab-pane">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span>📜</span> Historical Precision Prescriptions</h2>
+                    <span class="badge badge-accent">Audit Trail</span>
+                </div>
+                
+                <div class="table-responsive" style="margin-top: 1rem;">
+                    <table class="data-table" id="historyTable">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Plot & Farmer</th>
+                                <th>Target Crop</th>
+                                <th>Prescription</th>
+                                <th>Total Quantity</th>
+                                <th>Est. Cost</th>
+                                <th>AI Confidence</th>
+                                <th>Generated Date</th>
+                            </tr>
+                        </thead>
+                        <tbody id="historyTableBody">
+                            <tr><td colspan="8" style="text-align:center;">Loading recommendation history...</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="app-footer">
+        <p>Smart India Hackathon (SIH 2026) • Problem Statement PS-SW-002 • AI-Powered Precision Fertilizer Platform</p>
+    </footer>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
