@@ -5,6 +5,10 @@
 *.db
 *.db-shm
 *.db-wal
+# Trained ML models
+*.joblib
+*.pkl
+*.pickle
 
 
 # Python
