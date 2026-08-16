@@ -1,0 +1,17 @@
+# Large datasets
+*.csv
+
+# SQLite databases
+*.db
+*.db-shm
+*.db-wal
+
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Environment
+.env
