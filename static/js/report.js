@@ -253,20 +253,23 @@ function downloadReportPDF() {
     const reportElement = document.getElementById('reportContent');
     const cropName = (document.getElementById('repCrop')?.textContent || 'Prescription').replace(/[\/\\]/g, '_').trim();
     const recId = (document.getElementById('repId')?.textContent || 'report').replace('#', '').trim();
-    const actionsBar = document.querySelector('.report-actions-bar');
 
-    if (actionsBar) actionsBar.style.display = 'none';
+    // 1. Create a dedicated clone of reportContent
+    const clone = reportElement.cloneNode(true);
 
-    // Store original scroll position
-    const prevScrollX = window.scrollX || window.pageXOffset || 0;
-    const prevScrollY = window.scrollY || window.pageYOffset || 0;
+    // 2. Remove interactive actions bar & buttons from the clone
+    const actionElements = clone.querySelectorAll('.no-print, .report-actions-bar');
+    actionElements.forEach(el => el.remove());
 
-    // Reset window scroll to absolute top (0,0) before html2canvas capture
-    // This prevents html2canvas from injecting blank top offsets / empty initial pages!
-    window.scrollTo(0, 0);
+    // 3. Mount clone into a clean, zero-offset container (840px width matches standard A4 portrait proportion)
+    const renderWrapper = document.createElement('div');
+    renderWrapper.id = 'pdfRenderWrapper';
+    renderWrapper.style.cssText = 'position: absolute; top: 0; left: 0; width: 840px; margin: 0; padding: 0; background: #ffffff; z-index: 999999; box-sizing: border-box;';
+    renderWrapper.appendChild(clone);
+    document.body.appendChild(renderWrapper);
 
     const opt = {
-        margin: [10, 10, 10, 10], // 10mm margins for clean A4 printing
+        margin: [10, 10, 10, 10], // 10mm margins on all sides
         filename: `KrishiKisan_Fertilizer_Report_${cropName}_${recId}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
         enableLinks: false,
@@ -276,7 +279,10 @@ function downloadReportPDF() {
             logging: false,
             scrollY: 0,
             scrollX: 0,
-            windowWidth: 1040,
+            x: 0,
+            y: 0,
+            width: 840,
+            windowWidth: 840,
             backgroundColor: '#ffffff'
         },
         jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
@@ -286,32 +292,28 @@ function downloadReportPDF() {
         }
     };
 
-    if (typeof html2pdf !== 'undefined') {
-        html2pdf().set(opt).from(reportElement).save().then(() => {
-            if (actionsBar) actionsBar.style.display = 'flex';
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = originalContent;
-            }
-            window.scrollTo(prevScrollX, prevScrollY);
-        }).catch(err => {
-            console.error("PDF download error:", err);
-            if (actionsBar) actionsBar.style.display = 'flex';
-            if (btn) {
-                btn.disabled = false;
-                btn.innerHTML = originalContent;
-            }
-            window.scrollTo(prevScrollX, prevScrollY);
-        });
-    } else {
-        window.print();
-        if (actionsBar) actionsBar.style.display = 'flex';
+    const cleanup = () => {
+        if (document.body.contains(renderWrapper)) {
+            document.body.removeChild(renderWrapper);
+        }
         if (btn) {
             btn.disabled = false;
             btn.innerHTML = originalContent;
         }
-        window.scrollTo(prevScrollX, prevScrollY);
+    };
+
+    if (typeof html2pdf !== 'undefined') {
+        html2pdf().set(opt).from(renderWrapper).save().then(() => {
+            cleanup();
+        }).catch(err => {
+            console.error("PDF download error:", err);
+            cleanup();
+        });
+    } else {
+        cleanup();
+        window.print();
     }
 }
+
 
 
