@@ -60,6 +60,8 @@ class RecommendationSerializer(serializers.ModelSerializer):
     field_name = serializers.CharField(source='field.field_name', read_only=True)
     crop_name = serializers.CharField(source='crop.name', read_only=True)
     farm_name = serializers.CharField(source='field.farm.farmer_name', read_only=True)
+    soil_profile = SoilTestSerializer(source='soil_test', read_only=True)
+    weather_conditions = WeatherRecordSerializer(source='weather_record', read_only=True)
 
     class Meta:
         model = Recommendation

@@ -243,76 +243,7 @@ function renderReport(data) {
 }
 
 function downloadReportPDF() {
-    const btn = document.getElementById('btnDownloadPDF');
-    const originalContent = btn ? btn.innerHTML : '';
-    if (btn) {
-        btn.disabled = true;
-        btn.innerHTML = `<span>⏳</span> Generating PDF...`;
-    }
-
-    const reportElement = document.getElementById('reportContent');
-    const cropName = (document.getElementById('repCrop')?.textContent || 'Prescription').replace(/[\/\\]/g, '_').trim();
-    const recId = (document.getElementById('repId')?.textContent || 'report').replace('#', '').trim();
-
-    // 1. Create a dedicated clone of reportContent
-    const clone = reportElement.cloneNode(true);
-
-    // 2. Remove interactive actions bar & buttons from the clone
-    const actionElements = clone.querySelectorAll('.no-print, .report-actions-bar');
-    actionElements.forEach(el => el.remove());
-
-    // 3. Mount clone into a clean, zero-offset container (840px width matches standard A4 portrait proportion)
-    const renderWrapper = document.createElement('div');
-    renderWrapper.id = 'pdfRenderWrapper';
-    renderWrapper.style.cssText = 'position: absolute; top: 0; left: 0; width: 840px; margin: 0; padding: 0; background: #ffffff; z-index: 999999; box-sizing: border-box;';
-    renderWrapper.appendChild(clone);
-    document.body.appendChild(renderWrapper);
-
-    const opt = {
-        margin: [10, 10, 10, 10], // 10mm margins on all sides
-        filename: `KrishiKisan_Fertilizer_Report_${cropName}_${recId}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        enableLinks: false,
-        html2canvas: {
-            scale: 2,
-            useCORS: true,
-            logging: false,
-            scrollY: 0,
-            scrollX: 0,
-            x: 0,
-            y: 0,
-            width: 840,
-            windowWidth: 840,
-            backgroundColor: '#ffffff'
-        },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
-        pagebreak: {
-            mode: ['css', 'legacy'],
-            avoid: ['.timeline-item', '.nutrient-bar-group', '.primary-rec-banner', '.report-header-card', '.plot-context-strip', '.weather-preview-box']
-        }
-    };
-
-    const cleanup = () => {
-        if (document.body.contains(renderWrapper)) {
-            document.body.removeChild(renderWrapper);
-        }
-        if (btn) {
-            btn.disabled = false;
-            btn.innerHTML = originalContent;
-        }
-    };
-
-    if (typeof html2pdf !== 'undefined') {
-        html2pdf().set(opt).from(renderWrapper).save().then(() => {
-            cleanup();
-        }).catch(err => {
-            console.error("PDF download error:", err);
-            cleanup();
-        });
-    } else {
-        cleanup();
-        window.print();
-    }
+    window.print();
 }
 
 
