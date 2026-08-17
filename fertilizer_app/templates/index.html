@@ -48,9 +48,6 @@
             <button class="tab-btn" data-tab="farmsTab">
                 <span>🚜</span> Farm Plots & Fields
             </button>
-            <button class="tab-btn" data-tab="historyTab">
-                <span>📜</span> Recommendation Logs
-            </button>
         </nav>
 
         <!-- ====================================================================
@@ -401,37 +398,6 @@
             </div>
         </section>
 
-        <!-- ====================================================================
-             TAB 3: RECOMMENDATION LOGS
-             ==================================================================== -->
-        <section id="historyTab" class="tab-pane">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><span>📜</span> Historical Precision Prescriptions</h2>
-                    <span class="badge badge-accent">Audit Trail</span>
-                </div>
-                
-                <div class="table-responsive" style="margin-top: 1rem;">
-                    <table class="data-table" id="historyTable">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Plot & Farmer</th>
-                                <th>Target Crop</th>
-                                <th>Prescription</th>
-                                <th>Total Quantity</th>
-                                <th>Est. Cost</th>
-                                <th>AI Confidence</th>
-                                <th>Generated Date</th>
-                            </tr>
-                        </thead>
-                        <tbody id="historyTableBody">
-                            <tr><td colspan="8" style="text-align:center;">Loading recommendation history...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
 
     </main>
 

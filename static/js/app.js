@@ -31,7 +31,6 @@ function initTabs() {
             if (pane) pane.classList.add('active');
 
             if (target === 'farmsTab') loadFarmsTable();
-            if (target === 'historyTab') loadHistoryTable();
         });
     });
 }
@@ -439,36 +438,3 @@ async function loadFarmsTable() {
     }
 }
 
-async function loadHistoryTable() {
-    const tbody = document.getElementById('historyTableBody');
-    if (!tbody) return;
-
-    try {
-        const res = await fetch('/api/recommendations/');
-        if (res.ok) {
-            const data = await res.json();
-            const recs = Array.isArray(data) ? data : (data.results || []);
-            tbody.innerHTML = '';
-            if (recs.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;">No recommendations generated yet.</td></tr>';
-                return;
-            }
-            recs.forEach(r => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><strong>#${r.id}</strong></td>
-                    <td>${r.field_name} (${r.farm_name})</td>
-                    <td>${r.crop_name}</td>
-                    <td>${r.primary_fertilizer}</td>
-                    <td>${r.total_quantity_kg} kg</td>
-                    <td><strong>₹${parseFloat(r.estimated_cost_inr).toLocaleString('en-IN')}</strong></td>
-                    <td><span class="badge badge-success">${parseFloat(r.ai_confidence).toFixed(1)}%</span></td>
-                    <td>${new Date(r.created_at).toLocaleDateString()}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-    } catch (err) {
-        console.error("Error loading history:", err);
-    }
-}
