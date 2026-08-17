@@ -1,21 +1,33 @@
 # Large datasets
 *.csv
 
-# SQLite databases
+# SQLite databases & temp files
 *.db
 *.db-shm
 *.db-wal
+*.sqlite3
+*.db-journal
+
 # Trained ML models
 *.joblib
 *.pkl
 *.pickle
-
+*.h5
+*.pt
+*.pth
 
 # Python
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
 .venv/
 venv/
+*.log
 
-# Environment
+# Environment & OS
 .env
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
