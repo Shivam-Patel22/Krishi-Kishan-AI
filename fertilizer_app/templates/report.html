@@ -8,6 +8,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 </head>
 <body>
 
@@ -307,8 +308,8 @@
 
             <!-- Bottom Actions Bar -->
             <div class="report-actions-bar no-print" style="display: flex; justify-content: flex-end; align-items: center; padding-top: 1rem; border-top: 1px solid var(--border-color); margin-bottom: 3rem;">
-                <button type="button" class="btn btn-primary" onclick="window.print()" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; padding: 0.75rem 1.5rem;">
-                    <span>🖨️</span> Print / Save PDF Prescription
+                <button type="button" class="btn btn-primary" id="btnDownloadPDF" onclick="downloadReportPDF()" style="display: inline-flex; align-items: center; gap: 0.5rem; font-weight: 600; padding: 0.75rem 1.5rem;">
+                    <span>📥</span> Download PDF Report
                 </button>
             </div>
 

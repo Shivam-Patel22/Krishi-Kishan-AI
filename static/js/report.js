@@ -241,3 +241,52 @@ function renderReport(data) {
     const explanation = agri.explanation || data.explanation || "";
     if (document.getElementById('repExplanation')) document.getElementById('repExplanation').textContent = explanation;
 }
+
+function downloadReportPDF() {
+    const btn = document.getElementById('btnDownloadPDF');
+    const originalContent = btn ? btn.innerHTML : '';
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<span>⏳</span> Generating PDF...`;
+    }
+
+    const reportElement = document.getElementById('reportContent');
+    const cropName = (document.getElementById('repCrop')?.textContent || 'Prescription').replace(/[\/\\]/g, '_').trim();
+    const recId = (document.getElementById('repId')?.textContent || 'report').replace('#', '').trim();
+    const actionsBar = document.querySelector('.report-actions-bar');
+
+    if (actionsBar) actionsBar.style.display = 'none';
+
+    const opt = {
+        margin: [8, 8, 8, 8],
+        filename: `KrishiKisan_Fertilizer_Report_${cropName}_${recId}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2, useCORS: true, logging: false },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    };
+
+    if (typeof html2pdf !== 'undefined') {
+        html2pdf().set(opt).from(reportElement).save().then(() => {
+            if (actionsBar) actionsBar.style.display = 'flex';
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        }).catch(err => {
+            console.error("PDF download error:", err);
+            if (actionsBar) actionsBar.style.display = 'flex';
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalContent;
+            }
+        });
+    } else {
+        window.print();
+        if (actionsBar) actionsBar.style.display = 'flex';
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = originalContent;
+        }
+    }
+}
+
