@@ -13,7 +13,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "data" / "agriculture.db",
         # Enable WAL mode and busy timeout for concurrent read/write support
         "OPTIONS": {
             "timeout": 20,
