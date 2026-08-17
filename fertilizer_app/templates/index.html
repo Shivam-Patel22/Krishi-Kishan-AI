@@ -40,15 +40,6 @@
          ==================================================================== -->
     <main class="app-container">
         
-        <!-- Tab Navigation -->
-        <nav class="tab-nav">
-            <button class="tab-btn active" data-tab="recommendationTab">
-                <span>🎯</span> Precision Fertilizer Advisor
-            </button>
-            <button class="tab-btn" data-tab="farmsTab">
-                <span>🚜</span> Farm Plots & Fields
-            </button>
-        </nav>
 
         <!-- ====================================================================
              TAB 1: RECOMMENDATION ENGINE
@@ -367,36 +358,6 @@
             </div>
         </section>
 
-        <!-- ====================================================================
-             TAB 2: FARMS & FIELDS
-             ==================================================================== -->
-        <section id="farmsTab" class="tab-pane">
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title"><span>🚜</span> Registered Farm Holdings & Plots</h2>
-                    <button class="btn btn-sm btn-primary" id="btnOpenNewFarmModal">+ Register New Farm</button>
-                </div>
-                
-                <div class="table-responsive" style="margin-top: 1rem;">
-                    <table class="data-table" id="farmsTable">
-                        <thead>
-                            <tr>
-                                <th>Farm ID</th>
-                                <th>Farmer Name</th>
-                                <th>State</th>
-                                <th>District</th>
-                                <th>Location (Block/Village)</th>
-                                <th>Plots</th>
-                                <th>Registered On</th>
-                            </tr>
-                        </thead>
-                        <tbody id="farmsTableBody">
-                            <tr><td colspan="7" style="text-align:center;">Loading registered farms...</td></tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </section>
 
 
     </main>

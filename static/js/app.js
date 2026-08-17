@@ -3,72 +3,26 @@
  */
 
 document.addEventListener('DOMContentLoaded', () => {
-    initTabs();
     loadInitialData();
     setupEventListeners();
 });
 
 // State Store
 const appState = {
-    farms: [],
     crops: [],
-    selectedFarm: null,
-    selectedField: null,
 };
-
-function initTabs() {
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabPanes = document.querySelectorAll('.tab-pane');
-
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            tabBtns.forEach(b => b.classList.remove('active'));
-            tabPanes.forEach(p => p.classList.remove('active'));
-
-            btn.classList.add('active');
-            const target = btn.getAttribute('data-tab');
-            const pane = document.getElementById(target);
-            if (pane) pane.classList.add('active');
-
-            if (target === 'farmsTab') loadFarmsTable();
-        });
-    });
-}
 
 async function loadInitialData() {
     try {
-        const [farmsRes, cropsRes] = await Promise.all([
-            fetch('/api/farms/'),
-            fetch('/api/crops/')
-        ]);
-
-        if (farmsRes.ok) {
-            const farmsData = await farmsRes.json();
-            appState.farms = Array.isArray(farmsData) ? farmsData : (farmsData.results || []);
-            populateFarmSelect(appState.farms);
-        }
-
+        const cropsRes = await fetch('/api/crops/');
         if (cropsRes.ok) {
             const cropsData = await cropsRes.json();
             appState.crops = Array.isArray(cropsData) ? cropsData : (cropsData.results || []);
             populateCropSelect(appState.crops);
         }
     } catch (err) {
-        console.error("Failed to load initial farm/crop catalogs:", err);
+        console.error("Failed to load initial crop catalogs:", err);
     }
-}
-
-function populateFarmSelect(farms) {
-    const select = document.getElementById('farmSelect');
-    if (!select) return;
-    select.innerHTML = '<option value="">-- Choose Farm --</option>';
-
-    farms.forEach(farm => {
-        const opt = document.createElement('option');
-        opt.value = farm.id;
-        opt.textContent = `${farm.farmer_name} (${farm.district_name}, ${farm.state_name})`;
-        select.appendChild(opt);
-    });
 }
 
 function populateCropSelect(crops) {
@@ -405,36 +359,5 @@ function renderRecommendationResults(data) {
     if (resCard) resCard.scrollIntoView({ behavior: 'smooth' });
 }
 
-async function loadFarmsTable() {
-    const tbody = document.getElementById('farmsTableBody');
-    if (!tbody) return;
 
-    try {
-        const res = await fetch('/api/farms/');
-        if (res.ok) {
-            const data = await res.json();
-            const farms = Array.isArray(data) ? data : (data.results || []);
-            tbody.innerHTML = '';
-            if (farms.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;">No farms registered yet.</td></tr>';
-                return;
-            }
-            farms.forEach(f => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td><strong>#${f.id}</strong></td>
-                    <td>${f.farmer_name}</td>
-                    <td>${f.state_name}</td>
-                    <td>${f.district_name}</td>
-                    <td>${f.block_name || '-'} / ${f.village_name || '-'}</td>
-                    <td><span class="badge badge-accent">${f.fields_count || 1} Plots</span></td>
-                    <td>${new Date(f.created_at).toLocaleDateString()}</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-    } catch (err) {
-        console.error("Error loading farms:", err);
-    }
-}
 
