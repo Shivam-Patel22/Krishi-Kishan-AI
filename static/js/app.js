@@ -115,7 +115,7 @@ function setupEventListeners() {
             const st = e.target.value;
             lookupDistrict.innerHTML = '<option value="">-- Select District --</option>';
             lookupDistrict.disabled = true;
-            lookupBlock.innerHTML = '<option value="">-- Optional Block --</option>';
+            lookupBlock.innerHTML = '<option value="">-- Select Block / Taluka --</option>';
             lookupBlock.disabled = true;
             if (btnApplyBenchmark) btnApplyBenchmark.disabled = true;
 
@@ -143,7 +143,7 @@ function setupEventListeners() {
         lookupDistrict.addEventListener('change', async (e) => {
             const st = lookupState.value;
             const dist = e.target.value;
-            lookupBlock.innerHTML = '<option value="">-- Optional Block --</option>';
+            lookupBlock.innerHTML = '<option value="">-- Select Block / Taluka --</option>';
             lookupBlock.disabled = true;
             if (btnApplyBenchmark) btnApplyBenchmark.disabled = !dist;
 
@@ -212,6 +212,28 @@ function setupEventListeners() {
 async function handleGenerateRecommendation(e) {
     e.preventDefault();
 
+    const lookupState = document.getElementById('lookupState')?.value?.trim();
+    const lookupDistrict = document.getElementById('lookupDistrict')?.value?.trim();
+    const lookupBlock = document.getElementById('lookupBlock')?.value?.trim();
+
+    if (!lookupState) {
+        alert("Please select a State.");
+        document.getElementById('lookupState')?.focus();
+        return;
+    }
+
+    if (!lookupDistrict) {
+        alert("Please select a District.");
+        document.getElementById('lookupDistrict')?.focus();
+        return;
+    }
+
+    if (!lookupBlock) {
+        alert("Please select a Block / Taluka.");
+        document.getElementById('lookupBlock')?.focus();
+        return;
+    }
+
     const fieldSelectElem = document.getElementById('fieldSelect');
     const fieldId = fieldSelectElem ? fieldSelectElem.value : null;
     const cropId = document.getElementById('cropSelect').value;
@@ -230,6 +252,9 @@ async function handleGenerateRecommendation(e) {
         area_hectares: parseFloat(areaHa) || 1.0,
         soil_data: {
             soil_type: soilTypeVal,
+            state: lookupState,
+            district: lookupDistrict,
+            block: lookupBlock,
             nitrogen: parseFloat(document.getElementById('soilN').value || 140.0),
             phosphorus: parseFloat(document.getElementById('soilP').value || 18.0),
             potassium: parseFloat(document.getElementById('soilK').value || 180.0),
