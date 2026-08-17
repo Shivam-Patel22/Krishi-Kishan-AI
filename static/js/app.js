@@ -23,6 +23,26 @@ async function loadInitialData() {
     } catch (err) {
         console.error("Failed to load initial crop catalogs:", err);
     }
+    loadLookupStates();
+}
+
+async function loadLookupStates() {
+    const lookupState = document.getElementById('lookupState');
+    if (!lookupState || lookupState.options.length > 1) return;
+    try {
+        const res = await fetch('/api/soil-lookup/?type=states');
+        if (res.ok) {
+            const data = await res.json();
+            (data.states || []).forEach(st => {
+                const opt = document.createElement('option');
+                opt.value = st;
+                opt.textContent = st;
+                lookupState.appendChild(opt);
+            });
+        }
+    } catch (err) {
+        console.error("Error loading states:", err);
+    }
 }
 
 function populateCropSelect(crops) {
@@ -42,7 +62,6 @@ function setupEventListeners() {
     const farmSelect = document.getElementById('farmSelect');
     const fieldSelect = document.getElementById('fieldSelect');
     const form = document.getElementById('recommendationForm');
-    const btnToggleAuto = document.getElementById('btnToggleAutoFetch');
     const lookupState = document.getElementById('lookupState');
     const lookupDistrict = document.getElementById('lookupDistrict');
     const lookupBlock = document.getElementById('lookupBlock');
@@ -87,32 +106,6 @@ function setupEventListeners() {
             if (opt && opt.dataset.area) {
                 const areaInput = document.getElementById('fieldArea');
                 if (areaInput) areaInput.value = opt.dataset.area;
-            }
-        });
-    }
-
-    if (btnToggleAuto) {
-        btnToggleAuto.addEventListener('click', async () => {
-            const box = document.getElementById('autoFetchControls');
-            if (!box) return;
-            const isHidden = box.style.display === 'none';
-            box.style.display = isHidden ? 'grid' : 'none';
-
-            if (isHidden && lookupState.options.length <= 1) {
-                try {
-                    const res = await fetch('/api/soil-lookup/?type=states');
-                    if (res.ok) {
-                        const data = await res.json();
-                        (data.states || []).forEach(st => {
-                            const opt = document.createElement('option');
-                            opt.value = st;
-                            opt.textContent = st;
-                            lookupState.appendChild(opt);
-                        });
-                    }
-                } catch (err) {
-                    console.error("Error loading states:", err);
-                }
             }
         });
     }
