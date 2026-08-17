@@ -273,91 +273,22 @@ async function handleGenerateRecommendation(e) {
         }
 
         const data = await res.json();
-        renderRecommendationResults(data);
+        
+        // Save recommendation payload to sessionStorage for seamless report rendering
+        sessionStorage.setItem('currentRecommendation', JSON.stringify(data));
+
+        // Navigate to dedicated report route
+        const recId = data.recommendation_id || '';
+        window.location.href = `/report/${recId ? `?id=${recId}` : ''}`;
 
     } catch (err) {
         console.error("Failed to generate recommendation:", err);
         alert(`Recommendation Generation Error: ${err.message}`);
-    } finally {
         btn.disabled = false;
         btn.innerHTML = `<span>✨</span> Generate AI Precision Recommendation`;
     }
 }
 
-function renderRecommendationResults(data) {
-    const placeholder = document.getElementById('resultsPlaceholder');
-    const content = document.getElementById('resultsContent');
-
-    if (placeholder) placeholder.style.display = 'none';
-    if (content) content.style.display = 'block';
-
-    const agri = data.agronomic_recommendation || {};
-    const ml = data.ml_prediction || {};
-
-    if (document.getElementById('resPrimaryFertilizer')) document.getElementById('resPrimaryFertilizer').textContent = agri.primary_fertilizer || "-";
-    if (document.getElementById('resTotalCost')) document.getElementById('resTotalCost').textContent = `₹${(agri.estimated_cost_inr || 0).toLocaleString('en-IN')}`;
-    if (document.getElementById('resFieldArea')) document.getElementById('resFieldArea').textContent = `${data.area_hectares || 1.0} Hectares`;
-    if (document.getElementById('resTotalQuantity')) document.getElementById('resTotalQuantity').textContent = `${agri.total_quantity_kg || 0} kg`;
-    if (document.getElementById('resConfidence')) document.getElementById('resConfidence').textContent = `${ml.confidence_pct || 95}%`;
-
-    // Render Alternatives
-    const altContainer = document.getElementById('alternativesContainer');
-    if (altContainer && ml.alternatives) {
-        altContainer.innerHTML = '';
-        ml.alternatives.forEach((alt, idx) => {
-            const row = document.createElement('div');
-            row.style.cssText = "display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:6px 10px; border-radius:6px; border:1px solid #e2e8f0; font-size:0.82rem;";
-            row.innerHTML = `
-                <span style="font-weight:600; color:#1e293b;">${idx + 1}. ${alt.fertilizer}</span>
-                <span style="font-weight:700; color:#15803d;">${alt.probability_pct}%</span>
-            `;
-            altContainer.appendChild(row);
-        });
-    }
-
-    // Render Decision Drivers
-    const driversList = document.getElementById('decisionDriversList');
-    if (driversList && ml.decision_drivers) {
-        driversList.innerHTML = '';
-        ml.decision_drivers.forEach(driver => {
-            const li = document.createElement('li');
-            li.textContent = driver;
-            driversList.appendChild(li);
-        });
-    }
-
-    // Render Split Timeline
-    const timelineContainer = document.getElementById('splitTimelineContainer');
-    if (timelineContainer && agri.split_schedule) {
-        timelineContainer.innerHTML = '';
-        agri.split_schedule.forEach((split, idx) => {
-            const item = document.createElement('div');
-            item.className = 'timeline-item';
-            item.innerHTML = `
-                <div class="timeline-step">${idx + 1}</div>
-                <div class="timeline-content">
-                    <div class="timeline-title">
-                        <span>${split.stage} (${split.timing_days})</span>
-                        <span style="color:var(--primary); font-weight:800;">${split.total_dose_kg} kg</span>
-                    </div>
-                    <div class="timeline-desc">
-                        <strong>Nutrient:</strong> ${split.dosage_split} &bull; <strong>Application:</strong> ${split.application_method}
-                    </div>
-                </div>
-            `;
-            timelineContainer.appendChild(item);
-        });
-    }
-
-    // Soil Amendments
-    if (document.getElementById('resPhAmendment')) document.getElementById('resPhAmendment').textContent = agri.ph_amendment || "pH is in optimal range (no amendments needed).";
-    if (document.getElementById('resMicronutrients')) document.getElementById('resMicronutrients').textContent = agri.micronutrient_advice || "Micronutrients sufficient.";
-    if (document.getElementById('resExplanation')) document.getElementById('resExplanation').textContent = agri.explanation || "";
-
-    // Smooth Scroll to Results
-    const resCard = document.getElementById('resultsCard');
-    if (resCard) resCard.scrollIntoView({ behavior: 'smooth' });
-}
 
 
 

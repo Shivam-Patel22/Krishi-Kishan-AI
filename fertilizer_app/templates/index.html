@@ -43,13 +43,17 @@
         <!-- ====================================================================
              TAB 1: RECOMMENDATION ENGINE
              ==================================================================== -->
-        <section id="recommendationTab" class="tab-pane active">
-            <div class="grid-2col">
-
-                <!-- Left Column: Input Form -->
+        <section id="recommendationTab" class="dashboard-form-section">
+            <div class="dashboard-form-container">
+                <!-- Input Form Card -->
                 <div class="card form-card">
                     <div class="card-header">
-                        <h2 class="card-title"><span>🌾</span> Farm Plot & Soil Diagnostics</h2>
+                        <div>
+                            <h2 class="card-title"><span>🌾</span> Farm Plot & Soil Diagnostics</h2>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.25rem;">
+                                Enter your farm parameters or auto-fetch regional benchmarks to generate your AI precision prescription.
+                            </p>
+                        </div>
                         <span class="badge badge-accent">Interactive Engine</span>
                     </div>
 
@@ -87,8 +91,6 @@
                                 </div>
                             </div>
                         </div>
-
-
 
                         <!-- 2. National DB Auto-Fill Helper -->
                         <div class="form-section highlight-box">
@@ -207,153 +209,11 @@
                         </div>
 
                         <!-- Submit Button -->
-                        <button type="submit" id="btnGenerateRec" class="btn btn-primary btn-block">
+                        <button type="submit" id="btnGenerateRec" class="btn btn-primary btn-block" style="padding: 0.85rem; font-size: 1rem;">
                             <span>✨</span> Generate AI Precision Recommendation
                         </button>
                     </form>
                 </div>
-
-                <!-- Right Column: Recommendation Results -->
-                <div class="card results-card" id="resultsCard">
-                    <div class="card-header">
-                        <h2 class="card-title"><span>📋</span> Precision Recommendation Prescription</h2>
-                        <span class="badge badge-primary" id="resStatusBadge">Ready</span>
-                    </div>
-
-                    <div id="resultsContent" style="display: none;">
-                        
-                        <!-- Primary Product Banner -->
-                        <div class="primary-rec-banner">
-                            <div class="banner-top">
-                                <div>
-                                    <span class="banner-tag">Recommended Primary Formulation</span>
-                                    <h3 class="banner-product" id="resPrimaryFertilizer">-</h3>
-                                </div>
-                                <div class="banner-cost">
-                                    <span class="cost-label">Est. Total Cost</span>
-                                    <span class="cost-value" id="resTotalCost">₹0</span>
-                                </div>
-                            </div>
-                            
-                            <div class="banner-metrics">
-                                <div class="metric-item">
-                                    <span class="metric-label">Target Field Area</span>
-                                    <span class="metric-val" id="resFieldArea">1.0 Hectares</span>
-                                </div>
-                                <div class="metric-item">
-                                    <span class="metric-label">Total Fertilizer Quantity</span>
-                                    <span class="metric-val" id="resTotalQuantity">0 kg</span>
-                                </div>
-                                <div class="metric-item">
-                                    <span class="metric-label">Model Confidence</span>
-                                    <span class="metric-val" id="resConfidence">98.4%</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Warnings & Alerts Container -->
-                        <div id="warningsContainer"></div>
-
-                        <!-- Top AI Fertilizer Formulations & Probability Distribution -->
-                        <div class="card" style="margin-bottom: 1.25rem;">
-                            <div class="card-header">
-                                <h3 class="card-title"><span>🧠</span> AI Multi-Model Ensemble Confidence & Alternatives</h3>
-                                <span class="badge" id="resModelVersion" style="background:#e0f2fe; color:#0369a1; font-weight:700; font-size:0.75rem; padding:4px 8px; border-radius:4px;">Weighted Soft-Voting Ensemble V2</span>
-                            </div>
-                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
-                                Ranked by Soft-Voting Ensemble (250 Random Forest + 250 Extra Trees + 250 HistGradientBoosting + Deep MLP Neural Net):
-                            </p>
-                            <div id="alternativesContainer" style="display: flex; flex-direction: column; gap: 0.6rem;"></div>
-                            
-                            <div style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 0.75rem;">
-                                <strong style="font-size: 0.8rem; color: var(--text-main);">Key Decision Factors:</strong>
-                                <ul id="decisionDriversList" style="margin-top: 0.4rem; padding-left: 1.2rem; font-size: 0.8rem; color: var(--text-muted); line-height: 1.5;"></ul>
-                            </div>
-                        </div>
-
-                        <!-- Split Application Timeline Card -->
-                        <div class="card" style="margin-bottom: 1.25rem;">
-                            <div class="card-header">
-                                <h3 class="card-title"><span>📅</span> Agronomic Split Application Schedule</h3>
-                            </div>
-                            <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem;">
-                                Applying fertilizer in calibrated stages boosts crop nutrient uptake efficiency (NUE) by up to 35% and avoids leaching losses.
-                            </p>
-                            <div class="split-timeline" id="splitTimelineContainer"></div>
-                        </div>
-
-                        <!-- Nutrient Gap Visualizer Card -->
-                        <div class="card" style="margin-bottom: 1.25rem;">
-                            <div class="card-header">
-                                <h3 class="card-title"><span>📊</span> Soil Nutrient Status & Demand Balance</h3>
-                            </div>
-                            
-                            <div class="nutrient-bar-group">
-                                <div class="nutrient-bar-header">
-                                    <span>Nitrogen (N)</span>
-                                    <span id="barStatusN" style="color: var(--primary);">Status: LOW</span>
-                                </div>
-                                <div class="progress-track">
-                                    <div class="progress-fill fill-n" id="barFillN" style="width: 35%;"></div>
-                                </div>
-                            </div>
-
-                            <div class="nutrient-bar-group">
-                                <div class="nutrient-bar-header">
-                                    <span>Phosphorus (P2O5)</span>
-                                    <span id="barStatusP" style="color: var(--accent-amber);">Status: MEDIUM</span>
-                                </div>
-                                <div class="progress-track">
-                                    <div class="progress-fill fill-p" id="barFillP" style="width: 60%;"></div>
-                                </div>
-                            </div>
-
-                            <div class="nutrient-bar-group">
-                                <div class="nutrient-bar-header">
-                                    <span>Potassium (K2O)</span>
-                                    <span id="barStatusK" style="color: var(--accent-blue);">Status: MEDIUM</span>
-                                </div>
-                                <div class="progress-track">
-                                    <div class="progress-fill fill-k" id="barFillK" style="width: 70%;"></div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Soil Amendment & Micronutrient Card -->
-                        <div class="card" style="margin-bottom: 1.25rem;">
-                            <div class="card-header">
-                                <h3 class="card-title"><span>🧪</span> Soil Amendments & Micronutrients</h3>
-                            </div>
-                            <div style="font-size: 0.85rem; margin-bottom: 0.75rem;">
-                                <strong>pH Soil Amendment:</strong>
-                                <p id="resPhAmendment" style="color: var(--text-muted); margin-top: 2px;"></p>
-                            </div>
-                            <div style="font-size: 0.85rem;">
-                                <strong>Micronutrient Guidance (Zn, B, S, Fe):</strong>
-                                <p id="resMicronutrients" style="color: var(--text-muted); margin-top: 2px;"></p>
-                            </div>
-                        </div>
-
-                        <!-- Explanation & Rationale Card -->
-                        <div class="card">
-                            <div class="card-header">
-                                <h3 class="card-title"><span>💡</span> Explainable AI Rationale</h3>
-                            </div>
-                            <pre id="resExplanation" style="white-space: pre-wrap; font-family: inherit; font-size: 0.85rem; color: var(--text-muted); line-height: 1.6;"></pre>
-                        </div>
-
-                    </div>
-
-                    <!-- Placeholder when no recommendation is generated yet -->
-                    <div id="resultsPlaceholder" class="card" style="text-align: center; padding: 4rem 2rem;">
-                        <div style="font-size: 3rem; margin-bottom: 1rem;">🌱</div>
-                        <h3 style="font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">Awaiting Recommendation Request</h3>
-                        <p style="color: var(--text-muted); max-width: 400px; margin: 0 auto; font-size: 0.85rem;">
-                            Select your farm plot, choose your target crop, and click <strong>Generate AI Precision Recommendation</strong> to receive tailored fertilizer doses and split application guidance.
-                        </p>
-                    </div>
-                </div>
-
             </div>
         </section>
 

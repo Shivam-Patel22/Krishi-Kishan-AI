@@ -30,6 +30,14 @@ def index_view(request):
     return render(request, 'index.html')
 
 
+def report_view(request):
+    """
+    Renders the Dedicated AI Precision Recommendation Report page.
+    """
+    return render(request, 'report.html')
+
+
+
 class FarmViewSet(viewsets.ModelViewSet):
     permission_classes = [AllowAny]
     authentication_classes = []
