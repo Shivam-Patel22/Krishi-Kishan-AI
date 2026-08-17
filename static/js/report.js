@@ -257,12 +257,33 @@ function downloadReportPDF() {
 
     if (actionsBar) actionsBar.style.display = 'none';
 
+    // Store original scroll position
+    const prevScrollX = window.scrollX || window.pageXOffset || 0;
+    const prevScrollY = window.scrollY || window.pageYOffset || 0;
+
+    // Reset window scroll to absolute top (0,0) before html2canvas capture
+    // This prevents html2canvas from injecting blank top offsets / empty initial pages!
+    window.scrollTo(0, 0);
+
     const opt = {
-        margin: [8, 8, 8, 8],
+        margin: [10, 10, 10, 10], // 10mm margins for clean A4 printing
         filename: `KrishiKisan_Fertilizer_Report_${cropName}_${recId}.pdf`,
         image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2, useCORS: true, logging: false },
-        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+        enableLinks: false,
+        html2canvas: {
+            scale: 2,
+            useCORS: true,
+            logging: false,
+            scrollY: 0,
+            scrollX: 0,
+            windowWidth: 1040,
+            backgroundColor: '#ffffff'
+        },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' },
+        pagebreak: {
+            mode: ['css', 'legacy'],
+            avoid: ['.timeline-item', '.nutrient-bar-group', '.primary-rec-banner', '.report-header-card', '.plot-context-strip', '.weather-preview-box']
+        }
     };
 
     if (typeof html2pdf !== 'undefined') {
@@ -272,6 +293,7 @@ function downloadReportPDF() {
                 btn.disabled = false;
                 btn.innerHTML = originalContent;
             }
+            window.scrollTo(prevScrollX, prevScrollY);
         }).catch(err => {
             console.error("PDF download error:", err);
             if (actionsBar) actionsBar.style.display = 'flex';
@@ -279,6 +301,7 @@ function downloadReportPDF() {
                 btn.disabled = false;
                 btn.innerHTML = originalContent;
             }
+            window.scrollTo(prevScrollX, prevScrollY);
         });
     } else {
         window.print();
@@ -287,6 +310,8 @@ function downloadReportPDF() {
             btn.disabled = false;
             btn.innerHTML = originalContent;
         }
+        window.scrollTo(prevScrollX, prevScrollY);
     }
 }
+
 

@@ -714,9 +714,43 @@ body {
     }
 }
 
+/* PDF Page Break & Print Rules */
+@page {
+    size: A4 portrait;
+    margin: 10mm;
+}
+
+.report-header-card,
+.primary-rec-banner,
+.timeline-item,
+.nutrient-bar-group,
+.weather-preview-box,
+.plot-context-strip {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+}
+
+.report-grid-2col {
+    break-inside: auto;
+    page-break-inside: auto;
+}
+
+.primary-rec-banner .metric-val {
+    color: #ffffff !important;
+    font-weight: 800;
+}
+
+.primary-rec-banner .metric-val.highlight-green {
+    color: #ffffff !important;
+}
+
+.primary-rec-banner .metric-label {
+    color: rgba(255, 255, 255, 0.9) !important;
+}
+
 /* Print Styles */
 @media print {
-    .navbar, .app-footer, .no-print, .btn, #btnTopBack, #btnGenerateRec {
+    .navbar, .app-footer, .no-print, .btn, #btnTopBack, #btnGenerateRec, .report-actions-bar {
         display: none !important;
     }
     body {
@@ -731,8 +765,9 @@ body {
     .card {
         box-shadow: none !important;
         border: 1px solid #cbd5e1 !important;
-        page-break-inside: avoid;
+        page-break-inside: auto;
         margin-bottom: 1rem !important;
     }
 }
+
 
