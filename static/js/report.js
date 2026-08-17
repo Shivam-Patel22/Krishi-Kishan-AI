@@ -243,7 +243,12 @@ function renderReport(data) {
 }
 
 function downloadReportPDF() {
-    window.print();
+    const recId = (document.getElementById('repId')?.textContent || '').replace('#', '').trim();
+    if (recId && recId !== '-' && recId !== '') {
+        window.location.href = `/api/recommendations/${recId}/pdf/`;
+    } else {
+        window.print();
+    }
 }
 
 

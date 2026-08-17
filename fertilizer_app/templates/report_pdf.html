@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>KrishiKisan AI Precision Fertilizer Prescription #{{ rec.id }}</title>
+    <style>
+        @page {
+            size: A4 portrait;
+            margin: 12mm 10mm 12mm 10mm;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            color: #1e293b;
+            background: #ffffff;
+            font-size: 10pt;
+            line-height: 1.4;
+        }
+        .report-header-card {
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 14px;
+            margin-bottom: 12px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .badge {
+            display: inline-block;
+            font-size: 7pt;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
+        .badge-accent { background: #e0f2fe; color: #0369a1; }
+        .badge-primary { background: #dcfce7; color: #15803d; }
+        .badge-danger { background: #fee2e2; color: #b91c1c; }
+        .badge-warning { background: #fef3c7; color: #b45309; }
+        .badge-success { background: #dcfce7; color: #15803d; }
+
+        .report-title {
+            font-size: 15pt;
+            font-weight: 800;
+            color: #0f172a;
+            margin-top: 3px;
+            line-height: 1.2;
+        }
+        .report-subtitle {
+            font-size: 8.5pt;
+            color: #64748b;
+            margin-top: 2px;
+        }
+        .meta-strip {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        .meta-pill {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 7.5pt;
+            text-align: right;
+        }
+        .plot-context-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 8px 10px;
+            margin-top: 10px;
+        }
+        .context-label {
+            display: block;
+            font-size: 6.5pt;
+            text-transform: uppercase;
+            color: #64748b;
+            font-weight: 700;
+        }
+        .context-val {
+            display: block;
+            font-size: 8.5pt;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .primary-rec-banner {
+            background: #15803d;
+            color: #ffffff;
+            border-radius: 8px;
+            padding: 12px 14px;
+            margin-bottom: 12px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .banner-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+            padding-bottom: 8px;
+            margin-bottom: 8px;
+        }
+        .banner-tag {
+            font-size: 7pt;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            opacity: 0.9;
+        }
+        .banner-product {
+            font-size: 12pt;
+            font-weight: 800;
+            color: #ffffff;
+            margin-top: 2px;
+        }
+        .banner-cost {
+            text-align: right;
+        }
+        .cost-label {
+            font-size: 7pt;
+            opacity: 0.9;
+            display: block;
+        }
+        .cost-value {
+            font-size: 13pt;
+            font-weight: 800;
+            color: #fef08a;
+        }
+        .banner-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 8px;
+        }
+        .metric-label {
+            font-size: 7pt;
+            opacity: 0.9;
+            display: block;
+            color: #f1f5f9;
+        }
+        .metric-val {
+            font-weight: 800;
+            font-size: 9.5pt;
+            color: #ffffff;
+        }
+        .grid-2col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .card {
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 12px;
+            background: #ffffff;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 4px;
+        }
+        .card-title {
+            font-size: 9.5pt;
+            font-weight: 700;
+            color: #0f172a;
+        }
+        .nutrient-bar-group {
+            margin-bottom: 8px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .nutrient-bar-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 7.5pt;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+        .progress-track {
+            background: #e2e8f0;
+            height: 6px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 4px;
+        }
+        .fill-n { background: #15803d; }
+        .fill-p { background: #d97706; }
+        .fill-k { background: #0284c7; }
+
+        .timeline-item {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 8px;
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+        .timeline-step {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #15803d;
+            color: #ffffff;
+            font-size: 8pt;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .timeline-content {
+            flex-grow: 1;
+            font-size: 7.5pt;
+        }
+        .timeline-title {
+            font-size: 8pt;
+            font-weight: 700;
+            color: #0f172a;
+            display: flex;
+            justify-content: space-between;
+        }
+        .timeline-desc {
+            color: #475569;
+            margin-top: 2px;
+        }
+        .weather-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 6px 8px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-size: 7.5pt;
+        }
+        .rationale-box {
+            white-space: pre-wrap;
+            font-family: inherit;
+            font-size: 7.5pt;
+            color: #334155;
+            line-height: 1.5;
+            background: #f8fafc;
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
+        }
+        .pdf-avoid-break {
+            page-break-inside: avoid;
+            break-inside: avoid;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Prescription Card -->
+    <div class="report-header-card">
+        <div class="meta-strip">
+            <div>
+                <span class="badge badge-accent">Official Agronomic Prescription</span>
+                <h1 class="report-title">Precision Fertilizer Recommendation Report</h1>
+                <p class="report-subtitle">KrishiKisan AI • Multi-Model Ensemble & ICAR Stoichiometric Prescription</p>
+            </div>
+            <div class="meta-pill">
+                <div><strong>Report ID: #{{ rec.id }}</strong></div>
+                <div style="color: #64748b; margin-top: 2px;">{{ rec.created_at|date:"d M Y, h:i A" }}</div>
+            </div>
+        </div>
+
+        <div class="plot-context-strip">
+            <div>
+                <span class="context-label">Target Crop</span>
+                <strong class="context-val">{{ rec.crop.name }}</strong>
+            </div>
+            <div>
+                <span class="context-label">Field Area</span>
+                <strong class="context-val">{{ rec.field.area_hectares }} ha (~{{ area_acres }} acres)</strong>
+            </div>
+            <div>
+                <span class="context-label">Soil Texture</span>
+                <strong class="context-val">{{ rec.field.soil_type }}</strong>
+            </div>
+            <div>
+                <span class="context-label">Source Benchmark</span>
+                <strong class="context-val">{{ rec.soil_test.source|default:"Field Diagnostic Test" }}</strong>
+            </div>
+        </div>
+    </div>
+
+    <!-- Primary Formulation Banner -->
+    <div class="primary-rec-banner">
+        <div class="banner-top">
+            <div>
+                <span class="banner-tag">Recommended Primary Formulation</span>
+                <div class="banner-product">{{ rec.primary_fertilizer }}</div>
+            </div>
+            <div class="banner-cost">
+                <span class="cost-label">Est. Total Fertilizer Cost</span>
+                <div class="cost-value">₹{{ rec.estimated_cost_inr }}</div>
+            </div>
+        </div>
+        
+        <div class="banner-metrics">
+            <div>
+                <span class="metric-label">Total Fertilizer Quantity</span>
+                <span class="metric-val">{{ rec.total_quantity_kg }} kg</span>
+            </div>
+            <div>
+                <span class="metric-label">AI Model Confidence</span>
+                <span class="metric-val">{{ rec.ai_confidence }}%</span>
+            </div>
+            <div>
+                <span class="metric-label">Weather Application Window</span>
+                <span class="metric-val">Optimal / Safe</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2 Column Section: Diagnostics & Split Application -->
+    <div class="grid-2col">
+        <!-- Soil Diagnostics -->
+        <div class="card pdf-avoid-break">
+            <div class="card-header">
+                <span class="card-title">📊 Soil Nutrient Status & Balance</span>
+                <span class="badge badge-accent">Matrix</span>
+            </div>
+
+            <div class="nutrient-bar-group">
+                <div class="nutrient-bar-header">
+                    <span>Nitrogen (N): <strong>{{ rec.soil_test.nitrogen }} kg/ha</strong></span>
+                    <span class="badge badge-danger">LOW</span>
+                </div>
+                <div class="progress-track"><div class="progress-fill fill-n" style="width: 35%;"></div></div>
+            </div>
+
+            <div class="nutrient-bar-group">
+                <div class="nutrient-bar-header">
+                    <span>Phosphorus (P₂O₅): <strong>{{ rec.soil_test.phosphorus }} kg/ha</strong></span>
+                    <span class="badge badge-warning">MEDIUM</span>
+                </div>
+                <div class="progress-track"><div class="progress-fill fill-p" style="width: 50%;"></div></div>
+            </div>
+
+            <div class="nutrient-bar-group">
+                <div class="nutrient-bar-header">
+                    <span>Potassium (K₂O): <strong>{{ rec.soil_test.potassium }} kg/ha</strong></span>
+                    <span class="badge badge-accent">MEDIUM</span>
+                </div>
+                <div class="progress-track"><div class="progress-fill fill-k" style="width: 65%;"></div></div>
+            </div>
+
+            <div style="border-top: 1px solid #f1f5f9; padding-top: 6px; margin-top: 6px; font-size: 7pt; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+                <div><span style="color: #64748b;">Soil pH:</span> <strong>{{ rec.soil_test.soil_ph }} (Neutral)</strong></div>
+                <div><span style="color: #64748b;">Organic Carbon:</span> <strong>{{ rec.soil_test.organic_carbon_pct }}%</strong></div>
+                <div><span style="color: #64748b;">EC:</span> <strong>{{ rec.soil_test.electrical_conductivity }} dS/m</strong></div>
+                <div><span style="color: #64748b;">Zinc (Zn):</span> <strong>{{ rec.soil_test.zinc }} ppm</strong></div>
+                <div><span style="color: #64748b;">Boron (B):</span> <strong>{{ rec.soil_test.boron }} ppm</strong></div>
+                <div><span style="color: #64748b;">Sulphur (S):</span> <strong>{{ rec.soil_test.sulphur }} ppm</strong></div>
+            </div>
+        </div>
+
+        <!-- Split Application Schedule -->
+        <div class="card pdf-avoid-break">
+            <div class="card-header">
+                <span class="card-title">📅 Agronomic Split Application</span>
+                <span class="badge badge-primary">3-Stage Plan</span>
+            </div>
+            {% for split in rec.split_schedule %}
+            <div class="timeline-item">
+                <div class="timeline-step">{{ forloop.counter }}</div>
+                <div class="timeline-content">
+                    <div class="timeline-title">
+                        <span>{{ split.stage }}</span>
+                        <strong style="color: #15803d;">{% if split.total_stage_kg %}{{ split.total_stage_kg }}{% else %}{{ split.total_dose_kg }}{% endif %} kg</strong>
+                    </div>
+                    <div style="color: #64748b;"><strong>Timing:</strong> {{ split.timing_days }}</div>
+                    {% if split.dap_kg_per_ha %}
+                    <div style="color: #0f172a; margin: 2px 0;">
+                        {% if split.dap_kg_per_ha > 0 %}• DAP: <strong>{{ split.dap_kg_per_ha }} kg/ha</strong> {% endif %}
+                        {% if split.urea_kg_per_ha > 0 %}• Urea: <strong>{{ split.urea_kg_per_ha }} kg/ha</strong> {% endif %}
+                        {% if split.mop_kg_per_ha > 0 %}• MOP: <strong>{{ split.mop_kg_per_ha }} kg/ha</strong>{% endif %}
+                    </div>
+                    {% endif %}
+                    <div class="timeline-desc">{% if split.instructions %}{{ split.instructions }}{% else %}{{ split.application_method }}{% endif %}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Amendments & Weather -->
+    <div class="grid-2col">
+        <div class="card pdf-avoid-break">
+            <div class="card-header"><span class="card-title">🧪 Soil Amendments & Micronutrients</span></div>
+            <div style="font-size: 7.5pt; margin-bottom: 6px;">
+                <strong style="color: #0f172a;">pH Amendment:</strong>
+                <p style="color: #64748b; margin-top: 1px;">{{ rec.ph_amendment }}</p>
+            </div>
+            <div style="font-size: 7.5pt;">
+                <strong style="color: #0f172a;">Micronutrients (Zn, B, S, Fe):</strong>
+                <p style="color: #64748b; margin-top: 1px;">{{ rec.micronutrient_advice }}</p>
+            </div>
+        </div>
+
+        <div class="card pdf-avoid-break">
+            <div class="card-header"><span class="card-title">🌤️ Agro-Meteorology & Spray Radar</span></div>
+            <div class="weather-grid">
+                <div><span style="color:#64748b; display:block;">Temp</span><strong>{{ rec.weather_record.temperature_c }} °C</strong></div>
+                <div><span style="color:#64748b; display:block;">Humidity</span><strong>{{ rec.weather_record.humidity_pct }} %</strong></div>
+                <div><span style="color:#64748b; display:block;">Rain</span><strong>{{ rec.weather_record.rainfall_forecast_mm }} mm</strong></div>
+                <div><span style="color:#64748b; display:block;">Wind</span><strong>{{ rec.weather_record.wind_speed_kmh }} km/h</strong></div>
+            </div>
+            <p style="font-size: 7pt; color: #64748b;">Weather window is optimal for fertilizer broadcasting and foliage spray.</p>
+        </div>
+    </div>
+
+    <!-- AI Alternatives -->
+    <div class="card pdf-avoid-break" style="margin-bottom: 12px;">
+        <div class="card-header">
+            <span class="card-title">🧠 AI Multi-Model Ensemble Alternatives</span>
+            <span class="badge badge-accent">Weighted Soft-Voting</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 6px;">
+            {% for alt in rec.ai_alternatives %}
+            <div style="background: #f8fafc; border: 1px solid #e2e8f0; padding: 4px 6px; border-radius: 4px; font-size: 7pt; display:flex; justify-content:space-between; align-items:center;">
+                <strong>{{ forloop.counter }}. {{ alt.fertilizer }}</strong>
+                <span class="badge badge-success">{{ alt.probability_pct }}%</span>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- Explainable Rationale -->
+    <div class="card">
+        <div class="card-header">
+            <span class="card-title">💡 Explainable AI Scientific Rationale</span>
+            <span class="badge badge-accent">ICAR Stoichiometry</span>
+        </div>
+        <div class="rationale-box">{{ rec.explanation }}</div>
+    </div>
+
+</body>
+</html>

@@ -7,7 +7,8 @@ from rest_framework.routers import DefaultRouter
 from fertilizer_app.views import (
     FarmViewSet, FieldViewSet, CropViewSet, FertilizerViewSet,
     SoilTestViewSet, WeatherRecordViewSet, RecommendationViewSet,
-    GenerateRecommendationAPIView, SoilLookupAPIView, WeatherAPIView
+    GenerateRecommendationAPIView, SoilLookupAPIView, WeatherAPIView,
+    download_recommendation_pdf_view
 )
 
 router = DefaultRouter()
@@ -21,7 +22,9 @@ router.register(r'recommendations', RecommendationViewSet)
 
 urlpatterns = [
     path('recommendations/generate/', GenerateRecommendationAPIView.as_view(), name='recommendation-generate'),
+    path('recommendations/<int:pk>/pdf/', download_recommendation_pdf_view, name='recommendation-pdf-download'),
     path('soil-lookup/', SoilLookupAPIView.as_view(), name='soil-lookup'),
     path('weather/', WeatherAPIView.as_view(), name='weather-info'),
     path('', include(router.urls)),
 ]
+

@@ -3,6 +3,9 @@ Views and API Endpoints for Precision Fertilizer Recommendation Platform (PS-SW-
 """
 
 from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from django.template.loader import render_to_string
+import os, tempfile, subprocess
 from rest_framework import viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -35,6 +38,65 @@ def report_view(request):
     Renders the Dedicated AI Precision Recommendation Report page.
     """
     return render(request, 'report.html')
+
+
+def download_recommendation_pdf_view(request, pk):
+    """
+    Generates and returns an instant downloadable A4 PDF prescription.
+    """
+    rec = get_object_or_404(
+        Recommendation.objects.select_related('crop', 'field', 'soil_test', 'weather_record'),
+        pk=pk
+    )
+
+    area_ha = float(rec.field.area_hectares or 1.0)
+    area_acres = round(area_ha * 2.471, 1)
+
+    html_string = render_to_string('report_pdf.html', {
+        'rec': rec,
+        'area_acres': area_acres
+    })
+
+    edge_path = r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+    
+    with tempfile.NamedTemporaryFile('w', suffix='.html', delete=False, encoding='utf-8') as f:
+        f.write(html_string)
+        temp_html = f.name
+
+    temp_pdf = temp_html.replace('.html', '.pdf')
+    html_url = 'file:///' + temp_html.replace('\\', '/')
+
+    try:
+        if os.path.exists(edge_path):
+            cmd = [
+                edge_path,
+                '--headless',
+                '--disable-gpu',
+                '--no-pdf-header-footer',
+                f'--print-to-pdf={temp_pdf}',
+                html_url
+            ]
+            subprocess.run(cmd, capture_output=True, timeout=10)
+
+            if os.path.exists(temp_pdf):
+                with open(temp_pdf, 'rb') as pdf_file:
+                    pdf_bytes = pdf_file.read()
+
+                crop_slug = rec.crop.name.replace(' ', '_').replace('/', '_')
+                response = HttpResponse(pdf_bytes, content_type='application/pdf')
+                response['Content-Disposition'] = f'attachment; filename="KrishiKisan_Fertilizer_Report_{crop_slug}_#{rec.id}.pdf"'
+                return response
+    finally:
+        if os.path.exists(temp_html):
+            try: os.remove(temp_html)
+            except: pass
+        if os.path.exists(temp_pdf):
+            try: os.remove(temp_pdf)
+            except: pass
+
+    # Fallback to direct HTML print response if PDF binary is unavailable
+    return HttpResponse(html_string, content_type='text/html')
+
 
 
 
