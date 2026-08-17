@@ -236,10 +236,10 @@ async function handleGenerateRecommendation(e) {
             soil_ph: parseFloat(document.getElementById('soilPh').value || 6.8),
             organic_carbon_pct: parseFloat(document.getElementById('soilOc').value || 0.55),
             electrical_conductivity: parseFloat(document.getElementById('soilEc').value || 0.45),
-            zinc: parseFloat(document.getElementById('soilZn').value || 0.8),
-            boron: parseFloat(document.getElementById('soilB').value || 0.5),
-            sulphur: parseFloat(document.getElementById('soilS').value || 12.0),
-            iron: parseFloat(document.getElementById('soilFe').value || 6.0),
+            zinc: parseFloat(document.getElementById('soilZn')?.value || 0.8),
+            boron: parseFloat(document.getElementById('soilB')?.value || 0.5),
+            sulphur: parseFloat(document.getElementById('soilS')?.value || 12.0),
+            iron: parseFloat(document.getElementById('soilFe')?.value || 6.0),
             source: "Field Diagnostic Input"
         }
     };
