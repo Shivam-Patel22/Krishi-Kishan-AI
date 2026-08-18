@@ -1,6 +1,7 @@
 /**
  * KrishiKisan AI • Recommendation Report Script
- * Loads and renders precision fertilizer report on /report/ with full multilingual support
+ * Loads and renders precision fertilizer report on /report/ with full multilingual support,
+ * clean typography, balanced spacing, and structured alignment.
  */
 
 let cachedReportData = null;
@@ -121,7 +122,7 @@ function renderReport(data) {
         document.getElementById('repWeatherSafety').textContent = weather.is_safe_to_apply === false ? cautionText : safeText;
     }
 
-    // 3. Warnings
+    // 3. Warnings Container
     const rawWarnings = agri.warnings || [];
     const warningsContainer = document.getElementById('repWarningsContainer');
     if (warningsContainer) {
@@ -129,14 +130,14 @@ function renderReport(data) {
         if (rawWarnings.length > 0) {
             const warnTitle = window.i18n ? window.i18n.t('report.warningsTitle') : 'Agronomic & Environmental Advisory Warnings';
             const warnBox = document.createElement('div');
-            warnBox.style.cssText = "background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;";
+            warnBox.className = 'report-warning-card';
             
             const translatedWarnings = rawWarnings.map(w => window.i18n ? window.i18n.translateWarning(w) : w);
             warnBox.innerHTML = `
-                <div style="font-weight: 700; color: #92400e; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
-                    <span>⚠️</span> ${warnTitle}
+                <div class="warning-card-title">
+                    <span>⚠️</span> <span>${warnTitle}</span>
                 </div>
-                <ul style="padding-left: 1.2rem; font-size: 0.85rem; color: #78350f; line-height: 1.5;">
+                <ul class="warning-card-list">
                     ${translatedWarnings.map(w => `<li>${w}</li>`).join('')}
                 </ul>
             `;
@@ -199,7 +200,7 @@ function renderReport(data) {
         timelineContainer.innerHTML = '';
         if (splits.length === 0) {
             const defSplit = window.i18n ? window.i18n.t('report.defaultSplitText') : 'Standard basal and top-dressing application recommended.';
-            timelineContainer.innerHTML = `<p style="color:var(--text-muted); font-size:0.85rem;">${defSplit}</p>`;
+            timelineContainer.innerHTML = `<p class="section-lead-desc">${defSplit}</p>`;
         } else {
             splits.forEach((split, idx) => {
                 const item = document.createElement('div');
@@ -230,24 +231,29 @@ function renderReport(data) {
                 const timingLabel = window.i18n ? window.i18n.t('report.timing') : 'Timing:';
                 const instrLabel = window.i18n ? window.i18n.t('report.instructions') : 'Instructions:';
 
+                let doseChipsHtml = '';
+                if (split.dap_kg_per_ha !== undefined) {
+                    const chips = [];
+                    if (split.dap_kg_per_ha > 0) chips.push(`<span class="dosage-chip">🌿 DAP: <strong>${split.dap_kg_per_ha} kg/ha</strong> (${split.dap_kg_per_acre} kg/acre)</span>`);
+                    if (split.urea_kg_per_ha > 0) chips.push(`<span class="dosage-chip">⚡ Urea: <strong>${split.urea_kg_per_ha} kg/ha</strong> (${split.urea_kg_per_acre} kg/acre)</span>`);
+                    if (split.mop_kg_per_ha > 0) chips.push(`<span class="dosage-chip">🛡️ MOP: <strong>${split.mop_kg_per_ha} kg/ha</strong> (${split.mop_kg_per_acre} kg/acre)</span>`);
+                    if (chips.length > 0) {
+                        doseChipsHtml = `<div class="dosage-chips-wrap">${chips.join('')}</div>`;
+                    }
+                }
+
                 item.innerHTML = `
                     <div class="timeline-step">${idx + 1}</div>
                     <div class="timeline-content">
-                        <div class="timeline-title" style="display:flex; justify-content:space-between; align-items:center;">
+                        <div class="timeline-title">
                             <span>${stageName}</span>
-                            <span style="color:var(--primary); font-weight:800; font-size:0.95rem;">${totalStageKg}</span>
+                            <span style="color:var(--primary); font-weight:800; font-size:1.05rem;">${totalStageKg}</span>
                         </div>
-                        <div style="font-size:0.8rem; color:var(--text-muted); margin: 0.2rem 0;">
+                        <div class="timeline-timing">
                             <strong>${timingLabel}</strong> ${timingText}
                         </div>
-                        ${split.dap_kg_per_ha !== undefined ? `
-                            <div style="font-size:0.8rem; color:var(--text-main); margin: 0.25rem 0; background: #f8fafc; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border-color);">
-                                ${split.dap_kg_per_ha > 0 ? `<span>• DAP: <strong>${split.dap_kg_per_ha} kg/ha</strong> (${split.dap_kg_per_acre} kg/acre)</span> ` : ''}
-                                ${split.urea_kg_per_ha > 0 ? `<span>• Urea: <strong>${split.urea_kg_per_ha} kg/ha</strong> (${split.urea_kg_per_acre} kg/acre)</span> ` : ''}
-                                ${split.mop_kg_per_ha > 0 ? `<span>• MOP: <strong>${split.mop_kg_per_ha} kg/ha</strong> (${split.mop_kg_per_acre} kg/acre)</span>` : ''}
-                            </div>
-                        ` : ''}
-                        <div class="timeline-desc" style="font-size:0.8rem; color:var(--text-muted); margin-top:0.25rem;">
+                        ${doseChipsHtml}
+                        <div class="timeline-desc">
                             <strong>${instrLabel}</strong> ${instrText}
                         </div>
                     </div>
@@ -284,11 +290,11 @@ function renderReport(data) {
         altContainer.innerHTML = '';
         alternatives.forEach((alt, idx) => {
             const row = document.createElement('div');
-            row.style.cssText = "display:flex; justify-content:space-between; align-items:center; background:#f8fafc; padding:8px 12px; border-radius:6px; border:1px solid var(--border-color); font-size:0.84rem;";
+            row.className = 'alt-card';
             const fertLocalized = window.i18n ? window.i18n.translateFertilizer(alt.fertilizer) : alt.fertilizer;
             const confLabel = window.i18n ? window.i18n.t('report.confidence') : 'Confidence';
             row.innerHTML = `
-                <span style="font-weight:600; color:#1e293b;">${idx + 1}. ${fertLocalized}</span>
+                <span class="alt-name">${idx + 1}. ${fertLocalized}</span>
                 <span class="badge badge-success" style="font-weight:700;">${alt.probability_pct}% ${confLabel}</span>
             `;
             altContainer.appendChild(row);
@@ -301,11 +307,13 @@ function renderReport(data) {
         driversList.innerHTML = '';
         if (rawDrivers.length === 0) {
             const defDriver = window.i18n ? window.i18n.t('report.defaultRationale') : 'Balanced nutrient requirements based on ICAR crop standards and soil test values.';
-            driversList.innerHTML = `<li>${defDriver}</li>`;
+            driversList.innerHTML = `<li class="decision-driver-item"><span class="decision-driver-bullet">✓</span> <span>${defDriver}</span></li>`;
         } else {
             rawDrivers.forEach(d => {
                 const li = document.createElement('li');
-                li.textContent = window.i18n ? window.i18n.translateDecisionDriver(d) : d;
+                li.className = 'decision-driver-item';
+                const driverText = window.i18n ? window.i18n.translateDecisionDriver(d) : d;
+                li.innerHTML = `<span class="decision-driver-bullet">✓</span> <span>${driverText}</span>`;
                 driversList.appendChild(li);
             });
         }
