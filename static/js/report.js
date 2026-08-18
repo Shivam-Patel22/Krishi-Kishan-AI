@@ -88,7 +88,8 @@ function renderReport(data) {
         else if (rawSoilType.toLowerCase().includes('laterite')) soilType = window.i18n.t('soil.laterite');
     }
 
-    const source = soil.source || (window.i18n ? window.i18n.t('report.fieldTest') : 'Field Test / Diagnostic Input');
+    const rawSource = soil.source || data.field?.source || (window.i18n ? window.i18n.t('report.fieldTest') : 'Field Test / Diagnostic Input');
+    const source = window.i18n ? window.i18n.translateSource(rawSource) : rawSource;
     const createdDate = data.created_at ? new Date(data.created_at).toLocaleDateString('en-IN', {
         year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
     }) : new Date().toLocaleDateString('en-IN', {

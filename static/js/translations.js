@@ -659,6 +659,1632 @@ const translations = {
 /**
  * i18n Translation Engine with Intelligent Dynamic Agronomic Text Localization
  */
+
+const STATE_TRANSLATIONS = {
+    "Andaman And Nicobar Islands": {
+        "hi": "अंडमान और निकोबार द्वीप समूह",
+        "gu": "અંદમાન અને નિકોબાર દ્વીપસમૂહ"
+    },
+    "Andhra Pradesh": {
+        "hi": "आंध्र प्रदेश",
+        "gu": "આંધ્ર પ્રદેશ"
+    },
+    "Arunachal Pradesh": {
+        "hi": "अरुणाचल प्रदेश",
+        "gu": "અરુણાચલ પ્રદેશ"
+    },
+    "Assam": {
+        "hi": "असम",
+        "gu": "અસમ"
+    },
+    "Bihar": {
+        "hi": "बिहार",
+        "gu": "બિહાર"
+    },
+    "Chhattisgarh": {
+        "hi": "छत्तीसगढ़",
+        "gu": "છત્તીસગઢ"
+    },
+    "Goa": {
+        "hi": "गोवा",
+        "gu": "ગોવા"
+    },
+    "Gujarat": {
+        "hi": "गुजरात",
+        "gu": "ગુજરાત"
+    },
+    "Haryana": {
+        "hi": "हरियाणा",
+        "gu": "હરિયાણા"
+    },
+    "Himachal Pradesh": {
+        "hi": "हिमाचल प्रदेश",
+        "gu": "હિમાચલ પ્રદેશ"
+    },
+    "Jammu And Kashmir": {
+        "hi": "जम्मू और कश्मीर",
+        "gu": "જમ્મુ અને કાશ્મીર"
+    },
+    "Jharkhand": {
+        "hi": "झारखंड",
+        "gu": "ઝારખંડ"
+    },
+    "Karnataka": {
+        "hi": "कर्नाटक",
+        "gu": "કર્ણાટક"
+    },
+    "Kerala": {
+        "hi": "केरल",
+        "gu": "કેરળ"
+    },
+    "Ladakh": {
+        "hi": "लद्दाख",
+        "gu": "લદ્દાખ"
+    },
+    "Madhya Pradesh": {
+        "hi": "मध्य प्रदेश",
+        "gu": "મધ્ય પ્રદેશ"
+    },
+    "Maharashtra": {
+        "hi": "महाराष्ट्र",
+        "gu": "મહારાષ્ટ્ર"
+    },
+    "Manipur": {
+        "hi": "मणिपुर",
+        "gu": "મણિપુર"
+    },
+    "Meghalaya": {
+        "hi": "मेघालय",
+        "gu": "મેઘાલય"
+    },
+    "Mizoram": {
+        "hi": "मिजोरम",
+        "gu": "મિઝોરમ"
+    },
+    "Nagaland": {
+        "hi": "नागालैंड",
+        "gu": "નાગાલેન્ડ"
+    },
+    "Odisha": {
+        "hi": "ओडिशा",
+        "gu": "ઓડિશા"
+    },
+    "Puducherry": {
+        "hi": "पुदुचेरी",
+        "gu": "પુડુચેરી"
+    },
+    "Punjab": {
+        "hi": "पंजाब",
+        "gu": "પંજાબ"
+    },
+    "Rajasthan": {
+        "hi": "राजस्थान",
+        "gu": "રાજસ્થાન"
+    },
+    "Sikkim": {
+        "hi": "सिक्किम",
+        "gu": "સિક્કિમ"
+    },
+    "Tamil Nadu": {
+        "hi": "तमिलनाडु",
+        "gu": "તમિલનાડુ"
+    },
+    "Telangana": {
+        "hi": "तेलंगाना",
+        "gu": "તેલંગાણા"
+    },
+    "Tripura": {
+        "hi": "त्रिपुरा",
+        "gu": "ત્રિપુરા"
+    },
+    "Uttar Pradesh": {
+        "hi": "उत्तर प्रदेश",
+        "gu": "ઉત્તર પ્રદેશ"
+    },
+    "Uttarakhand": {
+        "hi": "उत्तराखंड",
+        "gu": "ઉત્તરાખંડ"
+    },
+    "West Bengal": {
+        "hi": "पश्चिम बंगाल",
+        "gu": "પશ્ચિમ બંગાળ"
+    }
+};
+
+const DISTRICT_TRANSLATIONS = {
+    "Ahmedabad": {
+        "hi": "अहमदाबाद",
+        "gu": "અમદાવાદ"
+    },
+    "Amreli": {
+        "hi": "अमरेली",
+        "gu": "અમરેલી"
+    },
+    "Anand": {
+        "hi": "आणंद",
+        "gu": "આણંદ"
+    },
+    "Arvalli": {
+        "hi": "अरवल्ली",
+        "gu": "અરવલ્લી"
+    },
+    "Banas Kantha": {
+        "hi": "बनासकांठा",
+        "gu": "બનાસકાંઠા"
+    },
+    "Banaskantha": {
+        "hi": "बनासकांठा",
+        "gu": "બનાસકાંઠા"
+    },
+    "Bharuch": {
+        "hi": "भरूच",
+        "gu": "ભરૂચ"
+    },
+    "Bhavnagar": {
+        "hi": "भावनगर",
+        "gu": "ભાવનગર"
+    },
+    "Botad": {
+        "hi": "बोटाद",
+        "gu": "બોટાદ"
+    },
+    "Chhotaudepur": {
+        "hi": "छोटा उदेपुर",
+        "gu": "છોટાઉદેપુર"
+    },
+    "Chhota Udepur": {
+        "hi": "छोटा उदेपुर",
+        "gu": "છોટાઉદેપુર"
+    },
+    "Chhota Udaipur": {
+        "hi": "छोटा उदेपुर",
+        "gu": "છોટાઉદેપુર"
+    },
+    "Dahod": {
+        "hi": "दाहोद",
+        "gu": "દાહોદ"
+    },
+    "Dangs": {
+        "hi": "डांग",
+        "gu": "ડાંગ"
+    },
+    "Dang": {
+        "hi": "डांग",
+        "gu": "ડાંગ"
+    },
+    "The Dangs": {
+        "hi": "डांग",
+        "gu": "ડાંગ"
+    },
+    "Devbhumi Dwarka": {
+        "hi": "देवभूमि द्वारका",
+        "gu": "દેવભૂમિ દ્વારકા"
+    },
+    "Gandhinagar": {
+        "hi": "गांधीनगर",
+        "gu": "ગાંધીનગર"
+    },
+    "Gir Somnath": {
+        "hi": "गिर सोमनाथ",
+        "gu": "ગીર સોમનાથ"
+    },
+    "Jamnagar": {
+        "hi": "जामनगर",
+        "gu": "જામનગર"
+    },
+    "Junagadh": {
+        "hi": "जूनागढ़",
+        "gu": "જૂનાગઢ"
+    },
+    "Kachchh": {
+        "hi": "कच्छ",
+        "gu": "કચ્છ"
+    },
+    "Kutch": {
+        "hi": "कच्छ",
+        "gu": "કચ્છ"
+    },
+    "Kheda": {
+        "hi": "खेड़ा",
+        "gu": "ખેડા"
+    },
+    "Mahesana": {
+        "hi": "महेसाणा",
+        "gu": "મહેસાણા"
+    },
+    "Mehsana": {
+        "hi": "महेसाणा",
+        "gu": "મહેસાણા"
+    },
+    "Mahisagar": {
+        "hi": "महिसागर",
+        "gu": "મહીસાગર"
+    },
+    "Morbi": {
+        "hi": "मोरबी",
+        "gu": "મોરબી"
+    },
+    "Narmada": {
+        "hi": "नर्मदा",
+        "gu": "નર્મદા"
+    },
+    "Navsari": {
+        "hi": "नवसारी",
+        "gu": "નવસારી"
+    },
+    "Panch Mahals": {
+        "hi": "पंचमहाल",
+        "gu": "પંચમહાલ"
+    },
+    "Panchmahal": {
+        "hi": "पंचमहाल",
+        "gu": "પંચમહાલ"
+    },
+    "Patan": {
+        "hi": "पाटन",
+        "gu": "પાટણ"
+    },
+    "Porbandar": {
+        "hi": "पोरबंदर",
+        "gu": "પોરબંદર"
+    },
+    "Rajkot": {
+        "hi": "राजकोट",
+        "gu": "રાજકોટ"
+    },
+    "Sabar Kantha": {
+        "hi": "साबरकांठा",
+        "gu": "સાબરકાંઠા"
+    },
+    "Sabarkantha": {
+        "hi": "साबरकांठा",
+        "gu": "સાબરકાંઠા"
+    },
+    "Surat": {
+        "hi": "सूरत",
+        "gu": "સુરત"
+    },
+    "Surendranagar": {
+        "hi": "सुरेंद्रनगर",
+        "gu": "સુરેન્દ્રનગર"
+    },
+    "Tapi": {
+        "hi": "तापी",
+        "gu": "તાપી"
+    },
+    "Vadodara": {
+        "hi": "वडोदरा (बड़ौदा)",
+        "gu": "વડોદરા"
+    },
+    "Valsad": {
+        "hi": "वलसाड",
+        "gu": "વલસાડ"
+    },
+    "Ludhiana": {
+        "hi": "लुधियाना",
+        "gu": "લુધિયાણા"
+    },
+    "Amritsar": {
+        "hi": "अमृतसर",
+        "gu": "અમૃતસર"
+    },
+    "Jalandhar": {
+        "hi": "जालंधर",
+        "gu": "જાલંધર"
+    },
+    "Patiala": {
+        "hi": "पटियाला",
+        "gu": "પટિયાલા"
+    },
+    "Bathinda": {
+        "hi": "बठिंडा",
+        "gu": "બઠિંડા"
+    },
+    "Firozepur": {
+        "hi": "फिरोजपुर",
+        "gu": "ફિરોઝપુર"
+    },
+    "Gurdaspur": {
+        "hi": "गुरदासपुर",
+        "gu": "ગુરદાસપુર"
+    },
+    "Hoshiarpur": {
+        "hi": "होशियारपुर",
+        "gu": "હોશિયારપુર"
+    },
+    "Karnal": {
+        "hi": "करनाल",
+        "gu": "કરનાલ"
+    },
+    "Hisar": {
+        "hi": "हिसार",
+        "gu": "હિસાર"
+    },
+    "Ambala": {
+        "hi": "अंबाला",
+        "gu": "અંબાલા"
+    },
+    "Kurukshetra": {
+        "hi": "कुरुक्षेत्र",
+        "gu": "કુરુક્ષેત્ર"
+    },
+    "Sirsa": {
+        "hi": "सिरसा",
+        "gu": "સિરસા"
+    },
+    "Rohtak": {
+        "hi": "रोहतक",
+        "gu": "રોહતક"
+    },
+    "Panipat": {
+        "hi": "पानीपत",
+        "gu": "પાણીપત"
+    },
+    "Sonipat": {
+        "hi": "सोनीपत",
+        "gu": "સોનીપત"
+    },
+    "Jaipur": {
+        "hi": "जयपुर",
+        "gu": "જયપુર"
+    },
+    "Jodhpur": {
+        "hi": "जोधपुर",
+        "gu": "જોધપુર"
+    },
+    "Udaipur": {
+        "hi": "उदयपुर",
+        "gu": "ઉદયપુર"
+    },
+    "Kota": {
+        "hi": "कोटा",
+        "gu": "કોટા"
+    },
+    "Bikaner": {
+        "hi": "बीकानेर",
+        "gu": "બીકાનેર"
+    },
+    "Ajmer": {
+        "hi": "अजमेर",
+        "gu": "અજમેર"
+    },
+    "Alwar": {
+        "hi": "अलवर",
+        "gu": "અલવર"
+    },
+    "Bharatpur": {
+        "hi": "भरतपुर",
+        "gu": "ભરતપુર"
+    },
+    "Ganganagar": {
+        "hi": "श्रीगंगानगर",
+        "gu": "શ્રીગંગાનગર"
+    },
+    "Barmer": {
+        "hi": "बाड़मेर",
+        "gu": "બાડમેર"
+    },
+    "Nagaur": {
+        "hi": "नागौर",
+        "gu": "નાગૌર"
+    },
+    "Sikar": {
+        "hi": "सीकर",
+        "gu": "સીકર"
+    },
+    "Pali": {
+        "hi": "पाली",
+        "gu": "પાલી"
+    },
+    "Bhilwara": {
+        "hi": "भीलवाड़ा",
+        "gu": "ભીલવાડા"
+    },
+    "Chittorgarh": {
+        "hi": "चित्तौड़गढ़",
+        "gu": "ચિત્તોડગઢ"
+    },
+    "Varanasi": {
+        "hi": "वाराणसी",
+        "gu": "વારાણસી"
+    },
+    "Lucknow": {
+        "hi": "लखनऊ",
+        "gu": "લખનૌ"
+    },
+    "Kanpur": {
+        "hi": "कानपुर",
+        "gu": "કાનપુર"
+    },
+    "Kanpur Nagar": {
+        "hi": "कानपुर नगर",
+        "gu": "કાનપુર નગર"
+    },
+    "Agra": {
+        "hi": "आगरा",
+        "gu": "આગ્રા"
+    },
+    "Prayagraj": {
+        "hi": "प्रयागराज",
+        "gu": "પ્રયાગરાજ"
+    },
+    "Allahabad": {
+        "hi": "प्रयागराज (इलाहाबाद)",
+        "gu": "પ્રયાગરાજ"
+    },
+    "Gorakhpur": {
+        "hi": "गोरखपुर",
+        "gu": "ગોરખપુર"
+    },
+    "Meerut": {
+        "hi": "मेरठ",
+        "gu": "મેરઠ"
+    },
+    "Bareilly": {
+        "hi": "बरेली",
+        "gu": "બરેલી"
+    },
+    "Aligarh": {
+        "hi": "अलीगढ़",
+        "gu": "અલીગઢ"
+    },
+    "Mathura": {
+        "hi": "मथुरा",
+        "gu": "મથુરા"
+    },
+    "Indore": {
+        "hi": "इंदौर",
+        "gu": "ઇન્દોર"
+    },
+    "Bhopal": {
+        "hi": "भोपाल",
+        "gu": "ભોપાલ"
+    },
+    "Jabalpur": {
+        "hi": "जबलपुर",
+        "gu": "જબલપુર"
+    },
+    "Gwalior": {
+        "hi": "ग्वालियर",
+        "gu": "ગ્વાલિયર"
+    },
+    "Ujjain": {
+        "hi": "उज्जैन",
+        "gu": "ઉજ્જૈન"
+    },
+    "Sagar": {
+        "hi": "सागर",
+        "gu": "સાગર"
+    },
+    "Patna": {
+        "hi": "पटना",
+        "gu": "પટના"
+    },
+    "Gaya": {
+        "hi": "गया",
+        "gu": "ગયા"
+    },
+    "Muzaffarpur": {
+        "hi": "मुजफ्फरपुर",
+        "gu": "મુઝફ્ફરપુર"
+    },
+    "Bhagalpur": {
+        "hi": "भागलपुर",
+        "gu": "ભાગલપુર"
+    },
+    "Pune": {
+        "hi": "पुणे",
+        "gu": "પુણે"
+    },
+    "Nashik": {
+        "hi": "नासिक",
+        "gu": "નાસિક"
+    },
+    "Nagpur": {
+        "hi": "नागपुर",
+        "gu": "નાગપુર"
+    },
+    "Aurangabad": {
+        "hi": "औरंगाबाद",
+        "gu": "ઔરંગાબાદ"
+    },
+    "Chhatrapati Sambhajinagar": {
+        "hi": "छत्रपति संभाजीनगर",
+        "gu": "છત્રપતિ સંભાજીનગર"
+    },
+    "Kolhapur": {
+        "hi": "कोल्हापुर",
+        "gu": "કોલ્હાપુર"
+    },
+    "Solapur": {
+        "hi": "सोलापुर",
+        "gu": "સોલાપુર"
+    },
+    "Ahmednagar": {
+        "hi": "अहमदनगर",
+        "gu": "અહમદનગર"
+    },
+    "Satara": {
+        "hi": "सतारा",
+        "gu": "સાતારા"
+    },
+    "Sangli": {
+        "hi": "सांगली",
+        "gu": "સાંગલી"
+    },
+    "Amravati": {
+        "hi": "अमरावती",
+        "gu": "અમરાવતી"
+    },
+    "Jalgaon": {
+        "hi": "जलगांव",
+        "gu": "જલગાંવ"
+    },
+    "Dhule": {
+        "hi": "धुले",
+        "gu": "ધુલિયા / ધુળે"
+    },
+    "Bengaluru": {
+        "hi": "बेंगलुरु",
+        "gu": "બેંગલુરુ"
+    },
+    "Bangalore": {
+        "hi": "बेंगलुरु",
+        "gu": "બેંગલુરુ"
+    },
+    "Mysuru": {
+        "hi": "मैसूर",
+        "gu": "મૈસૂર"
+    },
+    "Belagavi": {
+        "hi": "बेलगावी",
+        "gu": "બેલગાવી"
+    },
+    "Hyderabad": {
+        "hi": "हैदराबाद",
+        "gu": "હૈદરાબાદ"
+    },
+    "Warangal": {
+        "hi": "वारंगल",
+        "gu": "વારંગલ"
+    },
+    "Visakhapatnam": {
+        "hi": "विशाखापत्तनम",
+        "gu": "વિશાખાપટ્ટનમ"
+    },
+    "Guntur": {
+        "hi": "गुंटूर",
+        "gu": "ગુંટૂર"
+    },
+    "Chennai": {
+        "hi": "चेन्नई",
+        "gu": "ચેન્નઈ"
+    },
+    "Coimbatore": {
+        "hi": "कोयंबटूर",
+        "gu": "કોયમ્બતૂર"
+    },
+    "Madurai": {
+        "hi": "मदुरै",
+        "gu": "મદુરાઈ"
+    },
+    "Kolkata": {
+        "hi": "कोलकाता",
+        "gu": "કોલકાતા"
+    },
+    "Bardhaman": {
+        "hi": "बर्धमान",
+        "gu": "બર્ધમાન"
+    }
+};
+
+const BLOCK_TRANSLATIONS = {
+    "Bavla": {
+        "hi": "बावला",
+        "gu": "બાવળા"
+    },
+    "Daskroi": {
+        "hi": "दस्करोई",
+        "gu": "દસક્રોઈ"
+    },
+    "Detroj Rampura": {
+        "hi": "देतड़ोज रामपुरा",
+        "gu": "દેત્રોજ રામપુરા"
+    },
+    "Detroj-Rampura": {
+        "hi": "देतड़ोज रामपुरा",
+        "gu": "દેત્રોજ રામપુરા"
+    },
+    "Dhandhuka": {
+        "hi": "धंधुका",
+        "gu": "ધંધૂકા"
+    },
+    "Dholera": {
+        "hi": "धोलेरा",
+        "gu": "ધોલેરા"
+    },
+    "Dholka": {
+        "hi": "धोलका",
+        "gu": "ધોળકા"
+    },
+    "Mandal": {
+        "hi": "मांडल",
+        "gu": "માંડલ"
+    },
+    "Sanand": {
+        "hi": "साणंद",
+        "gu": "સાણંદ"
+    },
+    "Viramgam": {
+        "hi": "विरामगाम",
+        "gu": "વિરમગામ"
+    },
+    "Ahmedabad City": {
+        "hi": "अहमदाबाद शहर",
+        "gu": "અમદાવાદ શહેર"
+    },
+    "Dehgam": {
+        "hi": "दहेजगाम (दहेगाम)",
+        "gu": "દહેગામ"
+    },
+    "Gandhinagar": {
+        "hi": "गांधीनगर",
+        "gu": "ગાંધીનગર"
+    },
+    "Kalol": {
+        "hi": "कलोल",
+        "gu": "કલોલ"
+    },
+    "Mansa": {
+        "hi": "माणसा",
+        "gu": "માણસા"
+    },
+    "Dhoraji": {
+        "hi": "धोराजी",
+        "gu": "ધોરાજી"
+    },
+    "Gondal": {
+        "hi": "गोंडल",
+        "gu": "ગોંડલ"
+    },
+    "Jamkandorna": {
+        "hi": "जामकंडोरणा",
+        "gu": "જામકંડોરણા"
+    },
+    "Jamkandorana": {
+        "hi": "जामकंडोरणा",
+        "gu": "જામકંડોરણા"
+    },
+    "Jasdan": {
+        "hi": "जसदन",
+        "gu": "જસદણ"
+    },
+    "Jetpur": {
+        "hi": "जेतपुर",
+        "gu": "જેતપુર"
+    },
+    "Kotda Sangani": {
+        "hi": "कोटड़ा सांगाणी",
+        "gu": "કોટડા સાંગાણી"
+    },
+    "Kotdasangani": {
+        "hi": "कोटड़ा सांगाणी",
+        "gu": "કોટડા સાંગાણી"
+    },
+    "Lodhika": {
+        "hi": "लोधिका",
+        "gu": "લોધીકા"
+    },
+    "Paddhari": {
+        "hi": "पद्धरी",
+        "gu": "પડધરી"
+    },
+    "Rajkot": {
+        "hi": "राजकोट",
+        "gu": "રાજકોટ"
+    },
+    "Upleta": {
+        "hi": "उपलेटा",
+        "gu": "ઉપલેટા"
+    },
+    "Vinchhiya": {
+        "hi": "विंछिया",
+        "gu": "વીંછિયા"
+    },
+    "Vinchia": {
+        "hi": "विंछिया",
+        "gu": "વીંછિયા"
+    },
+    "Bardoli": {
+        "hi": "बारडोली",
+        "gu": "બારડોલી"
+    },
+    "Chorasi": {
+        "hi": "चौरासी",
+        "gu": "ચોર્યાસી"
+    },
+    "Choryasi": {
+        "hi": "चौरासी",
+        "gu": "ચોર્યાસી"
+    },
+    "Kamrej": {
+        "hi": "कामरेज",
+        "gu": "કામરેજ"
+    },
+    "Mahuva": {
+        "hi": "महुवा",
+        "gu": "મહુવા"
+    },
+    "Mandvi": {
+        "hi": "मांडवी",
+        "gu": "માંડવી"
+    },
+    "Mangrol": {
+        "hi": "मांगरोल",
+        "gu": "માંગરોળ"
+    },
+    "Olpad": {
+        "hi": "ओलपाड",
+        "gu": "ઓલપાડ"
+    },
+    "Palsana": {
+        "hi": "पलसाना",
+        "gu": "પલસાણા"
+    },
+    "Umarpada": {
+        "hi": "उमरपाड़ा",
+        "gu": "ઉમરપાડા"
+    },
+    "Surat City": {
+        "hi": "सूरत शहर",
+        "gu": "સુરત શહેર"
+    },
+    "Dabhoi": {
+        "hi": "डभोई",
+        "gu": "ડભોઈ"
+    },
+    "Desar": {
+        "hi": "डेसर",
+        "gu": "ડેસર"
+    },
+    "Karjan": {
+        "hi": "करजण",
+        "gu": "કરજણ"
+    },
+    "Padra": {
+        "hi": "पादरा",
+        "gu": "પાદરા"
+    },
+    "Savli": {
+        "hi": "सावली",
+        "gu": "સાવલી"
+    },
+    "Sinor": {
+        "hi": "शिनोर",
+        "gu": "શિનોર"
+    },
+    "Vaghodia": {
+        "hi": "वाघोडिया",
+        "gu": "વાઘોડિયા"
+    },
+    "Vadodara Rural": {
+        "hi": "वडोदरा ग्रामीण",
+        "gu": "વડોદરા ગ્રામ્ય"
+    },
+    "Anand": {
+        "hi": "आणंद",
+        "gu": "આણંદ"
+    },
+    "Anklav": {
+        "hi": "आंकलाव",
+        "gu": "આંકલાવ"
+    },
+    "Borsad": {
+        "hi": "बोरसद",
+        "gu": "બોરસદ"
+    },
+    "Khambhat": {
+        "hi": "खंभात",
+        "gu": "ખંભાત"
+    },
+    "Petlad": {
+        "hi": "पेतलाद",
+        "gu": "પેટલાદ"
+    },
+    "Sojitra": {
+        "hi": "सोजित्रा",
+        "gu": "સોજિત્રા"
+    },
+    "Tarapur": {
+        "hi": "तारापुर",
+        "gu": "તારાપુર"
+    },
+    "Umreth": {
+        "hi": "उमरेठ",
+        "gu": "ઉમરેઠ"
+    },
+    "Kapadvanj": {
+        "hi": "कपड़वंज",
+        "gu": "કપડવંજ"
+    },
+    "Kheda": {
+        "hi": "खेड़ा",
+        "gu": "ખેડા"
+    },
+    "Matar": {
+        "hi": "मातर",
+        "gu": "માતર"
+    },
+    "Mehmadabad": {
+        "hi": "महेमदावाद",
+        "gu": "મહેમદાવાદ"
+    },
+    "Nadiad": {
+        "hi": "नडियाद",
+        "gu": "નડિયાદ"
+    },
+    "Thasra": {
+        "hi": "ठासरा",
+        "gu": "ઠાસરા"
+    },
+    "Vaso": {
+        "hi": "वासो",
+        "gu": "વાસો"
+    },
+    "Galteshwar": {
+        "hi": "गलतेश्वर",
+        "gu": "ગળતેશ્વર"
+    },
+    "Amreli": {
+        "hi": "अमरेली",
+        "gu": "અમરેલી"
+    },
+    "Babra": {
+        "hi": "बाबरा",
+        "gu": "બાવરા / બાબરા"
+    },
+    "Bagasara": {
+        "hi": "बागसरा",
+        "gu": "બગસરા"
+    },
+    "Dhari": {
+        "hi": "धारी",
+        "gu": "ધારી"
+    },
+    "Jafrabad": {
+        "hi": "जाफराबाद",
+        "gu": "જાફરાબાદ"
+    },
+    "Khambha": {
+        "hi": "खांभा",
+        "gu": "ખાંભા"
+    },
+    "Kunkavav Vadia": {
+        "hi": "कुंकावाव वाडिया",
+        "gu": "કુંકાવાવ વડિયા"
+    },
+    "Kunkavav": {
+        "hi": "कुंकावाव",
+        "gu": "કુંકાવાવ"
+    },
+    "Lathi": {
+        "hi": "लाठी",
+        "gu": "લાઠી"
+    },
+    "Lilia": {
+        "hi": "लीलियां",
+        "gu": "લીલીયા"
+    },
+    "Rajula": {
+        "hi": "राजूला",
+        "gu": "રાજુલા"
+    },
+    "Savarkundla": {
+        "hi": "सावरकुंडला",
+        "gu": "સાવરકુંડલા"
+    },
+    "Bhavnagar": {
+        "hi": "भावनगर",
+        "gu": "ભાવનગર"
+    },
+    "Gariadhar": {
+        "hi": "गारियाधार",
+        "gu": "ગારીયાધાર"
+    },
+    "Ghogha": {
+        "hi": "घोघा",
+        "gu": "ઘોઘા"
+    },
+    "Jesar": {
+        "hi": "जेसर",
+        "gu": "જેસર"
+    },
+    "Palitana": {
+        "hi": "पालीताना",
+        "gu": "પાલીતાણા"
+    },
+    "Sihor": {
+        "hi": "सिहोर",
+        "gu": "સિહોર"
+    },
+    "Talaja": {
+        "hi": "तलाजा",
+        "gu": "તળાજા"
+    },
+    "Umrala": {
+        "hi": "उमराला",
+        "gu": "ઉમરાળા"
+    },
+    "Vallabhipur": {
+        "hi": "वल्लभीपुर",
+        "gu": "વલ્લભીપુર"
+    },
+    "Botad": {
+        "hi": "बोटाद",
+        "gu": "બોટાદ"
+    },
+    "Barwala": {
+        "hi": "बरवाला",
+        "gu": "બરવાળા"
+    },
+    "Gadhada": {
+        "hi": "गढडा",
+        "gu": "ગઢડા"
+    },
+    "Ranpur": {
+        "hi": "राणपुर",
+        "gu": "રાણપુર"
+    },
+    "Morbi": {
+        "hi": "मोरबी",
+        "gu": "મોરબી"
+    },
+    "Halvad": {
+        "hi": "हलवद",
+        "gu": "હળવદ"
+    },
+    "Maliya": {
+        "hi": "मालिया",
+        "gu": "માળિયા"
+    },
+    "Tankara": {
+        "hi": "टंकारा",
+        "gu": "ટંકારા"
+    },
+    "Wankaner": {
+        "hi": "वांकानेर",
+        "gu": "વાંકાનેર"
+    },
+    "Chotila": {
+        "hi": "चोटिला",
+        "gu": "ચોટીલા"
+    },
+    "Chuda": {
+        "hi": "चुड़ा",
+        "gu": "ચૂડા"
+    },
+    "Dasada": {
+        "hi": "दसाड़ा",
+        "gu": "દસાડા"
+    },
+    "Dhrangadhra": {
+        "hi": "ध्रांगध्रा",
+        "gu": "ધ્રાંગધ્રા"
+    },
+    "Lakhtar": {
+        "hi": "लखतर",
+        "gu": "લખતર"
+    },
+    "Limbdi": {
+        "hi": "लिंबडी",
+        "gu": "લીંબડી"
+    },
+    "Muli": {
+        "hi": "मूली",
+        "gu": "મૂળી"
+    },
+    "Sayla": {
+        "hi": "सायला",
+        "gu": "સાયલા"
+    },
+    "Thangadh": {
+        "hi": "थानगढ़",
+        "gu": "થાનગઢ"
+    },
+    "Wadhwan": {
+        "hi": "वढवाण",
+        "gu": "વઢવાણ"
+    },
+    "Bhesan": {
+        "hi": "भेसाण",
+        "gu": "ભેસાણ"
+    },
+    "Junagadh": {
+        "hi": "जूनागढ़",
+        "gu": "જૂનાગઢ"
+    },
+    "Keshod": {
+        "hi": "केशोद",
+        "gu": "કેશોદ"
+    },
+    "Manavadar": {
+        "hi": "माणावदर",
+        "gu": "માણાવદર"
+    },
+    "Mendarda": {
+        "hi": "मेंदरडा",
+        "gu": "મેંદરડા"
+    },
+    "Vanthali": {
+        "hi": "वंथाली",
+        "gu": "વંથલી"
+    },
+    "Visavadar": {
+        "hi": "विसावदर",
+        "gu": "વિસાવદર"
+    },
+    "Gir Gadhada": {
+        "hi": "गिर गढडा",
+        "gu": "ગીર ગઢડા"
+    },
+    "Kodinar": {
+        "hi": "कोडीनार",
+        "gu": "કોડીનાર"
+    },
+    "Patan Veraval": {
+        "hi": "वेरावल",
+        "gu": "વેરાવળ"
+    },
+    "Veraval": {
+        "hi": "वेरावल",
+        "gu": "વેરાવળ"
+    },
+    "Sutrapada": {
+        "hi": "सुत्रापाड़ा",
+        "gu": "સુત્રાપાડા"
+    },
+    "Talala": {
+        "hi": "तलाला",
+        "gu": "તાલાલા"
+    },
+    "Una": {
+        "hi": "ऊना",
+        "gu": "ઉના"
+    },
+    "Porbandar": {
+        "hi": "पोरबंदर",
+        "gu": "પોરબંદર"
+    },
+    "Kutiyana": {
+        "hi": "कुतियाना",
+        "gu": "કુતિયાણા"
+    },
+    "Ranavav": {
+        "hi": "राणावाव",
+        "gu": "રાણાવાવ"
+    },
+    "Dhrol": {
+        "hi": "ध्रोल",
+        "gu": "ધ્રોલ"
+    },
+    "Jamjodhpur": {
+        "hi": "जामजोधपुर",
+        "gu": "જામજોધપુર"
+    },
+    "Jodiya": {
+        "hi": "जोड़िया",
+        "gu": "જોડિયા"
+    },
+    "Kalavad": {
+        "hi": "कालावाद",
+        "gu": "કાલાવડ"
+    },
+    "Lalpur": {
+        "hi": "लालपुर",
+        "gu": "લાલપુર"
+    },
+    "Jamnagar": {
+        "hi": "जामनगर",
+        "gu": "જામનગર"
+    },
+    "Bhanvad": {
+        "hi": "भाणवड़",
+        "gu": "ભાણવડ"
+    },
+    "Kalyanpur": {
+        "hi": "कल्याणपुर",
+        "gu": "કલ્યાણપુર"
+    },
+    "Khambhalia": {
+        "hi": "खंभालिया",
+        "gu": "ખંભાળિયા"
+    },
+    "Okhamandal": {
+        "hi": "ओखामंडल (द्वारका)",
+        "gu": "ઓખામંડળ (દ્વારકા)"
+    },
+    "Abdasa": {
+        "hi": "अबडासा",
+        "gu": "અબડાસા"
+    },
+    "Anjar": {
+        "hi": "अंजार",
+        "gu": "અંજાર"
+    },
+    "Bhachau": {
+        "hi": "भचाऊ",
+        "gu": "ભચાઉ"
+    },
+    "Bhuj": {
+        "hi": "भुज",
+        "gu": "ભુજ"
+    },
+    "Gandhidham": {
+        "hi": "गांधीधाम",
+        "gu": "ગાંધીધામ"
+    },
+    "Lakhpat": {
+        "hi": "लखपत",
+        "gu": "લખપત"
+    },
+    "Mundra": {
+        "hi": "मुंद्रा",
+        "gu": "મુન્દ્રા"
+    },
+    "Nakhtrana": {
+        "hi": "नखत्राणा",
+        "gu": "નખત્રાણા"
+    },
+    "Rapar": {
+        "hi": "रापर",
+        "gu": "રાપર"
+    },
+    "Becharaji": {
+        "hi": "बेचराजी",
+        "gu": "બેચરાજી"
+    },
+    "Bechraji": {
+        "hi": "બેચરાજી",
+        "gu": "બેચરાજી"
+    },
+    "Jotana": {
+        "hi": "जोताणा",
+        "gu": "જોટાણા"
+    },
+    "Kadi": {
+        "hi": "कड़ी",
+        "gu": "કડી"
+    },
+    "Kheralu": {
+        "hi": "खेरालू",
+        "gu": "ખેરાલુ"
+    },
+    "Satlasana": {
+        "hi": "सतलासणा",
+        "gu": "સતલાસણા"
+    },
+    "Unjha": {
+        "hi": "ऊंझा",
+        "gu": "ઊંઝા"
+    },
+    "Vadnagar": {
+        "hi": "वडनगर",
+        "gu": "વડનગર"
+    },
+    "Vijapur": {
+        "hi": "विजापुर",
+        "gu": "વિજાપુર"
+    },
+    "Visnagar": {
+        "hi": "विसनगर",
+        "gu": "વિસનગર"
+    },
+    "Chanasma": {
+        "hi": "चाणस्मा",
+        "gu": "ચાણસ્મા"
+    },
+    "Harij": {
+        "hi": "हारिज",
+        "gu": "હારીજ"
+    },
+    "Radhanpur": {
+        "hi": "राधनपुर",
+        "gu": "રાધનપુર"
+    },
+    "Sami": {
+        "hi": "समी",
+        "gu": "સમી"
+    },
+    "Sankheshwar": {
+        "hi": "शंखेश्वर",
+        "gu": "શંખેશ્વર"
+    },
+    "Santalpur": {
+        "hi": "सांतलपुर",
+        "gu": "સાંતલપુર"
+    },
+    "Saraswati": {
+        "hi": "सरस्वती",
+        "gu": "સરસ્વતી"
+    },
+    "Sidhpur": {
+        "hi": "सिद्धपुर",
+        "gu": "સિદ્ધપુર"
+    },
+    "Patan": {
+        "hi": "पाटन",
+        "gu": "પાટણ"
+    },
+    "Amirgadh": {
+        "hi": "अमीरगढ़",
+        "gu": "અમીરગઢ"
+    },
+    "Bhabhar": {
+        "hi": "भाभर",
+        "gu": "ભાભર"
+    },
+    "Danta": {
+        "hi": "दांता",
+        "gu": "દાંતા"
+    },
+    "Dantiwada": {
+        "hi": "दांतीवाड़ा",
+        "gu": "દાંતીવાડા"
+    },
+    "Deesa": {
+        "hi": "डीसा",
+        "gu": "ડીસા"
+    },
+    "Deodar": {
+        "hi": "दियोदर",
+        "gu": "દિયોદર"
+    },
+    "Dhanera": {
+        "hi": "धानेरा",
+        "gu": "ધાનેરા"
+    },
+    "Kankrej": {
+        "hi": "कांकरेज",
+        "gu": "કાંકરેજ"
+    },
+    "Lakhani": {
+        "hi": "लाखाणी",
+        "gu": "લાખાણી"
+    },
+    "Palanpur": {
+        "hi": "पालनपुर",
+        "gu": "પાલનપુર"
+    },
+    "Suigam": {
+        "hi": "सुईगाम",
+        "gu": "સુઈગામ"
+    },
+    "Tharad": {
+        "hi": "थराद",
+        "gu": "થરાદ"
+    },
+    "Vadgam": {
+        "hi": "वडगाम",
+        "gu": "વડગામ"
+    },
+    "Vav": {
+        "hi": "वाव",
+        "gu": "વાવ"
+    },
+    "Himatnagar": {
+        "hi": "हिम्मतनगर",
+        "gu": "હિંમતનગર"
+    },
+    "Idar": {
+        "hi": "इदर",
+        "gu": "ઇડર"
+    },
+    "Khedbrahma": {
+        "hi": "खेडब्रह्मा",
+        "gu": "ખેડબ્રહ્મા"
+    },
+    "Poshina": {
+        "hi": "पोषीणा",
+        "gu": "પોશીના"
+    },
+    "Prantij": {
+        "hi": "प्रांतिज",
+        "gu": "પ્રાંતિજ"
+    },
+    "Talod": {
+        "hi": "तलोद",
+        "gu": "તલોદ"
+    },
+    "Vadali": {
+        "hi": "वडाली",
+        "gu": "વડાલી"
+    },
+    "Vijaynagar": {
+        "hi": "विजयनगर",
+        "gu": "વિજયનગર"
+    },
+    "Bayad": {
+        "hi": "बायड",
+        "gu": "બાયડ"
+    },
+    "Bhiloda": {
+        "hi": "भिलोड़ा",
+        "gu": "ભિલોડા"
+    },
+    "Dhansura": {
+        "hi": "धनसुरा",
+        "gu": "ધનસુરા"
+    },
+    "Malpur": {
+        "hi": "मालपुर",
+        "gu": "માલપુર"
+    },
+    "Meghraj": {
+        "hi": "मेघराज",
+        "gu": "મેઘરજ"
+    },
+    "Modasa": {
+        "hi": "मोडासा",
+        "gu": "મોડાસા"
+    },
+    "Ghoghamba": {
+        "hi": "घोघंबा",
+        "gu": "ઘોઘંબા"
+    },
+    "Godhra": {
+        "hi": "गोधरा",
+        "gu": "ગોધરા"
+    },
+    "Halol": {
+        "hi": "हालोल",
+        "gu": "હાલોલ"
+    },
+    "Jambughoda": {
+        "hi": "जांबुघोड़ा",
+        "gu": "જાંબુઘોડા"
+    },
+    "Morwa Hadaf": {
+        "hi": "मोरवा हड़फ",
+        "gu": "મોરવા હડફ"
+    },
+    "Shehera": {
+        "hi": "शहेरा",
+        "gu": "શહેરા"
+    },
+    "Devgadh Baria": {
+        "hi": "देवगढ़ बारिया",
+        "gu": "દેવગઢ બારિયા"
+    },
+    "Dhanpur": {
+        "hi": "धानपुर",
+        "gu": "ધાનપુર"
+    },
+    "Fatepura": {
+        "hi": "फतेपुरा",
+        "gu": "ફતેપુરા"
+    },
+    "Garbada": {
+        "hi": "गरबाड़ा",
+        "gu": "ગરબાડા"
+    },
+    "Jhalod": {
+        "hi": "झालोद",
+        "gu": "ઝાલોદ"
+    },
+    "Limkheda": {
+        "hi": "लिमखेड़ा",
+        "gu": "લીમખેડા"
+    },
+    "Sanjeli": {
+        "hi": "संजेली",
+        "gu": "સંજેલી"
+    },
+    "Singvad": {
+        "hi": "सिंगवड़",
+        "gu": "સિંગવડ"
+    },
+    "Dahod": {
+        "hi": "दाहोद",
+        "gu": "દાહોદ"
+    },
+    "Balasinor": {
+        "hi": "बालासिनोर",
+        "gu": "બાલાસિનોર"
+    },
+    "Kadana": {
+        "hi": "कडाणा",
+        "gu": "કડાણા"
+    },
+    "Khanpur": {
+        "hi": "खानपुर",
+        "gu": "ખાનપુર"
+    },
+    "Lunawada": {
+        "hi": "लूणावाड़ा",
+        "gu": "લુણાવાડા"
+    },
+    "Santrampur": {
+        "hi": "संतरामपुर",
+        "gu": "સંતરામપુર"
+    },
+    "Virpur": {
+        "hi": "वीरपुर",
+        "gu": "વીરપુર"
+    },
+    "Amod": {
+        "hi": "आमोद",
+        "gu": "આમોદ"
+    },
+    "Ankleshwar": {
+        "hi": "अंकलेश्वर",
+        "gu": "અંકલેશ્વર"
+    },
+    "Anklesvar": {
+        "hi": "अंकलेश्वर",
+        "gu": "અંકલેશ્વર"
+    },
+    "Hansot": {
+        "hi": "हंसोट",
+        "gu": "હંસોટ"
+    },
+    "Jambusar": {
+        "hi": "जंबूसर",
+        "gu": "જંબુસર"
+    },
+    "Jhagadia": {
+        "hi": "झगड़िया",
+        "gu": "ઝઘડિયા"
+    },
+    "Netrang": {
+        "hi": "नेत्रंग",
+        "gu": "નેત્રંગ"
+    },
+    "Vagra": {
+        "hi": "वागरा",
+        "gu": "વાગરા"
+    },
+    "Valia": {
+        "hi": "वालिया",
+        "gu": "વાલિયા"
+    },
+    "Bharuch": {
+        "hi": "भरूच",
+        "gu": "ભરૂચ"
+    },
+    "Dediapada": {
+        "hi": "डेडियापाड़ा",
+        "gu": "ડેડિયાપાડા"
+    },
+    "Garudeshwar": {
+        "hi": "गरुड़ेश्वर",
+        "gu": "ગરુડેશ્વર"
+    },
+    "Nandod": {
+        "hi": "नांदोद (राजपीपला)",
+        "gu": "નાંદોદ (રાજપીપળા)"
+    },
+    "Sagbara": {
+        "hi": "सागबारा",
+        "gu": "સાગબારા"
+    },
+    "Tilakwada": {
+        "hi": "तिलकवाड़ा",
+        "gu": "તિલકવાડા"
+    },
+    "Bodeli": {
+        "hi": "बोडेली",
+        "gu": "બોડેલી"
+    },
+    "Chhota Udepur": {
+        "hi": "छोटा उदेपुर",
+        "gu": "છોટાઉદેપુર"
+    },
+    "Jetpur Pavi": {
+        "hi": "जेतपुर पावी",
+        "gu": "જેતપુર પાવી"
+    },
+    "Kavant": {
+        "hi": "कवांट",
+        "gu": "કવાંટ"
+    },
+    "Nasvadi": {
+        "hi": "नसवाड़ी",
+        "gu": "નસવાડી"
+    },
+    "Sankheda": {
+        "hi": "संखेड़ा",
+        "gu": "સંખેડા"
+    },
+    "Nizar": {
+        "hi": "निझर",
+        "gu": "નિઝર"
+    },
+    "Songadh": {
+        "hi": "सोनगढ़",
+        "gu": "સોનગઢ"
+    },
+    "Uchchhal": {
+        "hi": "उच्छल",
+        "gu": "ઉચ્છલ"
+    },
+    "Valod": {
+        "hi": "वालोड",
+        "gu": "વાલોડ"
+    },
+    "Vyara": {
+        "hi": "व्यरा",
+        "gu": "વ્યારા"
+    },
+    "Kukarmunda": {
+        "hi": "कुकुरमुंडा",
+        "gu": "કુકરમુંડા"
+    },
+    "Dolvan": {
+        "hi": "डोलवण",
+        "gu": "ડોલવણ"
+    },
+    "Chikhli": {
+        "hi": "चिखली",
+        "gu": "ચીખલી"
+    },
+    "Gandevi": {
+        "hi": "गंदेवी",
+        "gu": "ગણદેવી"
+    },
+    "Jalalpore": {
+        "hi": "जलालपोर",
+        "gu": "જલાલપોર"
+    },
+    "Khergam": {
+        "hi": "खेरगाम",
+        "gu": "ખેરગામ"
+    },
+    "Navsari": {
+        "hi": "नवसारी",
+        "gu": "નવસારી"
+    },
+    "Vansda": {
+        "hi": "वांसदा",
+        "gu": "વાંસદા"
+    },
+    "Dharampur": {
+        "hi": "धरमपुर",
+        "gu": "ધરમપુર"
+    },
+    "Kaprada": {
+        "hi": "कपराड़ा",
+        "gu": "કપરાડા"
+    },
+    "Pardi": {
+        "hi": "पारडी",
+        "gu": "પારડી"
+    },
+    "Umbergaon": {
+        "hi": "उंबरगांव",
+        "gu": "ઉમરગામ"
+    },
+    "Vapi": {
+        "hi": "वापी",
+        "gu": "વાપી"
+    },
+    "Valsad": {
+        "hi": "वलसाड",
+        "gu": "વલસાડ"
+    },
+    "Ahwa": {
+        "hi": "आहवा",
+        "gu": "આહવા"
+    },
+    "Subir": {
+        "hi": "सुबीर",
+        "gu": "સુબીર"
+    },
+    "Waghai": {
+        "hi": "वाघई",
+        "gu": "વઘઈ"
+    }
+};
+
 class I18nManager {
     constructor() {
         this.currentLang = localStorage.getItem('krishi_lang') || 'en';
@@ -693,6 +2319,108 @@ class I18nManager {
             });
         }
         return text;
+    }
+
+    
+    translateState(name) {
+        if (!name || this.currentLang === 'en') return name;
+        const lang = this.currentLang;
+        const clean = name.trim();
+        if (STATE_TRANSLATIONS[clean]) return STATE_TRANSLATIONS[clean][lang] || clean;
+        for (const k of Object.keys(STATE_TRANSLATIONS)) {
+            if (k.toLowerCase() === clean.toLowerCase()) {
+                return STATE_TRANSLATIONS[k][lang] || clean;
+            }
+        }
+        return this.transliterateIndic(clean, lang);
+    }
+
+    translateDistrict(name) {
+        if (!name || this.currentLang === 'en') return name;
+        const lang = this.currentLang;
+        const clean = name.trim();
+        if (DISTRICT_TRANSLATIONS[clean]) return DISTRICT_TRANSLATIONS[clean][lang] || clean;
+        for (const k of Object.keys(DISTRICT_TRANSLATIONS)) {
+            if (k.toLowerCase() === clean.toLowerCase()) {
+                return DISTRICT_TRANSLATIONS[k][lang] || clean;
+            }
+        }
+        return this.transliterateIndic(clean, lang);
+    }
+
+    translateBlock(name) {
+        if (!name || this.currentLang === 'en') return name;
+        const lang = this.currentLang;
+        const clean = name.trim();
+        if (BLOCK_TRANSLATIONS[clean]) return BLOCK_TRANSLATIONS[clean][lang] || clean;
+        for (const k of Object.keys(BLOCK_TRANSLATIONS)) {
+            if (k.toLowerCase() === clean.toLowerCase()) {
+                return BLOCK_TRANSLATIONS[k][lang] || clean;
+            }
+        }
+        return this.transliterateIndic(clean, lang);
+    }
+
+    translateSource(source) {
+        if (!source || this.currentLang === 'en') return source;
+        const lang = this.currentLang;
+        
+        if (source.includes('10.85M') || source.includes('Benchmark') || source.includes('Database')) {
+            const match = source.match(/\(([^)]+)\)/);
+            if (match) {
+                const parts = match[1].split(',').map(p => p.trim());
+                const translatedParts = parts.map(p => {
+                    const st = this.translateState(p);
+                    if (st !== p) return st;
+                    const dt = this.translateDistrict(p);
+                    if (dt !== p) return dt;
+                    const bk = this.translateBlock(p);
+                    if (bk !== p) return bk;
+                    return p;
+                });
+                const locStr = translatedParts.join(', ');
+                return lang === 'hi' 
+                    ? `10.85M राष्ट्रीय मृदा डेटाबेस मानक (${locStr})`
+                    : `10.85M રાષ્ટ્રીય જમીન ડેટાબેઝ માપદંડ (${locStr})`;
+            }
+            return lang === 'hi' ? '10.85M राष्ट्रीय मृदा डेटाबेस मानक' : '10.85M રાષ્ટ્રીય જમીન ડેટાબેઝ માપદંડ';
+        }
+
+        if (source.includes('Field Diagnostic') || source.includes('Direct Farmer') || source.includes('Field Test')) {
+            return lang === 'hi' ? 'खेत परीक्षण / नैदानिक इनपुट' : 'ખેતર ચકાસણી / ખેડૂત ઇનપુટ';
+        }
+
+        return source;
+    }
+
+    transliterateIndic(text, lang) {
+        if (!text || lang === 'en') return text;
+        const isGu = (lang === 'gu');
+        let s = text.trim();
+
+        // Common suffix replacements
+        if (s.toLowerCase().endsWith('nagar')) {
+            const base = s.slice(0, -5);
+            return (this.transliterateIndic(base, lang) || base) + (isGu ? 'નગર' : 'नगर');
+        }
+        if (s.toLowerCase().endsWith('pur')) {
+            const base = s.slice(0, -3);
+            return (this.transliterateIndic(base, lang) || base) + (isGu ? 'પુર' : 'पुर');
+        }
+        if (s.toLowerCase().endsWith('garh')) {
+            const base = s.slice(0, -4);
+            return (this.transliterateIndic(base, lang) || base) + (isGu ? 'ગઢ' : 'गढ़');
+        }
+        if (s.toLowerCase().endsWith('bad')) {
+            const base = s.slice(0, -3);
+            return (this.transliterateIndic(base, lang) || base) + (isGu ? 'બાદ' : 'बाद');
+        }
+        if (s.toLowerCase().endsWith('kheda')) {
+            const base = s.slice(0, -5);
+            return (this.transliterateIndic(base, lang) || base) + (isGu ? 'ખેડા' : 'खेड़ा');
+        }
+
+        return s;
     }
 
     translateFertilizer(name) {
