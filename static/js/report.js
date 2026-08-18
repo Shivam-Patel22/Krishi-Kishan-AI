@@ -121,20 +121,22 @@ function renderReport(data) {
     }
 
     // 3. Warnings
-    const warnings = agri.warnings || [];
+    const rawWarnings = agri.warnings || [];
     const warningsContainer = document.getElementById('repWarningsContainer');
     if (warningsContainer) {
         warningsContainer.innerHTML = '';
-        if (warnings.length > 0) {
+        if (rawWarnings.length > 0) {
             const warnTitle = window.i18n ? window.i18n.t('report.warningsTitle') : 'Agronomic & Environmental Advisory Warnings';
             const warnBox = document.createElement('div');
             warnBox.style.cssText = "background: #fffbeb; border: 1px solid #fde68a; border-radius: 8px; padding: 1rem; margin-bottom: 1.25rem;";
+            
+            const translatedWarnings = rawWarnings.map(w => window.i18n ? window.i18n.translateWarning(w) : w);
             warnBox.innerHTML = `
                 <div style="font-weight: 700; color: #92400e; margin-bottom: 0.4rem; display: flex; align-items: center; gap: 0.4rem;">
                     <span>⚠️</span> ${warnTitle}
                 </div>
                 <ul style="padding-left: 1.2rem; font-size: 0.85rem; color: #78350f; line-height: 1.5;">
-                    ${warnings.map(w => `<li>${w}</li>`).join('')}
+                    ${translatedWarnings.map(w => `<li>${w}</li>`).join('')}
                 </ul>
             `;
             warningsContainer.appendChild(warnBox);
@@ -254,19 +256,25 @@ function renderReport(data) {
         }
     }
 
-    // 6. Amendments
-    const defPhText = window.i18n ? window.i18n.t('report.optimumPhText') : "Optimal soil pH (6.0-7.5). No liming or gypsum amendments required.";
-    const defMicroText = window.i18n ? window.i18n.t('report.adequateMicroText') : "Micronutrients (Zn, B, S, Fe) are within adequate agricultural ranges.";
-    if (document.getElementById('repPhAmendment')) document.getElementById('repPhAmendment').textContent = agri.ph_amendment || data.ph_amendment || defPhText;
-    if (document.getElementById('repMicronutrients')) document.getElementById('repMicronutrients').textContent = agri.micronutrient_advice || data.micronutrient_advice || defMicroText;
+    // 6. Amendments (Fully localized)
+    const rawPhAdvice = agri.ph_amendment || data.ph_amendment || "Optimal soil pH (6.0-7.5). No liming or gypsum amendments required.";
+    const rawMicroAdvice = agri.micronutrient_advice || data.micronutrient_advice || "Micronutrients (Zn, B, S, Fe) are within adequate agricultural ranges.";
+    
+    const localizedPh = window.i18n ? window.i18n.translatePhAmendment(rawPhAdvice) : rawPhAdvice;
+    const localizedMicro = window.i18n ? window.i18n.translateMicronutrientAdvice(rawMicroAdvice) : rawMicroAdvice;
 
-    // 7. Weather
+    if (document.getElementById('repPhAmendment')) document.getElementById('repPhAmendment').textContent = localizedPh;
+    if (document.getElementById('repMicronutrients')) document.getElementById('repMicronutrients').textContent = localizedMicro;
+
+    // 7. Weather (Fully localized)
     if (document.getElementById('repWeatherTemp')) document.getElementById('repWeatherTemp').textContent = `${weather.temperature_c || 28.5} °C`;
     if (document.getElementById('repWeatherHumidity')) document.getElementById('repWeatherHumidity').textContent = `${weather.humidity_pct || 62} %`;
     if (document.getElementById('repWeatherRain')) document.getElementById('repWeatherRain').textContent = `${weather.rainfall_forecast_mm || 0.0} mm`;
     if (document.getElementById('repWeatherWind')) document.getElementById('repWeatherWind').textContent = `${weather.wind_speed_kmh || 8.5} km/h`;
-    const defAdvisory = window.i18n ? window.i18n.t('report.defaultWeatherAdvisory') : "Weather window is optimal for fertilizer broadcasting and foliage spray.";
-    if (document.getElementById('repWeatherAdvisory')) document.getElementById('repWeatherAdvisory').textContent = weather.advice || agri.weather_advisory || defAdvisory;
+    
+    const rawAdvisory = weather.advice || agri.weather_advisory || "Weather window is optimal for fertilizer broadcasting and foliage spray.";
+    const localizedAdvisory = window.i18n ? window.i18n.translateWeatherAdvisory(rawAdvisory) : rawAdvisory;
+    if (document.getElementById('repWeatherAdvisory')) document.getElementById('repWeatherAdvisory').textContent = localizedAdvisory;
 
     // 8. Alternatives & Decision Drivers
     const alternatives = ml.alternatives || data.ai_alternatives || [];
@@ -286,25 +294,26 @@ function renderReport(data) {
         });
     }
 
-    const drivers = ml.decision_drivers || [];
+    const rawDrivers = ml.decision_drivers || [];
     const driversList = document.getElementById('repDecisionDriversList');
     if (driversList) {
         driversList.innerHTML = '';
-        if (drivers.length === 0) {
+        if (rawDrivers.length === 0) {
             const defDriver = window.i18n ? window.i18n.t('report.defaultRationale') : 'Balanced nutrient requirements based on ICAR crop standards and soil test values.';
             driversList.innerHTML = `<li>${defDriver}</li>`;
         } else {
-            drivers.forEach(d => {
+            rawDrivers.forEach(d => {
                 const li = document.createElement('li');
-                li.textContent = d;
+                li.textContent = window.i18n ? window.i18n.translateDecisionDriver(d) : d;
                 driversList.appendChild(li);
             });
         }
     }
 
     // 9. Explainable Rationale
-    const explanation = agri.explanation || data.explanation || (window.i18n ? window.i18n.t('report.defaultRationale') : "");
-    if (document.getElementById('repExplanation')) document.getElementById('repExplanation').textContent = explanation;
+    const rawExplanation = agri.explanation || data.explanation || (window.i18n ? window.i18n.t('report.defaultRationale') : "");
+    const localizedExplanation = window.i18n ? window.i18n.translateExplanation(rawExplanation) : rawExplanation;
+    if (document.getElementById('repExplanation')) document.getElementById('repExplanation').textContent = localizedExplanation;
 }
 
 function downloadReportPDF() {

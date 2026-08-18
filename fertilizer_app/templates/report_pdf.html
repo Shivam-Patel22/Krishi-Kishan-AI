@@ -411,11 +411,11 @@
             <div class="card-header"><span class="card-title">🧪 {{ t.amendments_title }}</span></div>
             <div style="font-size: 7.5pt; margin-bottom: 6px;">
                 <strong style="color: #0f172a;">{{ t.ph_amendment_label }}</strong>
-                <p style="color: #64748b; margin-top: 1px;">{{ rec.ph_amendment }}</p>
+                <p style="color: #64748b; margin-top: 1px;">{{ ph_amendment|default:rec.ph_amendment }}</p>
             </div>
             <div style="font-size: 7.5pt;">
                 <strong style="color: #0f172a;">{{ t.micronutrients_label }}</strong>
-                <p style="color: #64748b; margin-top: 1px;">{{ rec.micronutrient_advice }}</p>
+                <p style="color: #64748b; margin-top: 1px;">{{ micronutrient_advice|default:rec.micronutrient_advice }}</p>
             </div>
         </div>
 

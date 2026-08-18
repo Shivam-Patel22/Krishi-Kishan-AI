@@ -654,7 +654,7 @@ const translations = {
 };
 
 /**
- * i18n Translation Engine
+ * i18n Translation Engine with Intelligent Dynamic Agronomic Text Localization
  */
 class I18nManager {
     constructor() {
@@ -698,7 +698,6 @@ class I18nManager {
         if (translations[this.currentLang] && translations[this.currentLang][key]) {
             return translations[this.currentLang][key];
         }
-        // Partial search
         for (const k of Object.keys(translations.en)) {
             if (k.startsWith('fert.') && name.includes(k.replace('fert.', ''))) {
                 return this.t(k, {}, name);
@@ -750,6 +749,272 @@ class I18nManager {
         if (s.includes('DEFICIENT')) return this.t('report.statusDeficient', {}, 'DEFICIENT');
         if (s.includes('ADEQUATE')) return this.t('report.statusAdequate', {}, 'ADEQUATE');
         return status;
+    }
+
+    /**
+     * Localizes dynamic Soil pH amendment strings
+     */
+    translatePhAmendment(text) {
+        if (!text || this.currentLang === 'en') return text;
+        const lang = this.currentLang;
+
+        // Extract numbers like pH 5.0, 750 kg, 750 kg/ha
+        const phMatch = text.match(/pH\s*([\d\.]+)/i);
+        const kgMatch = text.match(/at\s*([\d\.]+)\s*kg/i);
+        const rateMatch = text.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+
+        const ph = phMatch ? phMatch[1] : '';
+        const kg = kgMatch ? kgMatch[1] : '';
+        const rate = rateMatch ? rateMatch[1] : '750';
+
+        if (text.toLowerCase().includes('strongly acidic')) {
+            if (lang === 'hi') {
+                return `अत्यधिक अम्लीय मिट्टी (pH ${ph})। फास्फोरस की उपलब्धता सुधारने के लिए बुआई से 2-3 सप्ताह पूर्व ${kg} kg (${rate} kg/ha) कृषि चूना (CaCO3) या डोलोमाइट डालें।`;
+            } else if (lang === 'gu') {
+                return `અત્યંત એસિડિક જમીન (pH ${ph}). ફોસ્ફરસની ઉપલબ્ધતા વધારવા માટે વાવણીના 2-3 અઠવાડિયા પહેલાં ${kg} kg (${rate} kg/ha) કૃષિ ચૂનો (CaCO3) અથવા ડોલોમાઇટ ઉમેરો.`;
+            }
+        } else if (text.toLowerCase().includes('moderately acidic')) {
+            if (lang === 'hi') {
+                return `मध्यम अम्लीय मिट्टी (pH ${ph})। ${kg} kg (${rate} kg/ha) कृषि चूना डालें या अच्छी तरह सड़ी हुई गोबर की खाद (FYM)/कम्पोस्ट मिलाएं।`;
+            } else if (lang === 'gu') {
+                return `મધ્યમ એસિડિક જમીન (pH ${ph}). ${kg} kg (${rate} kg/ha) કૃષિ ચૂનો ઉમેરો અથવા સારું કોહવાયેલું છાણિયું ખાતર/કમ્પોસ્ટ ભેળવો.`;
+            }
+        } else if (text.toLowerCase().includes('alkaline / sodic') || text.toLowerCase().includes('sodic')) {
+            if (lang === 'hi') {
+                return `क्षारीय / सोदिक मिट्टी (pH ${ph})। सोडियम विषाक्तता कम करने के लिए जल निकास के साथ ${kg} kg (${rate} kg/ha) कृषि जिप्सम (CaSO4·2H2O) डालें।`;
+            } else if (lang === 'gu') {
+                return `ક્ષારીય / સોડિક જમીન (pH ${ph}). સોડિયમની હાનિકારકતા ઘટાડવા માટે યોગ્ય નિતાર સાથે ${kg} kg (${rate} kg/ha) કૃષિ જીપ્સમ (CaSO4·2H2O) આપો.`;
+            }
+        } else if (text.toLowerCase().includes('slightly alkaline')) {
+            if (lang === 'hi') {
+                return `हल्की क्षारीय मिट्टी (pH ${ph})। जड़ क्षेत्र को स्वाभाविक रूप से उदासीन करने के लिए पोषक तत्व स्रोत के रूप में अमोनियम सल्फेट या SSP का प्रयोग करें।`;
+            } else if (lang === 'gu') {
+                return `હળવી ક્ષારીય જમીન (pH ${ph}). મૂળ વિસ્તારને તટસ્થ કરવા માટે ખાતર તરીકે એમોનિયમ સલ્ફેટ અથવા SSP નો ઉપયોગ કરો.`;
+            }
+        } else if (text.toLowerCase().includes('optimal')) {
+            if (lang === 'hi') {
+                return `अनुकूल मृदा pH (${ph})। पोषक तत्व अवशोषण क्षमता उत्कृष्ट है।`;
+            } else if (lang === 'gu') {
+                return `ઉત્તમ જમીન pH (${ph}). પોષક તત્વો ગ્રહણ ક્ષમતા શ્રેષ્ઠ છે.`;
+            }
+        }
+
+        return text;
+    }
+
+    /**
+     * Localizes dynamic Micronutrient advice strings
+     */
+    translateMicronutrientAdvice(text) {
+        if (!text || this.currentLang === 'en') return text;
+        const lang = this.currentLang;
+
+        if (text.toLowerCase().includes('adequate')) {
+            return lang === 'hi' ? 'सूक्ष्म पोषक तत्व (Zn, B, S, Fe) कृषि मानकों के अनुसार पर्याप्त मात्रा में हैं।' : 'સૂક્ષ્મ પોષક તત્વો (Zn, B, S, Fe) ખેતી માટે પૂરતા પ્રમાણમાં છે.';
+        }
+
+        const segments = text.split('|').map(s => s.trim());
+        const translatedSegments = segments.map(seg => {
+            // Zinc
+            if (seg.toLowerCase().includes('zinc') || seg.toLowerCase().includes('znso4')) {
+                const valMatch = seg.match(/([\d\.]+)\s*ppm/i);
+                const kgMatch = seg.match(/@\s*([\d\.]+)\s*kg/i);
+                const rateMatch = seg.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '0.00';
+                const kg = kgMatch ? kgMatch[1] : '25';
+                const rate = rateMatch ? rateMatch[1] : '25';
+                if (lang === 'hi') {
+                    return `जिंक की कमी (${val} ppm < 0.6 ppm): आधारभूत (बेसल) अवस्था में ${kg} kg (${rate} kg/ha) जिंक सल्फेट (ZnSO4 21%) डालें।`;
+                } else {
+                    return `ઝિંકની ખામી (${val} ppm < 0.6 ppm): પાયાના તબક્કે ${kg} kg (${rate} kg/ha) ઝિંક સલ્ફેટ (ZnSO4 21%) આપો.`;
+                }
+            }
+            // Boron
+            if (seg.toLowerCase().includes('boron') || seg.toLowerCase().includes('borax')) {
+                const valMatch = seg.match(/([\d\.]+)\s*ppm/i);
+                const kgMatch = seg.match(/@\s*([\d\.]+)\s*kg/i);
+                const rateMatch = seg.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '0.00';
+                const kg = kgMatch ? kgMatch[1] : '5.0';
+                const rate = rateMatch ? rateMatch[1] : '5';
+                if (lang === 'hi') {
+                    return `बोरॉन की कमी (${val} ppm < 0.5 ppm): फल फटने और फूल झड़ने से रोकने के लिए ${kg} kg (${rate} kg/ha) बोरेक्स (10.5% B) डालें।`;
+                } else {
+                    return `બોરોનની ખામી (${val} ppm < 0.5 ppm): ફળ ફાટતા અને ફૂલ ખરતા અટકાવવા માટે ${kg} kg (${rate} kg/ha) બોરેક્સ (10.5% B) આપો.`;
+                }
+            }
+            // Sulphur
+            if (seg.toLowerCase().includes('sulphur') || seg.toLowerCase().includes('gypsum')) {
+                const valMatch = seg.match(/([\d\.]+)\s*ppm/i);
+                const kgMatch = seg.match(/@\s*([\d\.]+)\s*kg/i);
+                const rateMatch = seg.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '0.0';
+                const kg = kgMatch ? kgMatch[1] : '35';
+                const rate = rateMatch ? rateMatch[1] : '35';
+                if (lang === 'hi') {
+                    return `सल्फर की कमी (${val} ppm < 10 ppm): तिलहन और दलहन में प्रोटीन निर्माण के लिए ${kg} kg (${rate} kg/ha) तत्वीय सल्फर या जिप्सम डालें।`;
+                } else {
+                    return `સલ્ફરની ખામી (${val} ppm < 10 ppm): તેલીબિયાં અને કઠોળમાં પ્રોટીન વૃદ્ધિ માટે ${kg} kg (${rate} kg/ha) સલ્ફર અથવા જીપ્સમ આપો.`;
+                }
+            }
+            // Iron
+            if (seg.toLowerCase().includes('iron') || seg.toLowerCase().includes('ferrous')) {
+                const valMatch = seg.match(/([\d\.]+)\s*ppm/i);
+                const val = valMatch ? valMatch[1] : '0.0';
+                if (lang === 'hi') {
+                    return `आयरन की कमी (${val} ppm < 4.5 ppm): वानस्पतिक अवस्था में फेरस सल्फेट (FeSO4 0.5%) + 0.1% साइट्रिक एसिड का पर्णीय छिड़काव करें।`;
+                } else {
+                    return `આયર્નની ખામી (${val} ppm < 4.5 ppm): વાનસ્પતિક વૃદ્ધિ સમયે ફેરસ સલ્ફેટ (FeSO4 0.5%) + 0.1% સાઇટ્રિક એસિડનો છંટકાવ કરો.`;
+                }
+            }
+            return seg;
+        });
+
+        return translatedSegments.join(' | ');
+    }
+
+    /**
+     * Localizes dynamic warning sentences
+     */
+    translateWarning(w) {
+        if (!w || this.currentLang === 'en') return w;
+        const lang = this.currentLang;
+        const low = w.toLowerCase();
+
+        if (low.includes('soil ph is very low') || (low.includes('phosphorus') && low.includes('locked'))) {
+            const ph = (w.match(/([\d\.]+)/) || [])[1] || '5.0';
+            return lang === 'hi' ? `मिट्टी का pH बहुत कम है (${ph})। चूना डाले बिना फॉस्फोरस पौधों को नहीं मिल पाएगा।` : `જમીનનું pH ખૂબ ઓછું છે (${ph}). ચૂનો ઉમેર્યા વિના ફોસ્ફરસ પાકને મળી શકશે નહીં.`;
+        }
+        if (low.includes('high soil ph') || low.includes('reduces micronutrient')) {
+            const ph = (w.match(/([\d\.]+)/) || [])[1] || '8.5';
+            return lang === 'hi' ? `मिट्टी का pH अधिक (${ph}) होने से सूक्ष्म पोषक तत्वों (Zn, Fe) और फॉस्फोरस का अवशोषण घट जाता है।` : `જમીનનું pH વધુ (${ph}) હોવાથી સૂક્ષ્મ પોષક તત્વો (Zn, Fe) અને ફોસ્ફરસનું શોષણ ઘટે છે.`;
+        }
+        if (low.includes('zinc') && (low.includes('khaira') || low.includes('stunted'))) {
+            return lang === 'hi' ? `जिंक की कमी पाई गई: धान में खैरा रोग और पौधों का विकास रुकने का खतरा है।` : `ઝિંકની ખામી જણાઈ: ડાંગરમાં ખૈરા રોગ અને છોડનો વિકાસ અટકી જવાનું જોખમ છે.`;
+        }
+        if (low.includes('heavy rainfall alert')) {
+            const rain = (w.match(/([\d\.]+)\s*mm/) || [])[1] || '25.0';
+            return lang === 'hi' ? `भारी वर्षा की चेतावनी: अगले 24-48 घंटों में ${rain} mm वर्षा का अनुमान है। अभी नाइट्रोजन या जल-घुलनशील उर्वरक न डालें क्योंकि बहाव से खाद व्यर्थ हो जाएगी।` : `ભારે વરસાદની ચેતવણી: આગામી 24-48 કલાકમાં ${rain} mm વરસાદની આગાહી છે. અત્યારે નાઇટ્રોજન કે ખાતર ન આપો અન્યથા ખાતર ધોવાઈ જશે.`;
+        }
+        if (low.includes('high wind speed')) {
+            const wind = (w.match(/([\d\.]+)\s*km\/h/) || [])[1] || '20.0';
+            return lang === 'hi' ? `तेज हवा की गति (${wind} km/h)। असमान छिड़काव से बचने के लिए पर्णीय छिड़काव और दानेदार खाद का छिड़काव न करें।` : `પવનની ગતિ વધુ (${wind} km/h) છે. ખાતરનો છંટકાવ કે પૂર્તિ ખાતર આપવાનું ટાળો જેથી સરખો ફેલાવો થાય.`;
+        }
+        if (low.includes('high temperature')) {
+            const temp = (w.match(/([\d\.]+)\s*°c/i) || [])[1] || '38.0';
+            return lang === 'hi' ? `अधिक तापमान (${temp}°C): अमोनिया गैस बनकर उड़ने से रोकने के लिए यूरिया का प्रयोग सुबह (6-8 बजे) या शाम (5-7 बजे) करें।` : `વધુ તાપમાન (${temp}°C): યુરિયાનું બાષ્પીભવન અટકાવવા માટે વહેલી સવારે (6-8 વાગ્યે) અથવા સાંજે (5-7 વાગ્યે) યુરિયા આપો.`;
+        }
+
+        return w;
+    }
+
+    /**
+     * Localizes dynamic weather advisory strings
+     */
+    translateWeatherAdvisory(text) {
+        if (!text || this.currentLang === 'en') return text;
+        const lang = this.currentLang;
+        const low = text.toLowerCase();
+
+        if (low.includes('favorable') || low.includes('ideal for fertilizer')) {
+            const temp = (text.match(/([\d\.]+)\s*°c/i) || [])[1] || '28.5';
+            const rain = (text.match(/([\d\.]+)\s*mm/i) || [])[1] || '0.0';
+            return lang === 'hi' ? `मौसम अनुकूल है (${temp}°C, ${rain} mm वर्षा)। उर्वरक टॉप-ड्रेसिंग और हल्की सिंचाई के लिए उत्तम समय है।` : `હવામાન અનુકૂળ છે (${temp}°C, ${rain} mm વરસાદ). પૂર્તિ ખાતર આપવા અને હળવા પિયત માટે શ્રેષ્ઠ સમય છે.`;
+        }
+        if (low.includes('moderate rainfall')) {
+            const rain = (text.match(/([\d\.]+)\s*mm/i) || [])[1] || '8.0';
+            return lang === 'hi' ? `मध्यम वर्षा (${rain} mm) का अनुमान: बेसल उर्वरक मिट्टी में मिलाना सुरक्षित है, लेकिन पत्तियों पर छिड़काव न करें।` : `મધ્યમ વરસાદ (${rain} mm)ની આગાહી: પાયાનું ખાતર જમીનમાં ભેળવી શકાય છે, પરંતુ છંટકાવ ટાળો.`;
+        }
+        if (low.includes('postpone fertilizer')) {
+            return lang === 'hi' ? `वर्षा थमने और खेत से पानी निकलने तक उर्वरक का प्रयोग स्थगित रखें।` : `વરસાદ બંધ ન થાય અને ખેતરમાંથી પાણી ન નીકળે ત્યાં સુધી ખાતર આપવાનું મુલતવી રાખો.`;
+        }
+
+        return text;
+    }
+
+    /**
+     * Localizes dynamic AI decision driver strings
+     */
+    translateDecisionDriver(text) {
+        if (!text || this.currentLang === 'en') return text;
+        const lang = this.currentLang;
+        const low = text.toLowerCase();
+
+        if (low.includes('nitrogen deficiency') || (low.includes('nitrogen') && low.includes('urea'))) {
+            const valMatch = text.match(/([\d\.]+)\s*kg\/ha/i);
+            const val = valMatch ? valMatch[1] : '140.0';
+            return lang === 'hi' ? `नाइट्रोजन की कमी (${val} kg/ha < 280.0 kg/ha) के लिए यूरिया की बेसल और टॉप-ड्रेसिंग विभाजित खुराक आवश्यक है।` : `નાઇટ્રોજનની ખામી (${val} kg/ha < 280.0 kg/ha) માટે યુરિયા પાયામાં અને પૂર્તિ ખાતર તરીકે તબક્કાવાર આપવું જરૂરી છે.`;
+        }
+        if (low.includes('phosphorus deficiency') || (low.includes('phosphorus') && low.includes('dap'))) {
+            const valMatch = text.match(/([\d\.]+)\s*kg\/ha/i);
+            const val = valMatch ? valMatch[1] : '18.0';
+            return lang === 'hi' ? `फॉस्फोरस की कमी (${val} kg/ha < 25.0 kg/ha) की पूर्ति DAP द्वारा की गई है।` : `ફોસ્ફરસની ખામી (${val} kg/ha < 25.0 kg/ha) ડીએપી (DAP) દ્વારા પૂર્ણ કરવામાં આવી છે.`;
+        }
+        if (low.includes('potassium deficiency') || (low.includes('potassium') && low.includes('mop'))) {
+            const valMatch = text.match(/([\d\.]+)\s*kg\/ha/i);
+            const val = valMatch ? valMatch[1] : '180.0';
+            return lang === 'hi' ? `पोटैशियम की कमी (${val} kg/ha < 280.0 kg/ha) की पूर्ति MOP द्वारा की गई है।` : `પોટેશિયમની ખામી (${val} kg/ha < 280.0 kg/ha) એમઓપી (MOP) દ્વારા પૂર્ણ કરવામાં આવી છે.`;
+        }
+
+        return text;
+    }
+
+    /**
+     * Localizes dynamic Explainable AI Scientific Rationale
+     */
+    translateExplanation(text) {
+        if (!text || this.currentLang === 'en') return text;
+        const lang = this.currentLang;
+
+        let res = text;
+        if (lang === 'hi') {
+            res = res.replace(/ICAR Stoichiometric Agronomic Prescription Rationale/g, "ICAR वैज्ञानिक एवं संतुलित उर्वरक निर्धारण आधार")
+                     .replace(/Target Crop Requirements & Soil Adjustment/g, "लक्षित फसल की आवश्यकताएं एवं मृदा समायोजन")
+                     .replace(/Soil Diagnostic Baseline/g, "मृदा परीक्षण एवं नैदानिक आधार")
+                     .replace(/Fertilizer Formulation & Stoichiometry/g, "उर्वरक सम्मिश्रण एवं मात्रा निर्धारण")
+                     .replace(/Nitrogen Split Dosing/g, "नाइट्रोजन विभाजित अनुप्रयोग (Split Dosing)")
+                     .replace(/Soil Health & Secondary Amendments/g, "मृदा स्वास्थ्य एवं द्वितीयक सुधारक")
+                     .replace(/Weather Risk & Application Advisory/g, "मौसम जोखिम एवं छिड़काव परामर्श")
+                     .replace(/Basal Application/g, "आधारभूत खुराक (बेसल)")
+                     .replace(/First Top Dressing/g, "प्रथम टॉप ड्रेसिंग")
+                     .replace(/Second Top Dressing/g, "द्वितीय टॉप ड्रेसिंग")
+                     .replace(/Urea/g, "यूरिया")
+                     .replace(/Nitrogen \(N\)/g, "नाइट्रोजन (N)")
+                     .replace(/Phosphorus \(P2O5\)/g, "फॉस्फोरस (P₂O₅)")
+                     .replace(/Potassium \(K2O\)/g, "पोटैशियम (K₂O)")
+                     .replace(/Organic Carbon/g, "जैविक कार्बन")
+                     .replace(/Electrical Conductivity/g, "विद्युत चालकता")
+                     .replace(/Optimal/g, "अनुकूल")
+                     .replace(/Low/g, "कम")
+                     .replace(/Medium/g, "मध्यम")
+                     .replace(/High/g, "अधिक")
+                     .replace(/Acidic/g, "अम्लीय")
+                     .replace(/Alkaline/g, "क्षारीय");
+        } else if (lang === 'gu') {
+            res = res.replace(/ICAR Stoichiometric Agronomic Prescription Rationale/g, "ICAR વૈજ્ઞાનિક અને સંતુલિત ખાતર નિર્ધારણ આધાર")
+                     .replace(/Target Crop Requirements & Soil Adjustment/g, "લક્ષિત પાકની જરૂરિયાતો અને જમીન સમાયોજન")
+                     .replace(/Soil Diagnostic Baseline/g, "જમીન ચકાસણી અને પરિણામો")
+                     .replace(/Fertilizer Formulation & Stoichiometry/g, "ખાતર આયોજન અને માત્રા નિર્ધારણ")
+                     .replace(/Nitrogen Split Dosing/g, "તબક્કાવાર નાઇટ્રોજન વ્યવસ્થાપન (Split Dosing)")
+                     .replace(/Soil Health & Secondary Amendments/g, "જમીન સ્વાસ્થ્ય અને સુધારક ભલામણ")
+                     .replace(/Weather Risk & Application Advisory/g, "હવામાન જોખમ અને છંટકાવ સલાહ")
+                     .replace(/Basal Application/g, "પાયાનું ખાતર")
+                     .replace(/First Top Dressing/g, "પ્રથમ પૂર્તિ ખાતર")
+                     .replace(/Second Top Dressing/g, "બીજું પૂર્તિ ખાતર")
+                     .replace(/Urea/g, "યુરિયા")
+                     .replace(/Nitrogen \(N\)/g, "નાઇટ્રોજન (N)")
+                     .replace(/Phosphorus \(P2O5\)/g, "ફોસ્ફરસ (P₂O₅)")
+                     .replace(/Potassium \(K2O\)/g, "પોટેશિયમ (K₂O)")
+                     .replace(/Organic Carbon/g, "ઓર્ગેનિક કાર્બન")
+                     .replace(/Electrical Conductivity/g, "વિદ્યુત વાહકતા")
+                     .replace(/Optimal/g, "ઉત્તમ")
+                     .replace(/Low/g, "ઓછું")
+                     .replace(/Medium/g, "મધ્યમ")
+                     .replace(/High/g, "વધારે")
+                     .replace(/Acidic/g, "એસિડિક")
+                     .replace(/Alkaline/g, "ક્ષારીય");
+        }
+        return res;
     }
 
     translatePage() {

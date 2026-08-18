@@ -3,6 +3,7 @@ Backend i18n Translation Dictionary and Localizer for KrishiKisan AI
 Supports English (en), Hindi (hi), and Gujarati (gu) for PDF and server-rendered templates.
 """
 
+import re
 from typing import Dict, Any, List
 
 CROP_TRANSLATIONS = {
@@ -271,6 +272,98 @@ def localize_soil_type(soil_type: str, lang: str = 'en') -> str:
         if k.lower() in soil_type.lower():
             return v.get(lang, soil_type)
     return soil_type
+
+
+def localize_ph_amendment(text: str, lang: str = 'en') -> str:
+    if not text or lang == 'en':
+        return text
+
+    ph_match = re.search(r'pH\s*([\d\.]+)', text, re.IGNORECASE)
+    kg_match = re.search(r'at\s*([\d\.]+)\s*kg', text, re.IGNORECASE)
+    rate_match = re.search(r'\(([\d\.]+)\s*kg/ha\)', text, re.IGNORECASE)
+
+    ph = ph_match.group(1) if ph_match else ''
+    kg = kg_match.group(1) if kg_match else ''
+    rate = rate_match.group(1) if rate_match else '750'
+
+    if 'strongly acidic' in text.lower():
+        if lang == 'hi':
+            return f"अत्यधिक अम्लीय मिट्टी (pH {ph})। फास्फोरस की उपलब्धता सुधारने के लिए बुआई से 2-3 सप्ताह पूर्व {kg} kg ({rate} kg/ha) कृषि चूना (CaCO3) या डोलोमाइट डालें।"
+        elif lang == 'gu':
+            return f"અત્યંત એસિડિક જમીન (pH {ph}). ફોસ્ફરસની ઉપલબ્ધતા વધારવા માટે વાવણીના 2-3 અઠવાડિયા પહેલાં {kg} kg ({rate} kg/ha) કૃષિ ચૂનો (CaCO3) અથવા ડોલોમાઇટ ઉમેરો."
+    elif 'moderately acidic' in text.lower():
+        if lang == 'hi':
+            return f"मध्यम अम्लीय मिट्टी (pH {ph})। {kg} kg ({rate} kg/ha) कृषि चूना डालें या अच्छी तरह सड़ी हुई गोबर की खाद (FYM)/कम्पोस्ट मिलाएं।"
+        elif lang == 'gu':
+            return f"મધ્યમ એસિડિક જમીન (pH {ph}). {kg} kg ({rate} kg/ha) કૃષિ ચૂનો ઉમેરો અથવા સારું કોહવાયેલું છાણિયું ખાતર/કમ્પોસ્ટ ભેળવો."
+    elif 'alkaline' in text.lower() or 'sodic' in text.lower():
+        if lang == 'hi':
+            return f"क्षारीय / सोदिक मिट्टी (pH {ph})। सोडियम विषाक्तता कम करने के लिए जल निकास के साथ {kg} kg ({rate} kg/ha) कृषि जिप्सम (CaSO4·2H2O) डालें।"
+        elif lang == 'gu':
+            return f"ક્ષારીય / સોડિક જમીન (pH {ph}). સોડિયમની હાનિકારકતા ઘટાડવા માટે યોગ્ય નિતાર સાથે {kg} kg ({rate} kg/ha) કૃષિ જીપ્સમ (CaSO4·2H2O) આપો."
+    elif 'optimal' in text.lower():
+        if lang == 'hi':
+            return f"अनुकूल मृदा pH ({ph})। पोषक तत्व अवशोषण क्षमता उत्कृष्ट है।"
+        elif lang == 'gu':
+            return f"ઉત્તમ જમીન pH ({ph}). પોષક તત્વો ગ્રહણ ક્ષમતા શ્રેષ્ઠ છે."
+
+    return text
+
+
+def localize_micronutrients(text: str, lang: str = 'en') -> str:
+    if not text or lang == 'en':
+        return text
+
+    if 'adequate' in text.lower():
+        return 'सूक्ष्म पोषक तत्व (Zn, B, S, Fe) कृषि मानकों के अनुसार पर्याप्त मात्रा में हैं।' if lang == 'hi' else 'સૂક્ષ્મ પોષક તત્વો (Zn, B, S, Fe) ખેતી માટે પૂરતા પ્રમાણમાં છે.'
+
+    segments = text.split('|')
+    translated = []
+    for s in segments:
+        seg = s.strip()
+        if 'zinc' in seg.lower() or 'znso4' in seg.lower():
+            val_m = re.search(r'([\d\.]+)\s*ppm', seg, re.I)
+            kg_m = re.search(r'@\s*([\d\.]+)\s*kg', seg, re.I)
+            rate_m = re.search(r'\(([\d\.]+)\s*kg/ha\)', seg, re.I)
+            val = val_m.group(1) if val_m else '0.00'
+            kg = kg_m.group(1) if kg_m else '25'
+            rate = rate_m.group(1) if rate_m else '25'
+            if lang == 'hi':
+                translated.append(f"जिंक की कमी ({val} ppm < 0.6 ppm): आधारभूत (बेसल) अवस्था में {kg} kg ({rate} kg/ha) जिंक सल्फेट (ZnSO4 21%) डालें।")
+            else:
+                translated.append(f"ઝિંકની ખામી ({val} ppm < 0.6 ppm): પાયાના તબક્કે {kg} kg ({rate} kg/ha) ઝિંક સલ્ફેટ (ZnSO4 21%) આપો.")
+        elif 'boron' in seg.lower() or 'borax' in seg.lower():
+            val_m = re.search(r'([\d\.]+)\s*ppm', seg, re.I)
+            kg_m = re.search(r'@\s*([\d\.]+)\s*kg', seg, re.I)
+            rate_m = re.search(r'\(([\d\.]+)\s*kg/ha\)', seg, re.I)
+            val = val_m.group(1) if val_m else '0.00'
+            kg = kg_m.group(1) if kg_m else '5.0'
+            rate = rate_m.group(1) if rate_m else '5'
+            if lang == 'hi':
+                translated.append(f"बोरॉन की कमी ({val} ppm < 0.5 ppm): फल फटने और फूल झड़ने से रोकने के लिए {kg} kg ({rate} kg/ha) बोरेक्स (10.5% B) डालें।")
+            else:
+                translated.append(f"બોરોનની ખામી ({val} ppm < 0.5 ppm): ફળ ફાટતા અને ફૂલ ખરતા અટકાવવા માટે {kg} kg ({rate} kg/ha) બોરેક્સ (10.5% B) આપો.")
+        elif 'sulphur' in seg.lower() or 'gypsum' in seg.lower():
+            val_m = re.search(r'([\d\.]+)\s*ppm', seg, re.I)
+            kg_m = re.search(r'@\s*([\d\.]+)\s*kg', seg, re.I)
+            rate_m = re.search(r'\(([\d\.]+)\s*kg/ha\)', seg, re.I)
+            val = val_m.group(1) if val_m else '0.0'
+            kg = kg_m.group(1) if kg_m else '35'
+            rate = rate_m.group(1) if rate_m else '35'
+            if lang == 'hi':
+                translated.append(f"सल्फर की कमी ({val} ppm < 10 ppm): तिलहन और दलहन में प्रोटीन निर्माण के लिए {kg} kg ({rate} kg/ha) तत्वीय सल्फर या जिप्सम डालें।")
+            else:
+                translated.append(f"સલ્ફરની ખામી ({val} ppm < 10 ppm): તેલીબિયાં અને કઠોળમાં પ્રોટીન વૃદ્ધિ માટે {kg} kg ({rate} kg/ha) સલ્ફર અથવા જીપ્સમ આપો.")
+        elif 'iron' in seg.lower() or 'ferrous' in seg.lower():
+            val_m = re.search(r'([\d\.]+)\s*ppm', seg, re.I)
+            val = val_m.group(1) if val_m else '0.0'
+            if lang == 'hi':
+                translated.append(f"आयरन की कमी ({val} ppm < 4.5 ppm): वानस्पतिक अवस्था में फेरस सल्फेट (FeSO4 0.5%) + 0.1% साइट्रिक एसिड का पर्णीय छिड़काव करें।")
+            else:
+                translated.append(f"આયર્નની ખામી ({val} ppm < 4.5 ppm): વાનસ્પતિક વૃદ્ધિ સમયે ફેરસ સલ્ફેટ (FeSO4 0.5%) + 0.1% સાઇટ્રિક એસિડનો છંટકાવ કરો.")
+        else:
+            translated.append(seg)
+    return " | ".join(translated)
 
 
 def localize_split_item(item: Dict[str, Any], lang: str = 'en') -> Dict[str, Any]:
