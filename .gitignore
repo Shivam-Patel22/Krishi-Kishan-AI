@@ -30,4 +30,10 @@ venv/
 .DS_Store
 Thumbs.db
 .vscode/
-.idea/
+.idea/
+
+# UI/UX Skill & Submodules
+ui-ux-pro-max-skill/
+21st.dev/
+21st/
+
