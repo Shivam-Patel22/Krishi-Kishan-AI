@@ -15,13 +15,37 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (appState.states && appState.states.length > 0) {
                 populateStateSelect(appState.states);
+            } else {
+                const lookupState = document.getElementById('lookupState');
+                if (lookupState) {
+                    Array.from(lookupState.options).forEach(opt => {
+                        if (opt.value) opt.textContent = window.i18n.translateState(opt.value);
+                    });
+                }
             }
+
             if (appState.districts && appState.districts.length > 0) {
                 populateDistrictSelect(appState.districts);
+            } else {
+                const lookupDistrict = document.getElementById('lookupDistrict');
+                if (lookupDistrict) {
+                    Array.from(lookupDistrict.options).forEach(opt => {
+                        if (opt.value) opt.textContent = window.i18n.translateDistrict(opt.value);
+                    });
+                }
             }
+
             if (appState.blocks && appState.blocks.length > 0) {
                 populateBlockSelect(appState.blocks);
+            } else {
+                const lookupBlock = document.getElementById('lookupBlock');
+                if (lookupBlock) {
+                    Array.from(lookupBlock.options).forEach(opt => {
+                        if (opt.value) opt.textContent = window.i18n.translateBlock(opt.value);
+                    });
+                }
             }
+
             if (weatherState.lastData) {
                 renderWeatherData(weatherState.lastData);
             }
@@ -38,6 +62,7 @@ const appState = {
     districts: [],
     blocks: []
 };
+window.appState = appState;
 
 const weatherState = {
     currentLocation: { state: 'Gujarat', district: 'Ahmedabad', name: 'Ahmedabad, Gujarat', lat: null, lon: null },
@@ -604,6 +629,52 @@ async function handleGenerateRecommendation(e) {
     if (!cropId) {
         const msg = window.i18n ? window.i18n.t('alert.selectCrop') : "Please select a Target Crop.";
         alert(msg);
+        document.getElementById('cropSelect')?.focus();
+        return;
+    }
+
+    const soilNElem = document.getElementById('soilN');
+    const soilPElem = document.getElementById('soilP');
+    const soilKElem = document.getElementById('soilK');
+    const soilPhElem = document.getElementById('soilPh');
+    const soilOcElem = document.getElementById('soilOc');
+    const soilEcElem = document.getElementById('soilEc');
+
+    const isMissingOrZero = (el) => !el || el.value === '' || el.value === null || isNaN(parseFloat(el.value)) || parseFloat(el.value) <= 0;
+
+    if (isMissingOrZero(soilNElem)) {
+        alert(window.i18n ? window.i18n.t('alert.enterN') : "Please enter Nitrogen (N) value (> 0 kg/ha).");
+        soilNElem?.focus();
+        return;
+    }
+
+    if (isMissingOrZero(soilPElem)) {
+        alert(window.i18n ? window.i18n.t('alert.enterP') : "Please enter Phosphorus (P) value (> 0 kg/ha).");
+        soilPElem?.focus();
+        return;
+    }
+
+    if (isMissingOrZero(soilKElem)) {
+        alert(window.i18n ? window.i18n.t('alert.enterK') : "Please enter Potassium (K) value (> 0 kg/ha).");
+        soilKElem?.focus();
+        return;
+    }
+
+    if (isMissingOrZero(soilPhElem) || parseFloat(soilPhElem.value) > 14.0) {
+        alert(window.i18n ? window.i18n.t('alert.enterPh') : "Please enter a valid Soil pH between 1.0 and 14.0.");
+        soilPhElem?.focus();
+        return;
+    }
+
+    if (isMissingOrZero(soilOcElem)) {
+        alert(window.i18n ? window.i18n.t('alert.enterOc') : "Please enter Organic Carbon % value (> 0%).");
+        soilOcElem?.focus();
+        return;
+    }
+
+    if (!soilEcElem || soilEcElem.value === '' || soilEcElem.value === null || isNaN(parseFloat(soilEcElem.value)) || parseFloat(soilEcElem.value) < 0) {
+        alert(window.i18n ? window.i18n.t('alert.enterEc') : "Please enter Electrical Conductivity (EC) value (>= 0 dS/m).");
+        soilEcElem?.focus();
         return;
     }
 

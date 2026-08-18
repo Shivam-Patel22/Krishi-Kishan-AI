@@ -134,31 +134,31 @@
                             
                             <div class="form-row-3">
                                 <div class="form-group">
-                                    <label for="soilN"><span data-i18n="form.nitrogen">Nitrogen (N)</span> <span class="unit">kg/ha</span></label>
-                                    <input type="number" id="soilN" class="form-control" min="0" step="any" value="0" required>
+                                    <label for="soilN"><span data-i18n="form.nitrogen">Nitrogen (N)</span> <span class="unit">kg/ha</span> <span class="text-danger" style="color: #ef4444; font-weight: bold;">*</span></label>
+                                    <input type="number" id="soilN" class="form-control" min="0.01" step="any" placeholder="e.g. 140.0" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="soilP"><span data-i18n="form.phosphorus">Phosphorus (P)</span> <span class="unit">kg/ha</span></label>
-                                    <input type="number" id="soilP" class="form-control" min="0" step="any" value="0" required>
+                                    <label for="soilP"><span data-i18n="form.phosphorus">Phosphorus (P)</span> <span class="unit">kg/ha</span> <span class="text-danger" style="color: #ef4444; font-weight: bold;">*</span></label>
+                                    <input type="number" id="soilP" class="form-control" min="0.01" step="any" placeholder="e.g. 35.0" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="soilK"><span data-i18n="form.potassium">Potassium (K)</span> <span class="unit">kg/ha</span></label>
-                                    <input type="number" id="soilK" class="form-control" min="0" step="any" value="0" required>
+                                    <label for="soilK"><span data-i18n="form.potassium">Potassium (K)</span> <span class="unit">kg/ha</span> <span class="text-danger" style="color: #ef4444; font-weight: bold;">*</span></label>
+                                    <input type="number" id="soilK" class="form-control" min="0.01" step="any" placeholder="e.g. 150.0" required>
                                 </div>
                             </div>
 
                             <div class="form-row-3">
                                 <div class="form-group">
-                                    <label for="soilPh" data-i18n="form.ph">Soil pH (1-14)</label>
-                                    <input type="number" id="soilPh" class="form-control" min="0" max="14.0" step="any" value="0" required>
+                                    <label for="soilPh"><span data-i18n="form.ph">Soil pH (1-14)</span> <span class="text-danger" style="color: #ef4444; font-weight: bold;">*</span></label>
+                                    <input type="number" id="soilPh" class="form-control" min="1.0" max="14.0" step="any" placeholder="e.g. 6.8" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="soilOc"><span data-i18n="form.oc">Organic Carbon</span> <span class="unit">%</span></label>
-                                    <input type="number" id="soilOc" class="form-control" min="0" max="10.0" step="any" value="0" required>
+                                    <label for="soilOc"><span data-i18n="form.oc">Organic Carbon</span> <span class="unit">%</span> <span class="text-danger" style="color: #ef4444; font-weight: bold;">*</span></label>
+                                    <input type="number" id="soilOc" class="form-control" min="0.01" max="10.0" step="any" placeholder="e.g. 0.54" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="soilEc"><span data-i18n="form.ec">Electrical Cond.</span> <span class="unit">dS/m</span></label>
-                                    <input type="number" id="soilEc" class="form-control" min="0" max="20.0" step="any" value="0">
+                                    <label for="soilEc"><span data-i18n="form.ec">Electrical Cond.</span> <span class="unit">dS/m</span> <span class="text-danger" style="color: #ef4444; font-weight: bold;">*</span></label>
+                                    <input type="number" id="soilEc" class="form-control" min="0.0" max="20.0" step="any" placeholder="e.g. 0.45" required>
                                 </div>
                             </div>
 
