@@ -411,11 +411,11 @@
             <div class="card-header"><span class="card-title">🧪 {{ t.amendments_title }}</span></div>
             <div style="font-size: 7.5pt; margin-bottom: 6px;">
                 <strong style="color: #0f172a;">{{ t.ph_amendment_label }}</strong>
-                <p style="color: #64748b; margin-top: 1px;">{{ rec.ph_amendment }}</p>
+                <p style="color: #64748b; margin-top: 1px;">{{ ph_amendment|default:rec.ph_amendment }}</p>
             </div>
             <div style="font-size: 7.5pt;">
                 <strong style="color: #0f172a;">{{ t.micronutrients_label }}</strong>
-                <p style="color: #64748b; margin-top: 1px;">{{ rec.micronutrient_advice }}</p>
+                <p style="color: #64748b; margin-top: 1px;">{{ micronutrient_advice|default:rec.micronutrient_advice }}</p>
             </div>
         </div>
 
@@ -427,7 +427,7 @@
                 <div><span style="color:#64748b; display:block;">{{ t.rain_label }}</span><strong>{{ rec.weather_record.rainfall_forecast_mm }} mm</strong></div>
                 <div><span style="color:#64748b; display:block;">{{ t.wind_label }}</span><strong>{{ rec.weather_record.wind_speed_kmh }} km/h</strong></div>
             </div>
-            <p style="font-size: 7pt; color: #64748b;">{{ t.weather_optimal_text }}</p>
+            <p style="font-size: 7pt; color: #64748b;">{{ weather_advisory_localized|default:t.weather_optimal_text }}</p>
         </div>
     </div>
 
@@ -453,7 +453,7 @@
             <span class="card-title">💡 {{ t.explainable_rationale_title }}</span>
             <span class="badge badge-accent">{{ t.icar_badge }}</span>
         </div>
-        <div class="rationale-box">{{ rec.explanation }}</div>
+        <div class="rationale-box">{{ explanation_localized|default:rec.explanation }}</div>
     </div>
 
 </body>

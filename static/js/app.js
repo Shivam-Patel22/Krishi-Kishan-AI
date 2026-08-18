@@ -13,8 +13,19 @@ document.addEventListener('DOMContentLoaded', () => {
             if (appState.crops && appState.crops.length > 0) {
                 populateCropSelect(appState.crops);
             }
+<<<<<<< HEAD
             if (weatherState.lastData) {
                 renderWeatherData(weatherState.lastData);
+=======
+            if (appState.states && appState.states.length > 0) {
+                populateStateSelect(appState.states);
+            }
+            if (appState.districts && appState.districts.length > 0) {
+                populateDistrictSelect(appState.districts);
+            }
+            if (appState.blocks && appState.blocks.length > 0) {
+                populateBlockSelect(appState.blocks);
+>>>>>>> 10cc4db5550b3f945f222490e6c0922e0a83d3ed
             }
         });
     }
@@ -25,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
 // ---------------------------------------------------------------------------
 const appState = {
     crops: [],
+    states: [],
+    districts: [],
+    blocks: []
 };
 
 const weatherState = {
@@ -57,20 +71,73 @@ async function loadInitialData() {
 
 async function loadLookupStates() {
     const lookupState = document.getElementById('lookupState');
-    if (!lookupState || lookupState.options.length > 1) return;
+    if (!lookupState) return;
     try {
         const res = await fetch('/api/soil-lookup/?type=states');
         if (res.ok) {
             const data = await res.json();
-            (data.states || []).forEach(st => {
-                const opt = document.createElement('option');
-                opt.value = st;
-                opt.textContent = st;
-                lookupState.appendChild(opt);
-            });
+            appState.states = data.states || [];
+            populateStateSelect(appState.states);
         }
     } catch (err) {
         console.error("Error loading states:", err);
+    }
+}
+
+function populateStateSelect(states) {
+    const select = document.getElementById('lookupState');
+    if (!select) return;
+    const currentVal = select.value;
+    const selectStateText = window.i18n ? window.i18n.t('form.selectState') : '-- Select State --';
+    select.innerHTML = `<option value="" data-i18n="form.selectState">${selectStateText}</option>`;
+
+    (states || []).forEach(st => {
+        const opt = document.createElement('option');
+        opt.value = st;
+        opt.textContent = window.i18n ? window.i18n.translateState(st) : st;
+        select.appendChild(opt);
+    });
+
+    if (currentVal) {
+        select.value = currentVal;
+    }
+}
+
+function populateDistrictSelect(districts) {
+    const select = document.getElementById('lookupDistrict');
+    if (!select) return;
+    const currentVal = select.value;
+    const selectDistText = window.i18n ? window.i18n.t('form.selectDistrict') : '-- Select District --';
+    select.innerHTML = `<option value="" data-i18n="form.selectDistrict">${selectDistText}</option>`;
+
+    (districts || []).forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d;
+        opt.textContent = window.i18n ? window.i18n.translateDistrict(d) : d;
+        select.appendChild(opt);
+    });
+
+    if (currentVal) {
+        select.value = currentVal;
+    }
+}
+
+function populateBlockSelect(blocks) {
+    const select = document.getElementById('lookupBlock');
+    if (!select) return;
+    const currentVal = select.value;
+    const selectBlockText = window.i18n ? window.i18n.t('form.selectBlock') : '-- Select Block / Taluka --';
+    select.innerHTML = `<option value="" data-i18n="form.selectBlock">${selectBlockText}</option>`;
+
+    (blocks || []).forEach(b => {
+        const opt = document.createElement('option');
+        opt.value = b;
+        opt.textContent = window.i18n ? window.i18n.translateBlock(b) : b;
+        select.appendChild(opt);
+    });
+
+    if (currentVal) {
+        select.value = currentVal;
     }
 }
 
@@ -393,6 +460,8 @@ function setupEventListeners() {
             lookupDistrict.disabled = true;
             lookupBlock.innerHTML = `<option value="" data-i18n="form.selectBlock">${selectBlockText}</option>`;
             lookupBlock.disabled = true;
+            appState.districts = [];
+            appState.blocks = [];
             if (btnApplyBenchmark) btnApplyBenchmark.disabled = true;
 
             if (!st) return;
@@ -404,12 +473,8 @@ function setupEventListeners() {
                 const res = await fetch(`/api/soil-lookup/?type=districts&state=${encodeURIComponent(st)}`);
                 if (res.ok) {
                     const data = await res.json();
-                    (data.districts || []).forEach(d => {
-                        const opt = document.createElement('option');
-                        opt.value = d;
-                        opt.textContent = d;
-                        lookupDistrict.appendChild(opt);
-                    });
+                    appState.districts = data.districts || [];
+                    populateDistrictSelect(appState.districts);
                     lookupDistrict.disabled = false;
                 }
             } catch (err) {
@@ -426,6 +491,7 @@ function setupEventListeners() {
             const selectBlockText = window.i18n ? window.i18n.t('form.selectBlock') : '-- Select Block / Taluka --';
             lookupBlock.innerHTML = `<option value="" data-i18n="form.selectBlock">${selectBlockText}</option>`;
             lookupBlock.disabled = true;
+            appState.blocks = [];
             if (btnApplyBenchmark) btnApplyBenchmark.disabled = !dist;
 
             if (!st) return;
@@ -443,12 +509,8 @@ function setupEventListeners() {
                 const res = await fetch(`/api/soil-lookup/?type=blocks&state=${encodeURIComponent(st)}&district=${encodeURIComponent(dist)}`);
                 if (res.ok) {
                     const data = await res.json();
-                    (data.blocks || []).forEach(b => {
-                        const opt = document.createElement('option');
-                        opt.value = b;
-                        opt.textContent = b;
-                        lookupBlock.appendChild(opt);
-                    });
+                    appState.blocks = data.blocks || [];
+                    populateBlockSelect(appState.blocks);
                     lookupBlock.disabled = false;
                 }
             } catch (err) {
@@ -484,7 +546,9 @@ function setupEventListeners() {
                     if (document.getElementById('soilS')) document.getElementById('soilS').value = profile.sulphur;
                     if (document.getElementById('soilFe')) document.getElementById('soilFe').value = profile.iron;
 
-                    const msg = window.i18n ? window.i18n.t('alert.benchmarkApplied', { district: dist, state: st }) : `Applied 10.85M National Soil Database Benchmark for ${dist}, ${st}!`;
+                    const localizedDist = window.i18n ? window.i18n.translateDistrict(dist) : dist;
+                    const localizedSt = window.i18n ? window.i18n.translateState(st) : st;
+                    const msg = window.i18n ? window.i18n.t('alert.benchmarkApplied', { district: localizedDist, state: localizedSt }) : `Applied 10.85M National Soil Database Benchmark for ${dist}, ${st}!`;
                     alert(msg);
                 }
             } catch (err) {

@@ -28,7 +28,9 @@ from fertilizer_app.services.soil_lookup_service import (
 from fertilizer_app.services.weather_service import fetch_weather_data
 from fertilizer_app.translations import (
     get_translations_for_lang, localize_crop, localize_fertilizer,
-    localize_soil_type, localize_split_item
+    localize_soil_type, localize_split_item, localize_ph_amendment,
+    localize_micronutrients, localize_explanation, localize_decision_driver,
+    localize_weather_advisory
 )
 
 
@@ -66,6 +68,11 @@ def download_recommendation_pdf_view(request, pk):
     crop_name = localize_crop(rec.crop.name, lang)
     primary_fert = localize_fertilizer(rec.primary_fertilizer, lang)
     soil_type = localize_soil_type(rec.field.soil_type, lang)
+    ph_amendment = localize_ph_amendment(rec.ph_amendment, lang)
+    micronutrient_advice = localize_micronutrients(rec.micronutrient_advice, lang)
+    explanation_localized = localize_explanation(rec.explanation, lang)
+    raw_weather_adv = rec.weather_advisory if hasattr(rec, 'weather_advisory') else getattr(rec.weather_record, 'advice', '')
+    weather_advisory_localized = localize_weather_advisory(raw_weather_adv, lang)
 
     split_schedule = []
     if rec.split_schedule:
@@ -88,6 +95,10 @@ def download_recommendation_pdf_view(request, pk):
         'crop_name': crop_name,
         'primary_fert': primary_fert,
         'soil_type': soil_type,
+        'ph_amendment': ph_amendment,
+        'micronutrient_advice': micronutrient_advice,
+        'weather_advisory_localized': weather_advisory_localized,
+        'explanation_localized': explanation_localized,
         'split_schedule': split_schedule,
         'alternatives_localized': alternatives_localized,
     })

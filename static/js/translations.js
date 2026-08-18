@@ -171,6 +171,7 @@ const translations = {
 
         // AI Ensemble & Rationale
         "report.aiTitle": "AI Multi-Model Ensemble Confidence & Alternative Formulations",
+        "report.metaEnsemble": "Weighted Soft-Voting Meta-Ensemble (250 RF + 250 ET + 250 HGB + Deep MLP)",
         "report.aiSubtitle": "Top-3 Alternative Formulations ranked by probability distribution:",
         "report.decisionFactors": "Key Decision Factors:",
         "report.rationaleTitle": "Explainable AI Scientific Rationale",
@@ -398,6 +399,7 @@ const translations = {
 
         // AI Ensemble & Rationale
         "report.aiTitle": "AI मल्टी-मॉडल एन्सेम्बल विश्वसनीयता और वैकल्पिक उर्वरक",
+        "report.metaEnsemble": "वेटेड सॉफ्ट-वोटिंग मेटा-एन्सेम्बल (250 RF + 250 ET + 250 HGB + Deep MLP)",
         "report.aiSubtitle": "संभाव्यता वितरण के अनुसार शीर्ष 3 वैकल्पिक उर्वरक:",
         "report.decisionFactors": "प्रमुख निर्णय कारक:",
         "report.rationaleTitle": "व्याख्यात्मक AI वैज्ञानिक आधार",
@@ -625,6 +627,7 @@ const translations = {
 
         // AI Ensemble & Rationale
         "report.aiTitle": "AI મલ્ટી-મોડેલ ચોકસાઈ અને વૈકલ્પિક ખાતરો",
+        "report.metaEnsemble": "વેઇટેડ સોફ્ટ-વોટિંગ મેટા-એન્સેમ્બલ (250 RF + 250 ET + 250 HGB + Deep MLP)",
         "report.aiSubtitle": "સંભાવના વિતરણ અનુસાર ટોચના 3 વૈકલ્પિક ખાતરો:",
         "report.decisionFactors": "મુખ્ય નિર્ણય પરિબળો:",
         "report.rationaleTitle": "વૈજ્ઞાનિક AI સમજૂતી અને આધાર",
@@ -687,8 +690,1634 @@ const translations = {
 };
 
 /**
- * i18n Translation Engine
+ * i18n Translation Engine with Intelligent Dynamic Agronomic Text Localization
  */
+
+const STATE_TRANSLATIONS = {
+    "Andaman And Nicobar Islands": {
+        "hi": "अंडमान और निकोबार द्वीप समूह",
+        "gu": "અંદમાન અને નિકોબાર દ્વીપસમૂહ"
+    },
+    "Andhra Pradesh": {
+        "hi": "आंध्र प्रदेश",
+        "gu": "આંધ્ર પ્રદેશ"
+    },
+    "Arunachal Pradesh": {
+        "hi": "अरुणाचल प्रदेश",
+        "gu": "અરુણાચલ પ્રદેશ"
+    },
+    "Assam": {
+        "hi": "असम",
+        "gu": "અસમ"
+    },
+    "Bihar": {
+        "hi": "बिहार",
+        "gu": "બિહાર"
+    },
+    "Chhattisgarh": {
+        "hi": "छत्तीसगढ़",
+        "gu": "છત્તીસગઢ"
+    },
+    "Goa": {
+        "hi": "गोवा",
+        "gu": "ગોવા"
+    },
+    "Gujarat": {
+        "hi": "गुजरात",
+        "gu": "ગુજરાત"
+    },
+    "Haryana": {
+        "hi": "हरियाणा",
+        "gu": "હરિયાણા"
+    },
+    "Himachal Pradesh": {
+        "hi": "हिमाचल प्रदेश",
+        "gu": "હિમાચલ પ્રદેશ"
+    },
+    "Jammu And Kashmir": {
+        "hi": "जम्मू और कश्मीर",
+        "gu": "જમ્મુ અને કાશ્મીર"
+    },
+    "Jharkhand": {
+        "hi": "झारखंड",
+        "gu": "ઝારખંડ"
+    },
+    "Karnataka": {
+        "hi": "कर्नाटक",
+        "gu": "કર્ણાટક"
+    },
+    "Kerala": {
+        "hi": "केरल",
+        "gu": "કેરળ"
+    },
+    "Ladakh": {
+        "hi": "लद्दाख",
+        "gu": "લદ્દાખ"
+    },
+    "Madhya Pradesh": {
+        "hi": "मध्य प्रदेश",
+        "gu": "મધ્ય પ્રદેશ"
+    },
+    "Maharashtra": {
+        "hi": "महाराष्ट्र",
+        "gu": "મહારાષ્ટ્ર"
+    },
+    "Manipur": {
+        "hi": "मणिपुर",
+        "gu": "મણિપુર"
+    },
+    "Meghalaya": {
+        "hi": "मेघालय",
+        "gu": "મેઘાલય"
+    },
+    "Mizoram": {
+        "hi": "मिजोरम",
+        "gu": "મિઝોરમ"
+    },
+    "Nagaland": {
+        "hi": "नागालैंड",
+        "gu": "નાગાલેન્ડ"
+    },
+    "Odisha": {
+        "hi": "ओडिशा",
+        "gu": "ઓડિશા"
+    },
+    "Puducherry": {
+        "hi": "पुदुचेरी",
+        "gu": "પુડુચેરી"
+    },
+    "Punjab": {
+        "hi": "पंजाब",
+        "gu": "પંજાબ"
+    },
+    "Rajasthan": {
+        "hi": "राजस्थान",
+        "gu": "રાજસ્થાન"
+    },
+    "Sikkim": {
+        "hi": "सिक्किम",
+        "gu": "સિક્કિમ"
+    },
+    "Tamil Nadu": {
+        "hi": "तमिलनाडु",
+        "gu": "તમિલનાડુ"
+    },
+    "Telangana": {
+        "hi": "तेलंगाना",
+        "gu": "તેલંગાણા"
+    },
+    "Tripura": {
+        "hi": "त्रिपुरा",
+        "gu": "ત્રિપુરા"
+    },
+    "Uttar Pradesh": {
+        "hi": "उत्तर प्रदेश",
+        "gu": "ઉત્તર પ્રદેશ"
+    },
+    "Uttarakhand": {
+        "hi": "उत्तराखंड",
+        "gu": "ઉત્તરાખંડ"
+    },
+    "West Bengal": {
+        "hi": "पश्चिम बंगाल",
+        "gu": "પશ્ચિમ બંગાળ"
+    }
+};
+
+const DISTRICT_TRANSLATIONS = {
+    "Ahmedabad": {
+        "hi": "अहमदाबाद",
+        "gu": "અમદાવાદ"
+    },
+    "Amreli": {
+        "hi": "अमरेली",
+        "gu": "અમરેલી"
+    },
+    "Anand": {
+        "hi": "आणंद",
+        "gu": "આણંદ"
+    },
+    "Arvalli": {
+        "hi": "अरवल्ली",
+        "gu": "અરવલ્લી"
+    },
+    "Banas Kantha": {
+        "hi": "बनासकांठा",
+        "gu": "બનાસકાંઠા"
+    },
+    "Banaskantha": {
+        "hi": "बनासकांठा",
+        "gu": "બનાસકાંઠા"
+    },
+    "Bharuch": {
+        "hi": "भरूच",
+        "gu": "ભરૂચ"
+    },
+    "Bhavnagar": {
+        "hi": "भावनगर",
+        "gu": "ભાવનગર"
+    },
+    "Botad": {
+        "hi": "बोटाद",
+        "gu": "બોટાદ"
+    },
+    "Chhotaudepur": {
+        "hi": "छोटा उदेपुर",
+        "gu": "છોટાઉદેપુર"
+    },
+    "Chhota Udepur": {
+        "hi": "छोटा उदेपुर",
+        "gu": "છોટાઉદેપુર"
+    },
+    "Chhota Udaipur": {
+        "hi": "छोटा उदेपुर",
+        "gu": "છોટાઉદેપુર"
+    },
+    "Dahod": {
+        "hi": "दाहोद",
+        "gu": "દાહોદ"
+    },
+    "Dangs": {
+        "hi": "डांग",
+        "gu": "ડાંગ"
+    },
+    "Dang": {
+        "hi": "डांग",
+        "gu": "ડાંગ"
+    },
+    "The Dangs": {
+        "hi": "डांग",
+        "gu": "ડાંગ"
+    },
+    "Devbhumi Dwarka": {
+        "hi": "देवभूमि द्वारका",
+        "gu": "દેવભૂમિ દ્વારકા"
+    },
+    "Gandhinagar": {
+        "hi": "गांधीनगर",
+        "gu": "ગાંધીનગર"
+    },
+    "Gir Somnath": {
+        "hi": "गिर सोमनाथ",
+        "gu": "ગીર સોમનાથ"
+    },
+    "Jamnagar": {
+        "hi": "जामनगर",
+        "gu": "જામનગર"
+    },
+    "Junagadh": {
+        "hi": "जूनागढ़",
+        "gu": "જૂનાગઢ"
+    },
+    "Kachchh": {
+        "hi": "कच्छ",
+        "gu": "કચ્છ"
+    },
+    "Kutch": {
+        "hi": "कच्छ",
+        "gu": "કચ્છ"
+    },
+    "Kheda": {
+        "hi": "खेड़ा",
+        "gu": "ખેડા"
+    },
+    "Mahesana": {
+        "hi": "महेसाणा",
+        "gu": "મહેસાણા"
+    },
+    "Mehsana": {
+        "hi": "महेसाणा",
+        "gu": "મહેસાણા"
+    },
+    "Mahisagar": {
+        "hi": "महिसागर",
+        "gu": "મહીસાગર"
+    },
+    "Morbi": {
+        "hi": "मोरबी",
+        "gu": "મોરબી"
+    },
+    "Narmada": {
+        "hi": "नर्मदा",
+        "gu": "નર્મદા"
+    },
+    "Navsari": {
+        "hi": "नवसारी",
+        "gu": "નવસારી"
+    },
+    "Panch Mahals": {
+        "hi": "पंचमहाल",
+        "gu": "પંચમહાલ"
+    },
+    "Panchmahal": {
+        "hi": "पंचमहाल",
+        "gu": "પંચમહાલ"
+    },
+    "Patan": {
+        "hi": "पाटन",
+        "gu": "પાટણ"
+    },
+    "Porbandar": {
+        "hi": "पोरबंदर",
+        "gu": "પોરબંદર"
+    },
+    "Rajkot": {
+        "hi": "राजकोट",
+        "gu": "રાજકોટ"
+    },
+    "Sabar Kantha": {
+        "hi": "साबरकांठा",
+        "gu": "સાબરકાંઠા"
+    },
+    "Sabarkantha": {
+        "hi": "साबरकांठा",
+        "gu": "સાબરકાંઠા"
+    },
+    "Surat": {
+        "hi": "सूरत",
+        "gu": "સુરત"
+    },
+    "Surendranagar": {
+        "hi": "सुरेंद्रनगर",
+        "gu": "સુરેન્દ્રનગર"
+    },
+    "Tapi": {
+        "hi": "तापी",
+        "gu": "તાપી"
+    },
+    "Vadodara": {
+        "hi": "वडोदरा (बड़ौदा)",
+        "gu": "વડોદરા"
+    },
+    "Valsad": {
+        "hi": "वलसाड",
+        "gu": "વલસાડ"
+    },
+    "Ludhiana": {
+        "hi": "लुधियाना",
+        "gu": "લુધિયાણા"
+    },
+    "Amritsar": {
+        "hi": "अमृतसर",
+        "gu": "અમૃતસર"
+    },
+    "Jalandhar": {
+        "hi": "जालंधर",
+        "gu": "જાલંધર"
+    },
+    "Patiala": {
+        "hi": "पटियाला",
+        "gu": "પટિયાલા"
+    },
+    "Bathinda": {
+        "hi": "बठिंडा",
+        "gu": "બઠિંડા"
+    },
+    "Firozepur": {
+        "hi": "फिरोजपुर",
+        "gu": "ફિરોઝપુર"
+    },
+    "Gurdaspur": {
+        "hi": "गुरदासपुर",
+        "gu": "ગુરદાસપુર"
+    },
+    "Hoshiarpur": {
+        "hi": "होशियारपुर",
+        "gu": "હોશિયારપુર"
+    },
+    "Karnal": {
+        "hi": "करनाल",
+        "gu": "કરનાલ"
+    },
+    "Hisar": {
+        "hi": "हिसार",
+        "gu": "હિસાર"
+    },
+    "Ambala": {
+        "hi": "अंबाला",
+        "gu": "અંબાલા"
+    },
+    "Kurukshetra": {
+        "hi": "कुरुक्षेत्र",
+        "gu": "કુરુક્ષેત્ર"
+    },
+    "Sirsa": {
+        "hi": "सिरसा",
+        "gu": "સિરસા"
+    },
+    "Rohtak": {
+        "hi": "रोहतक",
+        "gu": "રોહતક"
+    },
+    "Panipat": {
+        "hi": "पानीपत",
+        "gu": "પાણીપત"
+    },
+    "Sonipat": {
+        "hi": "सोनीपत",
+        "gu": "સોનીપત"
+    },
+    "Jaipur": {
+        "hi": "जयपुर",
+        "gu": "જયપુર"
+    },
+    "Jodhpur": {
+        "hi": "जोधपुर",
+        "gu": "જોધપુર"
+    },
+    "Udaipur": {
+        "hi": "उदयपुर",
+        "gu": "ઉદયપુર"
+    },
+    "Kota": {
+        "hi": "कोटा",
+        "gu": "કોટા"
+    },
+    "Bikaner": {
+        "hi": "बीकानेर",
+        "gu": "બીકાનેર"
+    },
+    "Ajmer": {
+        "hi": "अजमेर",
+        "gu": "અજમેર"
+    },
+    "Alwar": {
+        "hi": "अलवर",
+        "gu": "અલવર"
+    },
+    "Bharatpur": {
+        "hi": "भरतपुर",
+        "gu": "ભરતપુર"
+    },
+    "Ganganagar": {
+        "hi": "श्रीगंगानगर",
+        "gu": "શ્રીગંગાનગર"
+    },
+    "Barmer": {
+        "hi": "बाड़मेर",
+        "gu": "બાડમેર"
+    },
+    "Nagaur": {
+        "hi": "नागौर",
+        "gu": "નાગૌર"
+    },
+    "Sikar": {
+        "hi": "सीकर",
+        "gu": "સીકર"
+    },
+    "Pali": {
+        "hi": "पाली",
+        "gu": "પાલી"
+    },
+    "Bhilwara": {
+        "hi": "भीलवाड़ा",
+        "gu": "ભીલવાડા"
+    },
+    "Chittorgarh": {
+        "hi": "चित्तौड़गढ़",
+        "gu": "ચિત્તોડગઢ"
+    },
+    "Varanasi": {
+        "hi": "वाराणसी",
+        "gu": "વારાણસી"
+    },
+    "Lucknow": {
+        "hi": "लखनऊ",
+        "gu": "લખનૌ"
+    },
+    "Kanpur": {
+        "hi": "कानपुर",
+        "gu": "કાનપુર"
+    },
+    "Kanpur Nagar": {
+        "hi": "कानपुर नगर",
+        "gu": "કાનપુર નગર"
+    },
+    "Agra": {
+        "hi": "आगरा",
+        "gu": "આગ્રા"
+    },
+    "Prayagraj": {
+        "hi": "प्रयागराज",
+        "gu": "પ્રયાગરાજ"
+    },
+    "Allahabad": {
+        "hi": "प्रयागराज (इलाहाबाद)",
+        "gu": "પ્રયાગરાજ"
+    },
+    "Gorakhpur": {
+        "hi": "गोरखपुर",
+        "gu": "ગોરખપુર"
+    },
+    "Meerut": {
+        "hi": "मेरठ",
+        "gu": "મેરઠ"
+    },
+    "Bareilly": {
+        "hi": "बरेली",
+        "gu": "બરેલી"
+    },
+    "Aligarh": {
+        "hi": "अलीगढ़",
+        "gu": "અલીગઢ"
+    },
+    "Mathura": {
+        "hi": "मथुरा",
+        "gu": "મથુરા"
+    },
+    "Indore": {
+        "hi": "इंदौर",
+        "gu": "ઇન્દોર"
+    },
+    "Bhopal": {
+        "hi": "भोपाल",
+        "gu": "ભોપાલ"
+    },
+    "Jabalpur": {
+        "hi": "जबलपुर",
+        "gu": "જબલપુર"
+    },
+    "Gwalior": {
+        "hi": "ग्वालियर",
+        "gu": "ગ્વાલિયર"
+    },
+    "Ujjain": {
+        "hi": "उज्जैन",
+        "gu": "ઉજ્જૈન"
+    },
+    "Sagar": {
+        "hi": "सागर",
+        "gu": "સાગર"
+    },
+    "Patna": {
+        "hi": "पटना",
+        "gu": "પટના"
+    },
+    "Gaya": {
+        "hi": "गया",
+        "gu": "ગયા"
+    },
+    "Muzaffarpur": {
+        "hi": "मुजफ्फरपुर",
+        "gu": "મુઝફ્ફરપુર"
+    },
+    "Bhagalpur": {
+        "hi": "भागलपुर",
+        "gu": "ભાગલપુર"
+    },
+    "Pune": {
+        "hi": "पुणे",
+        "gu": "પુણે"
+    },
+    "Nashik": {
+        "hi": "नासिक",
+        "gu": "નાસિક"
+    },
+    "Nagpur": {
+        "hi": "नागपुर",
+        "gu": "નાગપુર"
+    },
+    "Aurangabad": {
+        "hi": "औरंगाबाद",
+        "gu": "ઔરંગાબાદ"
+    },
+    "Chhatrapati Sambhajinagar": {
+        "hi": "छत्रपति संभाजीनगर",
+        "gu": "છત્રપતિ સંભાજીનગર"
+    },
+    "Kolhapur": {
+        "hi": "कोल्हापुर",
+        "gu": "કોલ્હાપુર"
+    },
+    "Solapur": {
+        "hi": "सोलापुर",
+        "gu": "સોલાપુર"
+    },
+    "Ahmednagar": {
+        "hi": "अहमदनगर",
+        "gu": "અહમદનગર"
+    },
+    "Satara": {
+        "hi": "सतारा",
+        "gu": "સાતારા"
+    },
+    "Sangli": {
+        "hi": "सांगली",
+        "gu": "સાંગલી"
+    },
+    "Amravati": {
+        "hi": "अमरावती",
+        "gu": "અમરાવતી"
+    },
+    "Jalgaon": {
+        "hi": "जलगांव",
+        "gu": "જલગાંવ"
+    },
+    "Dhule": {
+        "hi": "धुले",
+        "gu": "ધુલિયા / ધુળે"
+    },
+    "Bengaluru": {
+        "hi": "बेंगलुरु",
+        "gu": "બેંગલુરુ"
+    },
+    "Bangalore": {
+        "hi": "बेंगलुरु",
+        "gu": "બેંગલુરુ"
+    },
+    "Mysuru": {
+        "hi": "मैसूर",
+        "gu": "મૈસૂર"
+    },
+    "Belagavi": {
+        "hi": "बेलगावी",
+        "gu": "બેલગાવી"
+    },
+    "Hyderabad": {
+        "hi": "हैदराबाद",
+        "gu": "હૈદરાબાદ"
+    },
+    "Warangal": {
+        "hi": "वारंगल",
+        "gu": "વારંગલ"
+    },
+    "Visakhapatnam": {
+        "hi": "विशाखापत्तनम",
+        "gu": "વિશાખાપટ્ટનમ"
+    },
+    "Guntur": {
+        "hi": "गुंटूर",
+        "gu": "ગુંટૂર"
+    },
+    "Chennai": {
+        "hi": "चेन्नई",
+        "gu": "ચેન્નઈ"
+    },
+    "Coimbatore": {
+        "hi": "कोयंबटूर",
+        "gu": "કોયમ્બતૂર"
+    },
+    "Madurai": {
+        "hi": "मदुरै",
+        "gu": "મદુરાઈ"
+    },
+    "Kolkata": {
+        "hi": "कोलकाता",
+        "gu": "કોલકાતા"
+    },
+    "Bardhaman": {
+        "hi": "बर्धमान",
+        "gu": "બર્ધમાન"
+    }
+};
+
+const BLOCK_TRANSLATIONS = {
+    "Bavla": {
+        "hi": "बावला",
+        "gu": "બાવળા"
+    },
+    "Daskroi": {
+        "hi": "दस्करोई",
+        "gu": "દસક્રોઈ"
+    },
+    "Detroj Rampura": {
+        "hi": "देतड़ोज रामपुरा",
+        "gu": "દેત્રોજ રામપુરા"
+    },
+    "Detroj-Rampura": {
+        "hi": "देतड़ोज रामपुरा",
+        "gu": "દેત્રોજ રામપુરા"
+    },
+    "Dhandhuka": {
+        "hi": "धंधुका",
+        "gu": "ધંધૂકા"
+    },
+    "Dholera": {
+        "hi": "धोलेरा",
+        "gu": "ધોલેરા"
+    },
+    "Dholka": {
+        "hi": "धोलका",
+        "gu": "ધોળકા"
+    },
+    "Mandal": {
+        "hi": "मांडल",
+        "gu": "માંડલ"
+    },
+    "Sanand": {
+        "hi": "साणंद",
+        "gu": "સાણંદ"
+    },
+    "Viramgam": {
+        "hi": "विरामगाम",
+        "gu": "વિરમગામ"
+    },
+    "Ahmedabad City": {
+        "hi": "अहमदाबाद शहर",
+        "gu": "અમદાવાદ શહેર"
+    },
+    "Dehgam": {
+        "hi": "दहेजगाम (दहेगाम)",
+        "gu": "દહેગામ"
+    },
+    "Gandhinagar": {
+        "hi": "गांधीनगर",
+        "gu": "ગાંધીનગર"
+    },
+    "Kalol": {
+        "hi": "कलोल",
+        "gu": "કલોલ"
+    },
+    "Mansa": {
+        "hi": "माणसा",
+        "gu": "માણસા"
+    },
+    "Dhoraji": {
+        "hi": "धोराजी",
+        "gu": "ધોરાજી"
+    },
+    "Gondal": {
+        "hi": "गोंडल",
+        "gu": "ગોંડલ"
+    },
+    "Jamkandorna": {
+        "hi": "जामकंडोरणा",
+        "gu": "જામકંડોરણા"
+    },
+    "Jamkandorana": {
+        "hi": "जामकंडोरणा",
+        "gu": "જામકંડોરણા"
+    },
+    "Jasdan": {
+        "hi": "जसदन",
+        "gu": "જસદણ"
+    },
+    "Jetpur": {
+        "hi": "जेतपुर",
+        "gu": "જેતપુર"
+    },
+    "Kotda Sangani": {
+        "hi": "कोटड़ा सांगाणी",
+        "gu": "કોટડા સાંગાણી"
+    },
+    "Kotdasangani": {
+        "hi": "कोटड़ा सांगाणी",
+        "gu": "કોટડા સાંગાણી"
+    },
+    "Lodhika": {
+        "hi": "लोधिका",
+        "gu": "લોધીકા"
+    },
+    "Paddhari": {
+        "hi": "पद्धरी",
+        "gu": "પડધરી"
+    },
+    "Rajkot": {
+        "hi": "राजकोट",
+        "gu": "રાજકોટ"
+    },
+    "Upleta": {
+        "hi": "उपलेटा",
+        "gu": "ઉપલેટા"
+    },
+    "Vinchhiya": {
+        "hi": "विंछिया",
+        "gu": "વીંછિયા"
+    },
+    "Vinchia": {
+        "hi": "विंछिया",
+        "gu": "વીંછિયા"
+    },
+    "Bardoli": {
+        "hi": "बारडोली",
+        "gu": "બારડોલી"
+    },
+    "Chorasi": {
+        "hi": "चौरासी",
+        "gu": "ચોર્યાસી"
+    },
+    "Choryasi": {
+        "hi": "चौरासी",
+        "gu": "ચોર્યાસી"
+    },
+    "Kamrej": {
+        "hi": "कामरेज",
+        "gu": "કામરેજ"
+    },
+    "Mahuva": {
+        "hi": "महुवा",
+        "gu": "મહુવા"
+    },
+    "Mandvi": {
+        "hi": "मांडवी",
+        "gu": "માંડવી"
+    },
+    "Mangrol": {
+        "hi": "मांगरोल",
+        "gu": "માંગરોળ"
+    },
+    "Olpad": {
+        "hi": "ओलपाड",
+        "gu": "ઓલપાડ"
+    },
+    "Palsana": {
+        "hi": "पलसाना",
+        "gu": "પલસાણા"
+    },
+    "Umarpada": {
+        "hi": "उमरपाड़ा",
+        "gu": "ઉમરપાડા"
+    },
+    "Surat City": {
+        "hi": "सूरत शहर",
+        "gu": "સુરત શહેર"
+    },
+    "Dabhoi": {
+        "hi": "डभोई",
+        "gu": "ડભોઈ"
+    },
+    "Desar": {
+        "hi": "डेसर",
+        "gu": "ડેસર"
+    },
+    "Karjan": {
+        "hi": "करजण",
+        "gu": "કરજણ"
+    },
+    "Padra": {
+        "hi": "पादरा",
+        "gu": "પાદરા"
+    },
+    "Savli": {
+        "hi": "सावली",
+        "gu": "સાવલી"
+    },
+    "Sinor": {
+        "hi": "शिनोर",
+        "gu": "શિનોર"
+    },
+    "Vaghodia": {
+        "hi": "वाघोडिया",
+        "gu": "વાઘોડિયા"
+    },
+    "Vadodara Rural": {
+        "hi": "वडोदरा ग्रामीण",
+        "gu": "વડોદરા ગ્રામ્ય"
+    },
+    "Anand": {
+        "hi": "आणंद",
+        "gu": "આણંદ"
+    },
+    "Anklav": {
+        "hi": "आंकलाव",
+        "gu": "આંકલાવ"
+    },
+    "Borsad": {
+        "hi": "बोरसद",
+        "gu": "બોરસદ"
+    },
+    "Khambhat": {
+        "hi": "खंभात",
+        "gu": "ખંભાત"
+    },
+    "Petlad": {
+        "hi": "पेतलाद",
+        "gu": "પેટલાદ"
+    },
+    "Sojitra": {
+        "hi": "सोजित्रा",
+        "gu": "સોજિત્રા"
+    },
+    "Tarapur": {
+        "hi": "तारापुर",
+        "gu": "તારાપુર"
+    },
+    "Umreth": {
+        "hi": "उमरेठ",
+        "gu": "ઉમરેઠ"
+    },
+    "Kapadvanj": {
+        "hi": "कपड़वंज",
+        "gu": "કપડવંજ"
+    },
+    "Kheda": {
+        "hi": "खेड़ा",
+        "gu": "ખેડા"
+    },
+    "Matar": {
+        "hi": "मातर",
+        "gu": "માતર"
+    },
+    "Mehmadabad": {
+        "hi": "महेमदावाद",
+        "gu": "મહેમદાવાદ"
+    },
+    "Nadiad": {
+        "hi": "नडियाद",
+        "gu": "નડિયાદ"
+    },
+    "Thasra": {
+        "hi": "ठासरा",
+        "gu": "ઠાસરા"
+    },
+    "Vaso": {
+        "hi": "वासो",
+        "gu": "વાસો"
+    },
+    "Galteshwar": {
+        "hi": "गलतेश्वर",
+        "gu": "ગળતેશ્વર"
+    },
+    "Amreli": {
+        "hi": "अमरेली",
+        "gu": "અમરેલી"
+    },
+    "Babra": {
+        "hi": "बाबरा",
+        "gu": "બાવરા / બાબરા"
+    },
+    "Bagasara": {
+        "hi": "बागसरा",
+        "gu": "બગસરા"
+    },
+    "Dhari": {
+        "hi": "धारी",
+        "gu": "ધારી"
+    },
+    "Jafrabad": {
+        "hi": "जाफराबाद",
+        "gu": "જાફરાબાદ"
+    },
+    "Khambha": {
+        "hi": "खांभा",
+        "gu": "ખાંભા"
+    },
+    "Kunkavav Vadia": {
+        "hi": "कुंकावाव वाडिया",
+        "gu": "કુંકાવાવ વડિયા"
+    },
+    "Kunkavav": {
+        "hi": "कुंकावाव",
+        "gu": "કુંકાવાવ"
+    },
+    "Lathi": {
+        "hi": "लाठी",
+        "gu": "લાઠી"
+    },
+    "Lilia": {
+        "hi": "लीलियां",
+        "gu": "લીલીયા"
+    },
+    "Rajula": {
+        "hi": "राजूला",
+        "gu": "રાજુલા"
+    },
+    "Savarkundla": {
+        "hi": "सावरकुंडला",
+        "gu": "સાવરકુંડલા"
+    },
+    "Bhavnagar": {
+        "hi": "भावनगर",
+        "gu": "ભાવનગર"
+    },
+    "Gariadhar": {
+        "hi": "गारियाधार",
+        "gu": "ગારીયાધાર"
+    },
+    "Ghogha": {
+        "hi": "घोघा",
+        "gu": "ઘોઘા"
+    },
+    "Jesar": {
+        "hi": "जेसर",
+        "gu": "જેસર"
+    },
+    "Palitana": {
+        "hi": "पालीताना",
+        "gu": "પાલીતાણા"
+    },
+    "Sihor": {
+        "hi": "सिहोर",
+        "gu": "સિહોર"
+    },
+    "Talaja": {
+        "hi": "तलाजा",
+        "gu": "તળાજા"
+    },
+    "Umrala": {
+        "hi": "उमराला",
+        "gu": "ઉમરાળા"
+    },
+    "Vallabhipur": {
+        "hi": "वल्लभीपुर",
+        "gu": "વલ્લભીપુર"
+    },
+    "Botad": {
+        "hi": "बोटाद",
+        "gu": "બોટાદ"
+    },
+    "Barwala": {
+        "hi": "बरवाला",
+        "gu": "બરવાળા"
+    },
+    "Gadhada": {
+        "hi": "गढडा",
+        "gu": "ગઢડા"
+    },
+    "Ranpur": {
+        "hi": "राणपुर",
+        "gu": "રાણપુર"
+    },
+    "Morbi": {
+        "hi": "मोरबी",
+        "gu": "મોરબી"
+    },
+    "Halvad": {
+        "hi": "हलवद",
+        "gu": "હળવદ"
+    },
+    "Maliya": {
+        "hi": "मालिया",
+        "gu": "માળિયા"
+    },
+    "Tankara": {
+        "hi": "टंकारा",
+        "gu": "ટંકારા"
+    },
+    "Wankaner": {
+        "hi": "वांकानेर",
+        "gu": "વાંકાનેર"
+    },
+    "Chotila": {
+        "hi": "चोटिला",
+        "gu": "ચોટીલા"
+    },
+    "Chuda": {
+        "hi": "चुड़ा",
+        "gu": "ચૂડા"
+    },
+    "Dasada": {
+        "hi": "दसाड़ा",
+        "gu": "દસાડા"
+    },
+    "Dhrangadhra": {
+        "hi": "ध्रांगध्रा",
+        "gu": "ધ્રાંગધ્રા"
+    },
+    "Lakhtar": {
+        "hi": "लखतर",
+        "gu": "લખતર"
+    },
+    "Limbdi": {
+        "hi": "लिंबडी",
+        "gu": "લીંબડી"
+    },
+    "Muli": {
+        "hi": "मूली",
+        "gu": "મૂળી"
+    },
+    "Sayla": {
+        "hi": "सायला",
+        "gu": "સાયલા"
+    },
+    "Thangadh": {
+        "hi": "थानगढ़",
+        "gu": "થાનગઢ"
+    },
+    "Wadhwan": {
+        "hi": "वढवाण",
+        "gu": "વઢવાણ"
+    },
+    "Bhesan": {
+        "hi": "भेसाण",
+        "gu": "ભેસાણ"
+    },
+    "Junagadh": {
+        "hi": "जूनागढ़",
+        "gu": "જૂનાગઢ"
+    },
+    "Keshod": {
+        "hi": "केशोद",
+        "gu": "કેશોદ"
+    },
+    "Manavadar": {
+        "hi": "माणावदर",
+        "gu": "માણાવદર"
+    },
+    "Mendarda": {
+        "hi": "मेंदरडा",
+        "gu": "મેંદરડા"
+    },
+    "Vanthali": {
+        "hi": "वंथाली",
+        "gu": "વંથલી"
+    },
+    "Visavadar": {
+        "hi": "विसावदर",
+        "gu": "વિસાવદર"
+    },
+    "Gir Gadhada": {
+        "hi": "गिर गढडा",
+        "gu": "ગીર ગઢડા"
+    },
+    "Kodinar": {
+        "hi": "कोडीनार",
+        "gu": "કોડીનાર"
+    },
+    "Patan Veraval": {
+        "hi": "वेरावल",
+        "gu": "વેરાવળ"
+    },
+    "Veraval": {
+        "hi": "वेरावल",
+        "gu": "વેરાવળ"
+    },
+    "Sutrapada": {
+        "hi": "सुत्रापाड़ा",
+        "gu": "સુત્રાપાડા"
+    },
+    "Talala": {
+        "hi": "तलाला",
+        "gu": "તાલાલા"
+    },
+    "Una": {
+        "hi": "ऊना",
+        "gu": "ઉના"
+    },
+    "Porbandar": {
+        "hi": "पोरबंदर",
+        "gu": "પોરબંદર"
+    },
+    "Kutiyana": {
+        "hi": "कुतियाना",
+        "gu": "કુતિયાણા"
+    },
+    "Ranavav": {
+        "hi": "राणावाव",
+        "gu": "રાણાવાવ"
+    },
+    "Dhrol": {
+        "hi": "ध्रोल",
+        "gu": "ધ્રોલ"
+    },
+    "Jamjodhpur": {
+        "hi": "जामजोधपुर",
+        "gu": "જામજોધપુર"
+    },
+    "Jodiya": {
+        "hi": "जोड़िया",
+        "gu": "જોડિયા"
+    },
+    "Kalavad": {
+        "hi": "कालावाद",
+        "gu": "કાલાવડ"
+    },
+    "Lalpur": {
+        "hi": "लालपुर",
+        "gu": "લાલપુર"
+    },
+    "Jamnagar": {
+        "hi": "जामनगर",
+        "gu": "જામનગર"
+    },
+    "Bhanvad": {
+        "hi": "भाणवड़",
+        "gu": "ભાણવડ"
+    },
+    "Kalyanpur": {
+        "hi": "कल्याणपुर",
+        "gu": "કલ્યાણપુર"
+    },
+    "Khambhalia": {
+        "hi": "खंभालिया",
+        "gu": "ખંભાળિયા"
+    },
+    "Okhamandal": {
+        "hi": "ओखामंडल (द्वारका)",
+        "gu": "ઓખામંડળ (દ્વારકા)"
+    },
+    "Abdasa": {
+        "hi": "अबडासा",
+        "gu": "અબડાસા"
+    },
+    "Anjar": {
+        "hi": "अंजार",
+        "gu": "અંજાર"
+    },
+    "Bhachau": {
+        "hi": "भचाऊ",
+        "gu": "ભચાઉ"
+    },
+    "Bhuj": {
+        "hi": "भुज",
+        "gu": "ભુજ"
+    },
+    "Gandhidham": {
+        "hi": "गांधीधाम",
+        "gu": "ગાંધીધામ"
+    },
+    "Lakhpat": {
+        "hi": "लखपत",
+        "gu": "લખપત"
+    },
+    "Mundra": {
+        "hi": "मुंद्रा",
+        "gu": "મુન્દ્રા"
+    },
+    "Nakhtrana": {
+        "hi": "नखत्राणा",
+        "gu": "નખત્રાણા"
+    },
+    "Rapar": {
+        "hi": "रापर",
+        "gu": "રાપર"
+    },
+    "Becharaji": {
+        "hi": "बेचराजी",
+        "gu": "બેચરાજી"
+    },
+    "Bechraji": {
+        "hi": "બેચરાજી",
+        "gu": "બેચરાજી"
+    },
+    "Jotana": {
+        "hi": "जोताणा",
+        "gu": "જોટાણા"
+    },
+    "Kadi": {
+        "hi": "कड़ी",
+        "gu": "કડી"
+    },
+    "Kheralu": {
+        "hi": "खेरालू",
+        "gu": "ખેરાલુ"
+    },
+    "Satlasana": {
+        "hi": "सतलासणा",
+        "gu": "સતલાસણા"
+    },
+    "Unjha": {
+        "hi": "ऊंझा",
+        "gu": "ઊંઝા"
+    },
+    "Vadnagar": {
+        "hi": "वडनगर",
+        "gu": "વડનગર"
+    },
+    "Vijapur": {
+        "hi": "विजापुर",
+        "gu": "વિજાપુર"
+    },
+    "Visnagar": {
+        "hi": "विसनगर",
+        "gu": "વિસનગર"
+    },
+    "Chanasma": {
+        "hi": "चाणस्मा",
+        "gu": "ચાણસ્મા"
+    },
+    "Harij": {
+        "hi": "हारिज",
+        "gu": "હારીજ"
+    },
+    "Radhanpur": {
+        "hi": "राधनपुर",
+        "gu": "રાધનપુર"
+    },
+    "Sami": {
+        "hi": "समी",
+        "gu": "સમી"
+    },
+    "Sankheshwar": {
+        "hi": "शंखेश्वर",
+        "gu": "શંખેશ્વર"
+    },
+    "Santalpur": {
+        "hi": "सांतलपुर",
+        "gu": "સાંતલપુર"
+    },
+    "Saraswati": {
+        "hi": "सरस्वती",
+        "gu": "સરસ્વતી"
+    },
+    "Sidhpur": {
+        "hi": "सिद्धपुर",
+        "gu": "સિદ્ધપુર"
+    },
+    "Patan": {
+        "hi": "पाटन",
+        "gu": "પાટણ"
+    },
+    "Amirgadh": {
+        "hi": "अमीरगढ़",
+        "gu": "અમીરગઢ"
+    },
+    "Bhabhar": {
+        "hi": "भाभर",
+        "gu": "ભાભર"
+    },
+    "Danta": {
+        "hi": "दांता",
+        "gu": "દાંતા"
+    },
+    "Dantiwada": {
+        "hi": "दांतीवाड़ा",
+        "gu": "દાંતીવાડા"
+    },
+    "Deesa": {
+        "hi": "डीसा",
+        "gu": "ડીસા"
+    },
+    "Deodar": {
+        "hi": "दियोदर",
+        "gu": "દિયોદર"
+    },
+    "Dhanera": {
+        "hi": "धानेरा",
+        "gu": "ધાનેરા"
+    },
+    "Kankrej": {
+        "hi": "कांकरेज",
+        "gu": "કાંકરેજ"
+    },
+    "Lakhani": {
+        "hi": "लाखाणी",
+        "gu": "લાખાણી"
+    },
+    "Palanpur": {
+        "hi": "पालनपुर",
+        "gu": "પાલનપુર"
+    },
+    "Suigam": {
+        "hi": "सुईगाम",
+        "gu": "સુઈગામ"
+    },
+    "Tharad": {
+        "hi": "थराद",
+        "gu": "થરાદ"
+    },
+    "Vadgam": {
+        "hi": "वडगाम",
+        "gu": "વડગામ"
+    },
+    "Vav": {
+        "hi": "वाव",
+        "gu": "વાવ"
+    },
+    "Himatnagar": {
+        "hi": "हिम्मतनगर",
+        "gu": "હિંમતનગર"
+    },
+    "Idar": {
+        "hi": "इदर",
+        "gu": "ઇડર"
+    },
+    "Khedbrahma": {
+        "hi": "खेडब्रह्मा",
+        "gu": "ખેડબ્રહ્મા"
+    },
+    "Poshina": {
+        "hi": "पोषीणा",
+        "gu": "પોશીના"
+    },
+    "Prantij": {
+        "hi": "प्रांतिज",
+        "gu": "પ્રાંતિજ"
+    },
+    "Talod": {
+        "hi": "तलोद",
+        "gu": "તલોદ"
+    },
+    "Vadali": {
+        "hi": "वडाली",
+        "gu": "વડાલી"
+    },
+    "Vijaynagar": {
+        "hi": "विजयनगर",
+        "gu": "વિજયનગર"
+    },
+    "Bayad": {
+        "hi": "बायड",
+        "gu": "બાયડ"
+    },
+    "Bhiloda": {
+        "hi": "भिलोड़ा",
+        "gu": "ભિલોડા"
+    },
+    "Dhansura": {
+        "hi": "धनसुरा",
+        "gu": "ધનસુરા"
+    },
+    "Malpur": {
+        "hi": "मालपुर",
+        "gu": "માલપુર"
+    },
+    "Meghraj": {
+        "hi": "मेघराज",
+        "gu": "મેઘરજ"
+    },
+    "Modasa": {
+        "hi": "मोडासा",
+        "gu": "મોડાસા"
+    },
+    "Ghoghamba": {
+        "hi": "घोघंबा",
+        "gu": "ઘોઘંબા"
+    },
+    "Godhra": {
+        "hi": "गोधरा",
+        "gu": "ગોધરા"
+    },
+    "Halol": {
+        "hi": "हालोल",
+        "gu": "હાલોલ"
+    },
+    "Jambughoda": {
+        "hi": "जांबुघोड़ा",
+        "gu": "જાંબુઘોડા"
+    },
+    "Morwa Hadaf": {
+        "hi": "मोरवा हड़फ",
+        "gu": "મોરવા હડફ"
+    },
+    "Shehera": {
+        "hi": "शहेरा",
+        "gu": "શહેરા"
+    },
+    "Devgadh Baria": {
+        "hi": "देवगढ़ बारिया",
+        "gu": "દેવગઢ બારિયા"
+    },
+    "Dhanpur": {
+        "hi": "धानपुर",
+        "gu": "ધાનપુર"
+    },
+    "Fatepura": {
+        "hi": "फतेपुरा",
+        "gu": "ફતેપુરા"
+    },
+    "Garbada": {
+        "hi": "गरबाड़ा",
+        "gu": "ગરબાડા"
+    },
+    "Jhalod": {
+        "hi": "झालोद",
+        "gu": "ઝાલોદ"
+    },
+    "Limkheda": {
+        "hi": "लिमखेड़ा",
+        "gu": "લીમખેડા"
+    },
+    "Sanjeli": {
+        "hi": "संजेली",
+        "gu": "સંજેલી"
+    },
+    "Singvad": {
+        "hi": "सिंगवड़",
+        "gu": "સિંગવડ"
+    },
+    "Dahod": {
+        "hi": "दाहोद",
+        "gu": "દાહોદ"
+    },
+    "Balasinor": {
+        "hi": "बालासिनोर",
+        "gu": "બાલાસિનોર"
+    },
+    "Kadana": {
+        "hi": "कडाणा",
+        "gu": "કડાણા"
+    },
+    "Khanpur": {
+        "hi": "खानपुर",
+        "gu": "ખાનપુર"
+    },
+    "Lunawada": {
+        "hi": "लूणावाड़ा",
+        "gu": "લુણાવાડા"
+    },
+    "Santrampur": {
+        "hi": "संतरामपुर",
+        "gu": "સંતરામપુર"
+    },
+    "Virpur": {
+        "hi": "वीरपुर",
+        "gu": "વીરપુર"
+    },
+    "Amod": {
+        "hi": "आमोद",
+        "gu": "આમોદ"
+    },
+    "Ankleshwar": {
+        "hi": "अंकलेश्वर",
+        "gu": "અંકલેશ્વર"
+    },
+    "Anklesvar": {
+        "hi": "अंकलेश्वर",
+        "gu": "અંકલેશ્વર"
+    },
+    "Hansot": {
+        "hi": "हंसोट",
+        "gu": "હંસોટ"
+    },
+    "Jambusar": {
+        "hi": "जंबूसर",
+        "gu": "જંબુસર"
+    },
+    "Jhagadia": {
+        "hi": "झगड़िया",
+        "gu": "ઝઘડિયા"
+    },
+    "Netrang": {
+        "hi": "नेत्रंग",
+        "gu": "નેત્રંગ"
+    },
+    "Vagra": {
+        "hi": "वागरा",
+        "gu": "વાગરા"
+    },
+    "Valia": {
+        "hi": "वालिया",
+        "gu": "વાલિયા"
+    },
+    "Bharuch": {
+        "hi": "भरूच",
+        "gu": "ભરૂચ"
+    },
+    "Dediapada": {
+        "hi": "डेडियापाड़ा",
+        "gu": "ડેડિયાપાડા"
+    },
+    "Garudeshwar": {
+        "hi": "गरुड़ेश्वर",
+        "gu": "ગરુડેશ્વર"
+    },
+    "Nandod": {
+        "hi": "नांदोद (राजपीपला)",
+        "gu": "નાંદોદ (રાજપીપળા)"
+    },
+    "Sagbara": {
+        "hi": "सागबारा",
+        "gu": "સાગબારા"
+    },
+    "Tilakwada": {
+        "hi": "तिलकवाड़ा",
+        "gu": "તિલકવાડા"
+    },
+    "Bodeli": {
+        "hi": "बोडेली",
+        "gu": "બોડેલી"
+    },
+    "Chhota Udepur": {
+        "hi": "छोटा उदेपुर",
+        "gu": "છોટાઉદેપુર"
+    },
+    "Jetpur Pavi": {
+        "hi": "जेतपुर पावी",
+        "gu": "જેતપુર પાવી"
+    },
+    "Kavant": {
+        "hi": "कवांट",
+        "gu": "કવાંટ"
+    },
+    "Nasvadi": {
+        "hi": "नसवाड़ी",
+        "gu": "નસવાડી"
+    },
+    "Sankheda": {
+        "hi": "संखेड़ा",
+        "gu": "સંખેડા"
+    },
+    "Nizar": {
+        "hi": "निझर",
+        "gu": "નિઝર"
+    },
+    "Songadh": {
+        "hi": "सोनगढ़",
+        "gu": "સોનગઢ"
+    },
+    "Uchchhal": {
+        "hi": "उच्छल",
+        "gu": "ઉચ્છલ"
+    },
+    "Valod": {
+        "hi": "वालोड",
+        "gu": "વાલોડ"
+    },
+    "Vyara": {
+        "hi": "व्यरा",
+        "gu": "વ્યારા"
+    },
+    "Kukarmunda": {
+        "hi": "कुकुरमुंडा",
+        "gu": "કુકરમુંડા"
+    },
+    "Dolvan": {
+        "hi": "डोलवण",
+        "gu": "ડોલવણ"
+    },
+    "Chikhli": {
+        "hi": "चिखली",
+        "gu": "ચીખલી"
+    },
+    "Gandevi": {
+        "hi": "गंदेवी",
+        "gu": "ગણદેવી"
+    },
+    "Jalalpore": {
+        "hi": "जलालपोर",
+        "gu": "જલાલપોર"
+    },
+    "Khergam": {
+        "hi": "खेरगाम",
+        "gu": "ખેરગામ"
+    },
+    "Navsari": {
+        "hi": "नवसारी",
+        "gu": "નવસારી"
+    },
+    "Vansda": {
+        "hi": "वांसदा",
+        "gu": "વાંસદા"
+    },
+    "Dharampur": {
+        "hi": "धरमपुर",
+        "gu": "ધરમપુર"
+    },
+    "Kaprada": {
+        "hi": "कपराड़ा",
+        "gu": "કપરાડા"
+    },
+    "Pardi": {
+        "hi": "पारडी",
+        "gu": "પારડી"
+    },
+    "Umbergaon": {
+        "hi": "उंबरगांव",
+        "gu": "ઉમરગામ"
+    },
+    "Vapi": {
+        "hi": "वापी",
+        "gu": "વાપી"
+    },
+    "Valsad": {
+        "hi": "वलसाड",
+        "gu": "વલસાડ"
+    },
+    "Ahwa": {
+        "hi": "आहवा",
+        "gu": "આહવા"
+    },
+    "Subir": {
+        "hi": "सुबीर",
+        "gu": "સુબીર"
+    },
+    "Waghai": {
+        "hi": "वाघई",
+        "gu": "વઘઈ"
+    }
+};
+
 class I18nManager {
     constructor() {
         this.currentLang = localStorage.getItem('krishi_lang') || 'en';
@@ -725,13 +2354,114 @@ class I18nManager {
         return text;
     }
 
+    
+    translateState(name) {
+        if (!name || this.currentLang === 'en') return name;
+        const lang = this.currentLang;
+        const clean = name.trim();
+        if (STATE_TRANSLATIONS[clean]) return STATE_TRANSLATIONS[clean][lang] || clean;
+        for (const k of Object.keys(STATE_TRANSLATIONS)) {
+            if (k.toLowerCase() === clean.toLowerCase()) {
+                return STATE_TRANSLATIONS[k][lang] || clean;
+            }
+        }
+        return this.transliterateIndic(clean, lang);
+    }
+
+    translateDistrict(name) {
+        if (!name || this.currentLang === 'en') return name;
+        const lang = this.currentLang;
+        const clean = name.trim();
+        if (DISTRICT_TRANSLATIONS[clean]) return DISTRICT_TRANSLATIONS[clean][lang] || clean;
+        for (const k of Object.keys(DISTRICT_TRANSLATIONS)) {
+            if (k.toLowerCase() === clean.toLowerCase()) {
+                return DISTRICT_TRANSLATIONS[k][lang] || clean;
+            }
+        }
+        return this.transliterateIndic(clean, lang);
+    }
+
+    translateBlock(name) {
+        if (!name || this.currentLang === 'en') return name;
+        const lang = this.currentLang;
+        const clean = name.trim();
+        if (BLOCK_TRANSLATIONS[clean]) return BLOCK_TRANSLATIONS[clean][lang] || clean;
+        for (const k of Object.keys(BLOCK_TRANSLATIONS)) {
+            if (k.toLowerCase() === clean.toLowerCase()) {
+                return BLOCK_TRANSLATIONS[k][lang] || clean;
+            }
+        }
+        return this.transliterateIndic(clean, lang);
+    }
+
+    translateSource(source) {
+        if (!source || this.currentLang === 'en') return source;
+        const lang = this.currentLang;
+        
+        if (source.includes('10.85M') || source.includes('Benchmark') || source.includes('Database')) {
+            const match = source.match(/\(([^)]+)\)/);
+            if (match) {
+                const parts = match[1].split(',').map(p => p.trim());
+                const translatedParts = parts.map(p => {
+                    const st = this.translateState(p);
+                    if (st !== p) return st;
+                    const dt = this.translateDistrict(p);
+                    if (dt !== p) return dt;
+                    const bk = this.translateBlock(p);
+                    if (bk !== p) return bk;
+                    return p;
+                });
+                const locStr = translatedParts.join(', ');
+                return lang === 'hi' 
+                    ? `10.85M राष्ट्रीय मृदा डेटाबेस मानक (${locStr})`
+                    : `10.85M રાષ્ટ્રીય જમીન ડેટાબેઝ માપદંડ (${locStr})`;
+            }
+            return lang === 'hi' ? '10.85M राष्ट्रीय मृदा डेटाबेस मानक' : '10.85M રાષ્ટ્રીય જમીન ડેટાબેઝ માપદંડ';
+        }
+
+        if (source.includes('Field Diagnostic') || source.includes('Direct Farmer') || source.includes('Field Test')) {
+            return lang === 'hi' ? 'खेत परीक्षण / नैदानिक इनपुट' : 'ખેતર ચકાસણી / ખેડૂત ઇનપુટ';
+        }
+
+        return source;
+    }
+
+    transliterateIndic(text, lang) {
+        if (!text || lang === 'en') return text;
+        const isGu = (lang === 'gu');
+        let s = text.trim();
+
+        // Common suffix replacements
+        if (s.toLowerCase().endsWith('nagar')) {
+            const base = s.slice(0, -5);
+            return (this.transliterateIndic(base, lang) || base) + (isGu ? 'નગર' : 'नगर');
+        }
+        if (s.toLowerCase().endsWith('pur')) {
+            const base = s.slice(0, -3);
+            return (this.transliterateIndic(base, lang) || base) + (isGu ? 'પુર' : 'पुर');
+        }
+        if (s.toLowerCase().endsWith('garh')) {
+            const base = s.slice(0, -4);
+            return (this.transliterateIndic(base, lang) || base) + (isGu ? 'ગઢ' : 'गढ़');
+        }
+        if (s.toLowerCase().endsWith('bad')) {
+            const base = s.slice(0, -3);
+            return (this.transliterateIndic(base, lang) || base) + (isGu ? 'બાદ' : 'बाद');
+        }
+        if (s.toLowerCase().endsWith('kheda')) {
+            const base = s.slice(0, -5);
+            return (this.transliterateIndic(base, lang) || base) + (isGu ? 'ખેડા' : 'खेड़ा');
+        }
+
+        return s;
+    }
+
     translateFertilizer(name) {
         if (!name) return '-';
         const key = `fert.${name}`;
         if (translations[this.currentLang] && translations[this.currentLang][key]) {
             return translations[this.currentLang][key];
         }
-        // Partial search
         for (const k of Object.keys(translations.en)) {
             if (k.startsWith('fert.') && name.includes(k.replace('fert.', ''))) {
                 return this.t(k, {}, name);
@@ -783,6 +2513,528 @@ class I18nManager {
         if (s.includes('DEFICIENT')) return this.t('report.statusDeficient', {}, 'DEFICIENT');
         if (s.includes('ADEQUATE')) return this.t('report.statusAdequate', {}, 'ADEQUATE');
         return status;
+    }
+
+    /**
+     * Localizes dynamic Soil pH amendment strings
+     */
+    translatePhAmendment(text) {
+        if (!text || this.currentLang === 'en') return text;
+        const lang = this.currentLang;
+
+        // Extract numbers like pH 5.0, 750 kg, 750 kg/ha
+        const phMatch = text.match(/pH\s*([\d\.]+)/i);
+        const kgMatch = text.match(/at\s*([\d\.]+)\s*kg/i);
+        const rateMatch = text.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+
+        const ph = phMatch ? phMatch[1] : '';
+        const kg = kgMatch ? kgMatch[1] : '';
+        const rate = rateMatch ? rateMatch[1] : '750';
+
+        if (text.toLowerCase().includes('strongly acidic')) {
+            if (lang === 'hi') {
+                return `अत्यधिक अम्लीय मिट्टी (pH ${ph})। फास्फोरस की उपलब्धता सुधारने के लिए बुआई से 2-3 सप्ताह पूर्व ${kg} kg (${rate} kg/ha) कृषि चूना (CaCO3) या डोलोमाइट डालें।`;
+            } else if (lang === 'gu') {
+                return `અત્યંત એસિડિક જમીન (pH ${ph}). ફોસ્ફરસની ઉપલબ્ધતા વધારવા માટે વાવણીના 2-3 અઠવાડિયા પહેલાં ${kg} kg (${rate} kg/ha) કૃષિ ચૂનો (CaCO3) અથવા ડોલોમાઇટ ઉમેરો.`;
+            }
+        } else if (text.toLowerCase().includes('moderately acidic')) {
+            if (lang === 'hi') {
+                return `मध्यम अम्लीय मिट्टी (pH ${ph})। ${kg} kg (${rate} kg/ha) कृषि चूना डालें या अच्छी तरह सड़ी हुई गोबर की खाद (FYM)/कम्पोस्ट मिलाएं।`;
+            } else if (lang === 'gu') {
+                return `મધ્યમ એસિડિક જમીન (pH ${ph}). ${kg} kg (${rate} kg/ha) કૃષિ ચૂનો ઉમેરો અથવા સારું કોહવાયેલું છાણિયું ખાતર/કમ્પોસ્ટ ભેળવો.`;
+            }
+        } else if (text.toLowerCase().includes('alkaline / sodic') || text.toLowerCase().includes('sodic')) {
+            if (lang === 'hi') {
+                return `क्षारीय / सोदिक मिट्टी (pH ${ph})। सोडियम विषाक्तता कम करने के लिए जल निकास के साथ ${kg} kg (${rate} kg/ha) कृषि जिप्सम (CaSO4·2H2O) डालें।`;
+            } else if (lang === 'gu') {
+                return `ક્ષારીય / સોડિક જમીન (pH ${ph}). સોડિયમની હાનિકારકતા ઘટાડવા માટે યોગ્ય નિતાર સાથે ${kg} kg (${rate} kg/ha) કૃષિ જીપ્સમ (CaSO4·2H2O) આપો.`;
+            }
+        } else if (text.toLowerCase().includes('slightly alkaline')) {
+            if (lang === 'hi') {
+                return `हल्की क्षारीय मिट्टी (pH ${ph})। जड़ क्षेत्र को स्वाभाविक रूप से उदासीन करने के लिए पोषक तत्व स्रोत के रूप में अमोनियम सल्फेट या SSP का प्रयोग करें।`;
+            } else if (lang === 'gu') {
+                return `હળવી ક્ષારીય જમીન (pH ${ph}). મૂળ વિસ્તારને તટસ્થ કરવા માટે ખાતર તરીકે એમોનિયમ સલ્ફેટ અથવા SSP નો ઉપયોગ કરો.`;
+            }
+        } else if (text.toLowerCase().includes('optimal')) {
+            if (lang === 'hi') {
+                return `अनुकूल मृदा pH (${ph})। पोषक तत्व अवशोषण क्षमता उत्कृष्ट है।`;
+            } else if (lang === 'gu') {
+                return `ઉત્તમ જમીન pH (${ph}). પોષક તત્વો ગ્રહણ ક્ષમતા શ્રેષ્ઠ છે.`;
+            }
+        }
+
+        return text;
+    }
+
+    /**
+     * Localizes dynamic Micronutrient advice strings
+     */
+    translateMicronutrientAdvice(text) {
+        if (!text || this.currentLang === 'en') return text;
+        const lang = this.currentLang;
+
+        if (text.toLowerCase().includes('adequate')) {
+            return lang === 'hi' ? 'सूक्ष्म पोषक तत्व (Zn, B, S, Fe) कृषि मानकों के अनुसार पर्याप्त मात्रा में हैं।' : 'સૂક્ષ્મ પોષક તત્વો (Zn, B, S, Fe) ખેતી માટે પૂરતા પ્રમાણમાં છે.';
+        }
+
+        const segments = text.split('|').map(s => s.trim());
+        const translatedSegments = segments.map(seg => {
+            // Zinc
+            if (seg.toLowerCase().includes('zinc') || seg.toLowerCase().includes('znso4')) {
+                const valMatch = seg.match(/([\d\.]+)\s*ppm/i);
+                const kgMatch = seg.match(/@\s*([\d\.]+)\s*kg/i);
+                const rateMatch = seg.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '0.00';
+                const kg = kgMatch ? kgMatch[1] : '25';
+                const rate = rateMatch ? rateMatch[1] : '25';
+                if (lang === 'hi') {
+                    return `जिंक की कमी (${val} ppm < 0.6 ppm): आधारभूत (बेसल) अवस्था में ${kg} kg (${rate} kg/ha) जिंक सल्फेट (ZnSO4 21%) डालें।`;
+                } else {
+                    return `ઝિંકની ખામી (${val} ppm < 0.6 ppm): પાયાના તબક્કે ${kg} kg (${rate} kg/ha) ઝિંક સલ્ફેટ (ZnSO4 21%) આપો.`;
+                }
+            }
+            // Boron
+            if (seg.toLowerCase().includes('boron') || seg.toLowerCase().includes('borax')) {
+                const valMatch = seg.match(/([\d\.]+)\s*ppm/i);
+                const kgMatch = seg.match(/@\s*([\d\.]+)\s*kg/i);
+                const rateMatch = seg.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '0.00';
+                const kg = kgMatch ? kgMatch[1] : '5.0';
+                const rate = rateMatch ? rateMatch[1] : '5';
+                if (lang === 'hi') {
+                    return `बोरॉन की कमी (${val} ppm < 0.5 ppm): फल फटने और फूल झड़ने से रोकने के लिए ${kg} kg (${rate} kg/ha) बोरेक्स (10.5% B) डालें।`;
+                } else {
+                    return `બોરોનની ખામી (${val} ppm < 0.5 ppm): ફળ ફાટતા અને ફૂલ ખરતા અટકાવવા માટે ${kg} kg (${rate} kg/ha) બોરેક્સ (10.5% B) આપો.`;
+                }
+            }
+            // Sulphur
+            if (seg.toLowerCase().includes('sulphur') || seg.toLowerCase().includes('gypsum')) {
+                const valMatch = seg.match(/([\d\.]+)\s*ppm/i);
+                const kgMatch = seg.match(/@\s*([\d\.]+)\s*kg/i);
+                const rateMatch = seg.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '0.0';
+                const kg = kgMatch ? kgMatch[1] : '35';
+                const rate = rateMatch ? rateMatch[1] : '35';
+                if (lang === 'hi') {
+                    return `सल्फर की कमी (${val} ppm < 10 ppm): तिलहन और दलहन में प्रोटीन निर्माण के लिए ${kg} kg (${rate} kg/ha) तत्वीय सल्फर या जिप्सम डालें।`;
+                } else {
+                    return `સલ્ફરની ખામી (${val} ppm < 10 ppm): તેલીબિયાં અને કઠોળમાં પ્રોટીન વૃદ્ધિ માટે ${kg} kg (${rate} kg/ha) સલ્ફર અથવા જીપ્સમ આપો.`;
+                }
+            }
+            // Iron
+            if (seg.toLowerCase().includes('iron') || seg.toLowerCase().includes('ferrous')) {
+                const valMatch = seg.match(/([\d\.]+)\s*ppm/i);
+                const val = valMatch ? valMatch[1] : '0.0';
+                if (lang === 'hi') {
+                    return `आयरन की कमी (${val} ppm < 4.5 ppm): वानस्पतिक अवस्था में फेरस सल्फेट (FeSO4 0.5%) + 0.1% साइट्रिक एसिड का पर्णीय छिड़काव करें।`;
+                } else {
+                    return `આયર્નની ખામી (${val} ppm < 4.5 ppm): વાનસ્પતિક વૃદ્ધિ સમયે ફેરસ સલ્ફેટ (FeSO4 0.5%) + 0.1% સાઇટ્રિક એસિડનો છંટકાવ કરો.`;
+                }
+            }
+            return seg;
+        });
+
+        return translatedSegments.join(' | ');
+    }
+
+    /**
+     * Localizes dynamic warning sentences
+     */
+    translateWarning(w) {
+        if (!w || this.currentLang === 'en') return w;
+        const lang = this.currentLang;
+        const low = w.toLowerCase();
+
+        if (low.includes('soil ph is very low') || (low.includes('phosphorus') && low.includes('locked'))) {
+            const ph = (w.match(/([\d\.]+)/) || [])[1] || '5.0';
+            return lang === 'hi' ? `मिट्टी का pH बहुत कम है (${ph})। चूना डाले बिना फॉस्फोरस पौधों को नहीं मिल पाएगा।` : `જમીનનું pH ખૂબ ઓછું છે (${ph}). ચૂનો ઉમેર્યા વિના ફોસ્ફરસ પાકને મળી શકશે નહીં.`;
+        }
+        if (low.includes('high soil ph') || low.includes('reduces micronutrient')) {
+            const ph = (w.match(/([\d\.]+)/) || [])[1] || '8.5';
+            return lang === 'hi' ? `मिट्टी का pH अधिक (${ph}) होने से सूक्ष्म पोषक तत्वों (Zn, Fe) और फॉस्फोरस का अवशोषण घट जाता है।` : `જમીનનું pH વધુ (${ph}) હોવાથી સૂક્ષ્મ પોષક તત્વો (Zn, Fe) અને ફોસ્ફરસનું શોષણ ઘટે છે.`;
+        }
+        if (low.includes('zinc') && (low.includes('khaira') || low.includes('stunted'))) {
+            return lang === 'hi' ? `जिंक की कमी पाई गई: धान में खैरा रोग और पौधों का विकास रुकने का खतरा है।` : `ઝિંકની ખામી જણાઈ: ડાંગરમાં ખૈરા રોગ અને છોડનો વિકાસ અટકી જવાનું જોખમ છે.`;
+        }
+        if (low.includes('heavy rainfall alert')) {
+            const rain = (w.match(/([\d\.]+)\s*mm/) || [])[1] || '25.0';
+            return lang === 'hi' ? `भारी वर्षा की चेतावनी: अगले 24-48 घंटों में ${rain} mm वर्षा का अनुमान है। अभी नाइट्रोजन या जल-घुलनशील उर्वरक न डालें क्योंकि बहाव से खाद व्यर्थ हो जाएगी।` : `ભારે વરસાદની ચેતવણી: આગામી 24-48 કલાકમાં ${rain} mm વરસાદની આગાહી છે. અત્યારે નાઇટ્રોજન કે ખાતર ન આપો અન્યથા ખાતર ધોવાઈ જશે.`;
+        }
+        if (low.includes('high wind speed')) {
+            const wind = (w.match(/([\d\.]+)\s*km\/h/) || [])[1] || '20.0';
+            return lang === 'hi' ? `तेज हवा की गति (${wind} km/h)। असमान छिड़काव से बचने के लिए पर्णीय छिड़काव और दानेदार खाद का छिड़काव न करें।` : `પવનની ગતિ વધુ (${wind} km/h) છે. ખાતરનો છંટકાવ કે પૂર્તિ ખાતર આપવાનું ટાળો જેથી સરખો ફેલાવો થાય.`;
+        }
+        if (low.includes('high temperature')) {
+            const temp = (w.match(/([\d\.]+)\s*°c/i) || [])[1] || '38.0';
+            return lang === 'hi' ? `अधिक तापमान (${temp}°C): अमोनिया गैस बनकर उड़ने से रोकने के लिए यूरिया का प्रयोग सुबह (6-8 बजे) या शाम (5-7 बजे) करें।` : `વધુ તાપમાન (${temp}°C): યુરિયાનું બાષ્પીભવન અટકાવવા માટે વહેલી સવારે (6-8 વાગ્યે) અથવા સાંજે (5-7 વાગ્યે) યુરિયા આપો.`;
+        }
+
+        return w;
+    }
+
+    /**
+     * Localizes dynamic weather advisory strings
+     */
+    translateWeatherAdvisory(text) {
+        if (!text || this.currentLang === 'en') return text;
+        const lang = this.currentLang;
+        const low = text.toLowerCase();
+
+        // 1. Weather conditions are optimal for fertilizer application and top-dressing.
+        if (low.includes('optimal for fertilizer application') || low.includes('weather conditions are optimal') || low.includes('optimal for fertilizer broadcasting')) {
+            return lang === 'hi'
+                ? 'उर्वरक अनुप्रयोग और टॉप-ड्रेसिंग के लिए मौसम परिस्थितियां पूरी तरह अनुकूल हैं।'
+                : 'ખાતર આપવા અને પૂર્તિ ખાતર (ટોપ-ડ્રેસિંગ) માટે હવામાન અનુકૂળ છે.';
+        }
+
+        // 2. Weather is favorable ({temp}°C, {rain} mm rain). Ideal for fertilizer top-dressing followed by light irrigation.
+        if (low.includes('favorable') || low.includes('ideal for fertilizer')) {
+            const temp = (text.match(/([\d\.]+)\s*°c/i) || [])[1] || '28.5';
+            const rain = (text.match(/([\d\.]+)\s*mm/i) || [])[1] || '0.0';
+            return lang === 'hi'
+                ? `मौसम अनुकूल है (${temp}°C, ${rain} mm वर्षा)। उर्वरक टॉप-ड्रेसिंग और हल्की सिंचाई के लिए उत्तम समय है।`
+                : `હવામાન અનુકૂળ છે (${temp}°C, ${rain} mm વરસાદ). પૂર્તિ ખાતર આપવા અને હળવા પિયત માટે શ્રેષ્ઠ સમય છે.`;
+        }
+
+        // 3. Heavy rainfall forecast in next 48h! Delay fertilizer broadcast to prevent runoff and leaching.
+        if (low.includes('heavy rainfall') || low.includes('delay fertilizer broadcast') || low.includes('prevent runoff')) {
+            return lang === 'hi'
+                ? 'अगले 48 घंटों में भारी वर्षा का अनुमान! बहाव और रिसाव से नुकसान रोकने के लिए उर्वरक छिड़काव में देरी करें।'
+                : 'આગામી 48 કલાકમાં ભારે વરસાદની આગાહી! ખાતર ધોવાઈ જતું અટકાવવા માટે ખાતર આપવાનું મુલતવી રાખો.';
+        }
+
+        // 4. Moderate rain expected / Moderate rainfall ({rain} mm) forecasted
+        if (low.includes('moderate rain') || low.includes('moderate rainfall')) {
+            const rainMatch = text.match(/([\d\.]+)\s*mm/i);
+            if (rainMatch) {
+                const rain = rainMatch[1];
+                return lang === 'hi'
+                    ? `मध्यम वर्षा (${rain} mm) का अनुमान: बेसल उर्वरक मिट्टी में मिलाना सुरक्षित है, लेकिन पत्तियों पर छिड़काव न करें।`
+                    : `મધ્યમ વરસાદ (${rain} mm)ની આગાહી: પાયાનું ખાતર જમીનમાં ભેળવી શકાય છે, પરંતુ છંટકાવ ટાળો.`;
+            }
+            return lang === 'hi'
+                ? 'मध्यम वर्षा का अनुमान। पत्तियों पर छिड़काव न करें; खुराक को विभाजित करें या धीमी गति से घुलने वाले उर्वरक का प्रयोग करें।'
+                : 'મધ્યમ વરસાદની શક્યતા. પાન પર છંટકાવ ટાળો; ખાતર તબક્કાવાર વહેંચીને આપો અથવા ધીમે ઓગળતા ખાતરનો ઉપયોગ કરો.';
+        }
+
+        // 5. High ambient heat detected
+        if (low.includes('high ambient heat') || low.includes('ammonia volatilization')) {
+            return lang === 'hi'
+                ? 'अधिक तापमान दर्ज किया गया। अमोनिया गैस बनकर उड़ने से रोकने के लिए यूरिया का प्रयोग सुबह जल्दी या शाम को करें।'
+                : 'વધુ ગરમી/તાપમાન જણાયું છે. યુરિયાનું બાષ્પીભવન અટકાવવા માટે વહેલી સવારે અથવા મોડી સાંજે યુરિયા આપો.';
+        }
+
+        // 6. Postpone fertilizer application
+        if (low.includes('postpone fertilizer')) {
+            return lang === 'hi'
+                ? 'वर्षा थमने और खेत से पानी निकलने तक उर्वरक का प्रयोग स्थगित रखें।'
+                : 'વરસાદ બંધ ન થાય અને ખેતરમાંથી પાણી ન નીકળે ત્યાં સુધી ખાતર આપવાનું મુલતવી રાખો.';
+        }
+
+        return text;
+    }
+
+    /**
+     * Localizes dynamic AI decision driver strings
+     */
+    translateDecisionDriver(text) {
+        if (!text || this.currentLang === 'en') return text;
+        const lang = this.currentLang;
+        const low = text.toLowerCase();
+
+        // 1. Acidic soil pH
+        if (low.includes('acidic soil ph') && low.includes('buffering')) {
+            const ph = (text.match(/([\d\.]+)/) || [])[1] || '5.0';
+            return lang === 'hi'
+                ? `अम्लीय मृदा pH (${ph}) चूना और फॉस्फेट बफरिंग स्रोतों को प्राथमिकता देता है`
+                : `એસિડિક જમીન pH (${ph}) કેલ્શિયમ અને ફોસ્ફેટ બફરિંગ સ્રોતોને પ્રાથમિકતા આપે છે`;
+        }
+        // 2. Alkaline soil pH
+        if (low.includes('alkaline soil ph') && low.includes('sulphate')) {
+            const ph = (text.match(/([\d\.]+)/) || [])[1] || '8.5';
+            return lang === 'hi'
+                ? `क्षारीय मृदा pH (${ph}) अम्लीय सल्फेट-आधारित उर्वरक स्रोतों को प्राथमिकता देता है`
+                : `ક્ષારીય જમીન pH (${ph}) સલ્ફેટ-આધારિત ખાતર સ્રોતોને પ્રાથમિકતા આપે છે`;
+        }
+        // 3. Moderately Alkaline
+        if (low.includes('moderately alkaline')) {
+            const ph = (text.match(/([\d\.]+)/) || [])[1] || '7.8';
+            return lang === 'hi'
+                ? `मृदा pH मध्यम क्षारीय है (${ph}); पोषक तत्व आमतौर पर सुलभ रहते हैं`
+                : `જમીનનું pH મધ્યમ ક્ષારીય છે (${ph}); પોષક તત્વો સામાન્ય રીતે પ્રાપ્ય રહે છે`;
+        }
+        // 4. Available Phosphorus is High
+        if (low.includes('phosphorus') && low.includes('high')) {
+            const val = (text.match(/([\d\.]+)\s*kg\/ha/i) || [])[1] || '144.0';
+            return lang === 'hi'
+                ? `उपलब्ध फॉस्फोरस अधिक है (${val} kg/ha); मॉडल मृदा भंडार पर भरोसा करते हुए केवल शुरुआती बेसल फॉस्फोरस का उपयोग करता है`
+                : `ઉપલબ્ધ ફોસ્ફરસ વધુ છે (${val} kg/ha); મોડેલ જમીનના ભંડાર પર નિર્ભર રહીને માત્ર પાયાના ફોસ્ફરસનો ઉપયોગ કરે છે`;
+        }
+        // 5. Available Phosphorus is Low
+        if (low.includes('phosphorus') && low.includes('low')) {
+            const val = (text.match(/([\d\.]+)\s*kg\/ha/i) || [])[1] || '10.0';
+            return lang === 'hi'
+                ? `उपलब्ध फॉस्फोरस कम है (${val} kg/ha); मॉडल फॉस्फेट पुनःपूर्ति को प्राथमिकता देता है`
+                : `ઉપલબ્ધ ફોસ્ફરસ ઓછું છે (${val} kg/ha); મોડેલ ફોસ્ફરસ પૂર્તિને પ્રાથમિકતા આપે છે`;
+        }
+        // 6. Available Potassium is High
+        if (low.includes('potassium') && low.includes('high')) {
+            const val = (text.match(/([\d\.]+)\s*kg\/ha/i) || [])[1] || '280.0';
+            return lang === 'hi'
+                ? `उपलब्ध पोटैशियम अधिक है (${val} kg/ha); मॉडल मिट्टी की कमी के बजाय फसल पोषण के लिए पोटाश आवंटित करता है`
+                : `ઉપલબ્ધ પોટેશિયમ વધુ છે (${val} kg/ha); મોડેલ જમીનની ખામીના બદલે પાકના નિભાવ માટે પોટાશ ફાળવે છે`;
+        }
+        // 7. Available Potassium is Low
+        if (low.includes('potassium') && low.includes('low')) {
+            const val = (text.match(/([\d\.]+)\s*kg\/ha/i) || [])[1] || '110.0';
+            return lang === 'hi'
+                ? `उपलब्ध पोटैशियम कम है (${val} kg/ha); मॉडल पोटाश पूरकता को प्राथमिकता देता है`
+                : `ઉપલબ્ધ પોટેશિયમ ઓછું છે (${val} kg/ha); મોડેલ પોટાશ પૂર્તિને પ્રાથમિકતા આપે છે`;
+        }
+        // 8. Soil Organic Carbon is Low
+        if (low.includes('organic carbon') && low.includes('low')) {
+            const val = (text.match(/([\d\.]+)\s*%/i) || [])[1] || '0.50';
+            return lang === 'hi'
+                ? `मृदा जैविक कार्बन कम है (${val}%); जैविक खाद/गोबर खाद प्रबंधन मृदा स्वास्थ्य के लिए लाभकारी है`
+                : `જમીનમાં ઓર્ગેનિક કાર્બન ઓછો છે (${val}%); દેશી ખાતર/સેન્દ્રીય ખાતર વ્યવસ્થાપન જમીન સ્વાસ્થ્ય માટે ફાયદાકારક છે`;
+        }
+        // 9. Available Sulphur is Low
+        if (low.includes('sulphur') && low.includes('low')) {
+            const val = (text.match(/([\d\.]+)\s*ppm/i) || [])[1] || '0.0';
+            return lang === 'hi'
+                ? `उपलब्ध सल्फर कम है (${val} ppm); मॉडल सल्फर-युक्त उर्वरक यौगिकों को शामिल करता है`
+                : `ઉપલબ્ધ સલ્ફર ઓછું છે (${val} ppm); મોડેલ સલ્ફર-યુક્ત ખાતરોનો સમાવેશ કરે છે`;
+        }
+        // 10. Nitrogen deficiency
+        if (low.includes('nitrogen deficiency') || (low.includes('nitrogen') && low.includes('urea'))) {
+            const val = (text.match(/([\d\.]+)\s*kg\/ha/i) || [])[1] || '140.0';
+            return lang === 'hi'
+                ? `नाइट्रोजन की कमी (${val} kg/ha < 280.0 kg/ha) के लिए यूरिया की बेसल और टॉप-ड्रेसिंग विभाजित खुराक आवश्यक है`
+                : `નાઇટ્રોજનની ખામી (${val} kg/ha < 280.0 kg/ha) માટે યુરિયા પાયામાં અને પૂર્તિ ખાતર તરીકે તબક્કાવાર આપવું જરૂરી છે`;
+        }
+        // 11. Standard nutrient balance
+        if (low.includes('standard nutrient balance')) {
+            return lang === 'hi'
+                ? `फसल की लक्षित वृद्धि आवश्यकताओं के अनुसार मानक पोषक तत्व संतुलन`
+                : `પાકની લક્ષિત વૃદ્ધિ જરૂરિયાતો મુજબ પ્રમાણભૂત પોષક તત્વ સંતુલન`;
+        }
+
+        return text;
+    }
+
+    /**
+     * Localizes dynamic Explainable AI Scientific Rationale
+     */
+    translateExplanation(text) {
+        if (!text || this.currentLang === 'en') return text;
+        const lang = this.currentLang;
+
+        const lines = text.split('\n');
+        const translatedLines = lines.map(line => {
+            const trLine = line.trim();
+            if (!trLine) return '';
+
+            // 1. Section 1 Heading: "1. SOIL NUTRIENT STATUS (Input Data vs Reference Scale for Mustard):"
+            if (/^1\.\s*SOIL NUTRIENT STATUS/i.test(trLine)) {
+                const cropMatch = trLine.match(/for\s+([^)]+)\)/i);
+                const rawCrop = cropMatch ? cropMatch[1].trim() : '';
+                const crop = rawCrop ? (this.translateCrop(rawCrop) || rawCrop) : '';
+                return lang === 'hi'
+                    ? `1. मृदा पोषक तत्व स्थिति (${crop ? `${crop} के लिए ` : ''}परीक्षण मान बनाम मानक पैमाना):`
+                    : `1. જમીન પોષક તત્વોની સ્થિતિ (${crop ? `${crop} માટે ` : ''}ચકાસણી પરિણામો વિરુદ્ધ સંદર્ભ માપદંડ):`;
+            }
+
+            // Available Nitrogen (N)
+            if (/Available Nitrogen/i.test(trLine)) {
+                const valMatch = trLine.match(/:\s*([^->]+)->\s*(\w+)/i);
+                const val = valMatch ? valMatch[1].trim() : '140.0 kg/ha';
+                const rawRating = valMatch ? valMatch[2] : 'LOW';
+                const rating = this.translateRating(rawRating);
+                return lang === 'hi'
+                    ? `  • उपलब्ध नाइट्रोजन (N)   : ${val} -> ${rating} (मानक पैमाना: <280 कम, 280-560 मध्यम, >560 अधिक)`
+                    : `  • ઉપલબ્ધ નાઇટ્રોજન (N)   : ${val} -> ${rating} (સંદર્ભ માપદંડ: <280 ઓછું, 280-560 મધ્યમ, >560 વધારે)`;
+            }
+
+            // Available Phosphorus (P)
+            if (/Available Phosphorus/i.test(trLine)) {
+                const valMatch = trLine.match(/:\s*([^->]+)->\s*(\w+)/i);
+                const val = valMatch ? valMatch[1].trim() : '18.0 kg/ha';
+                const rawRating = valMatch ? valMatch[2] : 'MEDIUM';
+                const rating = this.translateRating(rawRating);
+                return lang === 'hi'
+                    ? `  • उपलब्ध फॉस्फोरस (P)   : ${val} -> ${rating} (मानक पैमाना: <10 कम, 10-25 मध्यम, >25 अधिक)`
+                    : `  • ઉપલબ્ધ ફોસ્ફરસ (P)   : ${val} -> ${rating} (સંદર્ભ માપદંડ: <10 ઓછું, 10-25 મધ્યમ, >25 વધારે)`;
+            }
+
+            // Available Potassium (K)
+            if (/Available Potassium/i.test(trLine)) {
+                const valMatch = trLine.match(/:\s*([^->]+)->\s*(\w+)/i);
+                const val = valMatch ? valMatch[1].trim() : '180.0 kg/ha';
+                const rawRating = valMatch ? valMatch[2] : 'MEDIUM';
+                const rating = this.translateRating(rawRating);
+                return lang === 'hi'
+                    ? `  • उपलब्ध पोटैशियम (K)   : ${val} -> ${rating} (मानक पैमाना: <110 कम, 110-280 मध्यम, >280 अधिक)`
+                    : `  • ઉપલબ્ધ પોટેશિયમ (K)   : ${val} -> ${rating} (સંદર્ભ માપદંડ: <110 ઓછું, 110-280 મધ્યમ, >280 વધારે)`;
+            }
+
+            // Soil Organic Carbon (OC)
+            if (/Soil Organic Carbon/i.test(trLine) || /Soil जैविक कार्बन/i.test(trLine)) {
+                const valMatch = trLine.match(/:\s*([^->]+)->\s*(\w+)/i);
+                const val = valMatch ? valMatch[1].trim() : '0.55%';
+                const rawRating = valMatch ? valMatch[2] : 'MEDIUM';
+                const rating = this.translateRating(rawRating);
+                return lang === 'hi'
+                    ? `  • मृदा जैविक कार्बन (OC) : ${val} -> ${rating} (मानक पैमाना: <0.50% कम, 0.50-0.75% मध्यम, >0.75% अधिक)`
+                    : `  • જમીન ઓર્ગેનિક કાર્બન (OC) : ${val} -> ${rating} (સંદર્ભ માપદંડ: <0.50% ઓછું, 0.50-0.75% મધ્યમ, >0.75% વધારે)`;
+            }
+
+            // Note on Organic Matter
+            if (/\[Note on Organic Matter/i.test(trLine) || /\[जैविक पदार्थ पर टिप्पणी/i.test(trLine)) {
+                if (/adequate|high|पर्याप्त/i.test(trLine)) {
+                    return lang === 'hi'
+                        ? `  [जैविक पदार्थ पर टिप्पणी: मृदा जैविक कार्बन पर्याप्त/उच्च श्रेणी में है, जो सूक्ष्मजीवों द्वारा पोषक तत्व उपलब्धता को बढ़ावा देता है।]`
+                        : `  [સેન્દ્રીય પદાર્થ અંગે નોંધ: જમીનમાં ઓર્ગેનિક કાર્બન પૂરતો/વધુ છે, જે સૂક્ષ્મજીવાણુઓ દ્વારા પોષક તત્વો મુક્ત કરવામાં મદદરૂપ છે.]`;
+                } else {
+                    return lang === 'hi'
+                        ? `  [जैविक पदार्थ पर टिप्पणी: मृदा जैविक कार्बन कम है। मिट्टी के जैविक स्वास्थ्य और नमी धारण क्षमता के लिए नियमित रूप से जैविक खाद, गोबर खाद या कम्पोस्ट का प्रयोग लाभकारी है।]`
+                    : `  [સેન્દ્રીય પદાર્થ અંગે નોંધ: જમીનમાં ઓર્ગેનિક કાર્બન ઓછો છે. જમીનનું સ્વાસ્થ્ય અને ભેજ સંગ્રહ શક્તિ વધારવા માટે નિયમિત સેન્દ્રીય/છાણિયું ખાતર આપવું ફાયદાકારક છે.]`;
+                }
+            }
+
+            // Soil pH
+            if (/Soil pH/i.test(trLine)) {
+                const phMatch = trLine.match(/:\s*([\d\.]+)\s*->\s*([^(\.]+)/i);
+                const ph = phMatch ? phMatch[1] : '6.8';
+                const cat = phMatch ? phMatch[2].trim() : 'NEUTRAL';
+                let catText = cat;
+                let detailText = '';
+                if (/acidic/i.test(cat)) {
+                    catText = lang === 'hi' ? 'अम्लीय (ACIDIC)' : 'એસિડિક (ACIDIC)';
+                    detailText = lang === 'hi' ? 'फास्फोरस की उपलब्धता और पोषक तत्व अवशोषण बाधित हो सकता है; चूना या क्षारीय सुधारक की सिफारिश की जाती है।' : 'ફોસ્ફરસની ઉપલબ્ધતા અને પોષક તત્વોનું શોષણ ઘટી શકે છે; ચૂનો અથવા ક્ષાર સુધારકની ભલામણ છે.';
+                } else if (/alkaline|sodic/i.test(cat)) {
+                    catText = lang === 'hi' ? 'क्षारीय (ALKALINE)' : 'ક્ષારીય (ALKALINE)';
+                    detailText = lang === 'hi' ? 'उच्च क्षारीयता सूक्ष्म पोषक तत्वों (Zn, Fe) की उपलब्धता को कम कर सकती है; जिप्सम प्रयोग की सिफारिश की जाती है।' : 'વધુ ક્ષારીયતા સૂક્ષ્મ પોષક તત્વો (Zn, Fe) ની પ્રાપ્યતા ઘટાડી શકે છે; જીપ્સમ આપવાની ભલામણ છે.';
+                } else {
+                    catText = lang === 'hi' ? 'उदासीन / अनुकूल (NEUTRAL / OPTIMAL)' : 'તટસ્થ / ઉત્તમ (NEUTRAL / OPTIMAL)';
+                    detailText = lang === 'hi' ? 'फसल द्वारा पोषक तत्व अवशोषण और सूक्ष्मजीवी गतिविधि के लिए आदर्श स्थिति।' : 'પાક દ્વારા પોષક તત્વો ગ્રહણ કરવા અને સૂક્ષ્મજીવાણુ પ્રવૃત્તિ માટે ઉત્તમ સ્થિતિ.';
+                }
+                return lang === 'hi'
+                    ? `  • मृदा pH                  : ${ph} -> ${catText} (मानक: 6.0-7.5 उदासीन, 7.5-8.5 मध्यम क्षारीय, >8.5 क्षारीय)। ${detailText}`
+                    : `  • જમીન pH                  : ${ph} -> ${catText} (સંદર્ભ: 6.0-7.5 તટસ્થ, 7.5-8.5 મધ્યમ ક્ષારીય, >8.5 ક્ષારીય). ${detailText}`;
+            }
+
+            // Electrical Cond. (EC)
+            if (/Electrical Cond/i.test(trLine)) {
+                const ecMatch = trLine.match(/:\s*([\d\.]+)\s*dS\/m\s*->\s*([^(\.]+)/i);
+                const ec = ecMatch ? ecMatch[1] : '0.45';
+                const cat = ecMatch ? ecMatch[2].trim() : 'SALT-FREE';
+                let catText = cat;
+                let detailText = '';
+                if (/saline/i.test(cat)) {
+                    catText = lang === 'hi' ? 'लवणीय (SALINE)' : 'ખારવાળી (SALINE)';
+                    detailText = lang === 'hi' ? 'बढ़ी हुई लवणता जड़ों द्वारा जल और पोषक तत्व अवशोषण को बाधित कर सकती है।' : 'વધારે ક્ષારના કારણે મૂળ દ્વારા પાણી અને પોષક તત્વો ગ્રહણ કરવામાં અવરોધ આવી શકે છે.';
+                } else {
+                    catText = lang === 'hi' ? 'लवण-मुक्त (SALT-FREE)' : 'ક્ષાર-મુક્ત (SALT-FREE)';
+                    detailText = lang === 'hi' ? 'जड़ों द्वारा पोषक तत्व अवशोषण पर कोई लवणता का प्रतिकूल प्रभाव नहीं है।' : 'મૂળ દ્વારા પોષક તત્વો ગ્રહણ કરવામાં કોઈ ક્ષારની પ્રતિકૂળ અસર નથી.';
+                }
+                return lang === 'hi'
+                    ? `  • विद्युत चालकता (EC)    : ${ec} dS/m -> ${catText} (मानक पैमाना: <1.0 dS/m लवण-मुक्त)। ${detailText}`
+                    : `  • વિદ્યુત વાહકતા (EC)    : ${ec} dS/m -> ${catText} (સંદર્ભ માપદંડ: <1.0 dS/m ક્ષાર-મુક્ત). ${detailText}`;
+            }
+
+            // 2. Section 2 Heading: "2. MODEL PREDICTION & FERTILIZER RECOMMENDATION JUSTIFICATION (1.0 Hectare Plot):"
+            if (/^2\.\s*MODEL PREDICTION/i.test(trLine)) {
+                const haMatch = trLine.match(/\(([\d\.]+)\s*Hectare/i);
+                const ha = haMatch ? haMatch[1] : '1.0';
+                return lang === 'hi'
+                    ? `2. मॉडल पूर्वानुमान एवं उर्वरक सिफारिश का वैज्ञानिक आधार (${ha} हेक्टेयर प्लॉट):`
+                    : `2. મોડેલ પરિણામ અને ખાતર ભલામણનો વૈજ્ઞાનિક આધાર (${ha} હેક્ટર પ્લોટ):`;
+            }
+
+            // Phosphorus Management
+            if (/Phosphorus Management/i.test(trLine)) {
+                const valMatch = trLine.match(/HIGH\s*\(([\d\.]+)\s*kg\/ha\)/i) || trLine.match(/LOW\s*\(([\d\.]+)\s*kg\/ha\)/i) || trLine.match(/MEDIUM\s*range\s*\(([\d\.]+)\s*kg\/ha\)/i) || trLine.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '18.0';
+                const dapMatch = trLine.match(/recommends\s*([\d\.]+)\s*kg\/ha DAP/i);
+                const dap = dapMatch ? dapMatch[1] : '73.4';
+                const nMatch = trLine.match(/\(([\d\.]+)\s*kg N\)/i);
+                const n = nMatch ? nMatch[1] : '13.2';
+                const pMatch = trLine.match(/\(([\d\.]+)\s*kg P2O5\)/i);
+                const p = pMatch ? pMatch[1] : '33.8';
+
+                if (/already HIGH/i.test(trLine) || /HIGH/i.test(trLine)) {
+                    return lang === 'hi'
+                        ? `  • फॉस्फोरस प्रबंधन: मिट्टी में उपलब्ध फॉस्फोरस पहले से अधिक (${val} kg/ha) है। मिट्टी में फॉस्फोरस की कोई कमी नहीं है। मॉडल ${dap} kg/ha DAP की सिफारिश मुख्य रूप से शुरुआती बेसल नाइट्रोजन (${n} kg N) और शुरुआती जड़ों के विकास के लिए न्यूनतम फॉस्फेट (${p} kg P₂O₅) प्रदान करने के लिए करता है, जबकि शेष आवश्यकता मिट्टी के मौजूदा भंडार से पूरी होती है।`
+                        : `  • ફોસ્ફરસ વ્યવસ્થાપન: જમીનમાં ઉપલબ્ધ ફોસ્ફરસ પહેલેથી વધુ (${val} kg/ha) છે. જમીનમાં ફોસ્ફરસની કોઈ ખામી નથી. મોડેલ ${dap} kg/ha DAP ની ભલામણ મુખ્યત્વે પાયાનો નાઇટ્રોજન (${n} kg N) અને મૂળના પ્રારંભિક વિકાસ માટે જરૂરી ફોસ્ફેટ (${p} kg P₂O₅) આપવા માટે કરે છે, જ્યારે બાકીની જરૂરિયાત જમીનમાં રહેલા ફોસ્ફરસ ભંડારમાંથી પૂરી થાય છે.`;
+                } else if (/LOW/i.test(trLine)) {
+                    return lang === 'hi'
+                        ? `  • फॉस्फोरस प्रबंधन: मिट्टी में उपलब्ध फॉस्फोरस कम (${val} kg/ha) है। मॉडल मिट्टी की कमी को दूर करने और जड़ों के विकास के लिए ${dap} kg/ha DAP (${p} kg P₂O₅) की सिफारिश करता है।`
+                        : `  • ફોસ્ફરસ વ્યવસ્થાપન: જમીનમાં ઉપલબ્ધ ફોસ્ફરસ ઓછું (${val} kg/ha) છે. મોડેલ જમીનની ખામી સુધારવા અને મૂળના વિકાસ માટે ${dap} kg/ha DAP (${p} kg P₂O₅) ની ભલામણ કરે છે.`;
+                } else {
+                    return lang === 'hi'
+                        ? `  • फॉस्फोरस प्रबंधन: मिट्टी में उपलब्ध फॉस्फोरस मध्यम (${val} kg/ha) है। मॉडल मानक फसल मांग (${p} kg P₂O₅) पूरी करने और उर्वरता बनाए रखने के लिए ${dap} kg/ha DAP की सिफारिश करता है।`
+                        : `  • ફોસ્ફરસ વ્યવસ્થાપન: જમીનમાં ઉપલબ્ધ ફોસ્ફરસ મધ્યમ (${val} kg/ha) છે. મોડેલ પાકની સામાન્ય જરૂરિયાત (${p} kg P₂O₅) પૂરી કરવા અને જમીનની ફળદ્રુપતા જાળવવા ${dap} kg/ha DAP ની ભલામણ કરે છે.`;
+                }
+            }
+
+            // Nitrogen Management
+            if (/Nitrogen Management/i.test(trLine)) {
+                const valMatch = trLine.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '140.0';
+                const targetMatch = trLine.match(/target of\s*([\d\.]+)\s*kg\/ha N/i);
+                const target = targetMatch ? targetMatch[1] : '112.5';
+                const nDapMatch = trLine.match(/Accounting for\s*([\d\.]+)\s*kg N/i);
+                const nDap = nDapMatch ? nDapMatch[1] : '13.2';
+                const remNMatch = trLine.match(/remaining\s*([\d\.]+)\s*kg\/ha N/i);
+                const remN = remNMatch ? remNMatch[1] : '99.3';
+                const ureaMatch = trLine.match(/through\s*([\d\.]+)\s*kg\/ha/i);
+                const urea = ureaMatch ? ureaMatch[1] : '215.9';
+
+                return lang === 'hi'
+                    ? `  • नाइट्रोजन प्रबंधन : मिट्टी में उपलब्ध नाइट्रोजन (${val} kg/ha) है, जिससे फसल का समायोजित लक्ष्य ${target} kg/ha N निर्धारित हुआ है। DAP से प्राप्त ${nDap} kg N को घटाकर, शेष ${remN} kg/ha N की पूर्ति ${urea} kg/ha यूरिया द्वारा की जाती है, जिसे नाइट्रोजन उपयोग दक्षता (NUE) बढ़ाने और बर्बादी रोकने के लिए विकास के विभिन्न चरणों में विभाजित खुराक में दिया जाता है।`
+                    : `  • નાઇટ્રોજન વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ નાઇટ્રોજન (${val} kg/ha) હોવાથી પાકનો સંશોધિત લક્ષ્યાંક ${target} kg/ha N નક્કી થયો છે. DAP માંથી મળતા ${nDap} kg N ને બાદ કરતાં, બાકીનો ${remN} kg/ha N ${urea} kg/ha યુરિયા દ્વારા પૂરો પાડવામાં આવે છે, જે નાઇટ્રોજન ઉપયોગ ક્ષમતા (NUE) વધારવા અને બગાડ અટકાવવા તબક્કાવાર વહેંચીને આપવામાં આવે છે.`;
+            }
+
+            // Potassium Management
+            if (/Potassium Management/i.test(trLine)) {
+                const valMatch = trLine.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '134.0';
+                const mopMatch = trLine.match(/([\d\.]+)\s*kg\/ha MOP/i);
+                const mop = mopMatch ? mopMatch[1] : '75.0';
+                const kMatch = trLine.match(/supply\s*([\d\.]+)\s*kg K2O/i);
+                const k = kMatch ? kMatch[1] : '45.0';
+
+                if (/already HIGH/i.test(trLine)) {
+                    return lang === 'hi'
+                        ? `  • पोटैशियम प्रबंधन : मिट्टी में उपलब्ध पोटैशियम पहले से अधिक (${val} kg/ha) है। मॉडल मिट्टी की कमी सुधारने के बजाय दाना/फली भराव के लिए ${mop} kg/ha MOP की रखरखाव खुराक की सिफारिश करता है।`
+                        : `  • પોટેશિયમ વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ પોટેશિયમ પહેલેથી વધુ (${val} kg/ha) છે. મોડેલ જમીનની ખામી સુધારવાને બદલે દાણા ભરાવ માટે ${mop} kg/ha MOP નિભાવ માત્રા તરીકે આપવાની ભલામણ કરે છે.`;
+                } else if (/LOW/i.test(trLine)) {
+                    return lang === 'hi'
+                        ? `  • पोटैशियम प्रबंधन : मिट्टी में उपलब्ध पोटैशियम कम (${val} kg/ha) है। मॉडल मिट्टी की कमी दूर करने और पौधों की मजबूती के लिए ${k} kg K₂O देने हेतु ${mop} kg/ha MOP की सिफारिश करता है।`
+                        : `  • પોટેશિયમ વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ પોટેશિયમ ઓછું (${val} kg/ha) છે. મોડેલ જમીનની ખામી સુધારવા અને પાકની રોગપ્રતિકારક શક્તિ વધારવા ${k} kg K₂O આપવા ${mop} kg/ha MOP ની ભલામણ કરે છે.`;
+                } else {
+                    return lang === 'hi'
+                        ? `  • पोटैशियम प्रबंधन : मिट्टी में उपलब्ध पोटैशियम मध्यम (${val} kg/ha) श्रेणी में है। मॉडल मानक फसल अवशोषण आवश्यकताओं को पूरा करने के लिए ${k} kg K₂O प्रदान करने हेतु ${mop} kg/ha MOP की सिफारिश करता है।`
+                        : `  • પોટેશિયમ વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ પોટેશિયમ મધ્યમ (${val} kg/ha) છે. મોડેલ પાકની પ્રમાણભૂત પોષક જરૂરિયાતો પૂરી કરવા ${k} kg K₂O આપવા માટે ${mop} kg/ha MOP ની ભલામણ કરે છે.`;
+                }
+            }
+
+            // 3. Section 3 Heading: "3. SUMMARY:"
+            if (/^3\.\s*SUMMARY/i.test(trLine)) {
+                return lang === 'hi' ? '3. सारांश:' : '3. સારાંશ:';
+            }
+
+            // Summary content
+            if (/The recommended fertilizer quantities are generated by the AI model/i.test(trLine)) {
+                return lang === 'hi'
+                    ? '  अनुशंसित उर्वरक मात्राएं AI मॉडल द्वारा फसल की आवश्यकताओं और मिट्टी की स्थिति के आधार पर निर्धारित की गई हैं। मिट्टी परीक्षण मान प्रारंभिक उर्वरता दर्शाते हैं, जबकि यह उर्वरक समय-सारणी लक्षित फसल के लिए सटीक संतुलित पोषक तत्व प्रदान करती है।'
+                    : '  ભલામણ કરેલ ખાતરનો જથ્થો AI મોડેલ દ્વારા પાકની જરૂરિયાતો અને જમીનની સ્થિતિના આધારે નક્કી કરવામાં આવ્યો છે. જમીન ચકાસણી પરિણામો મૂળ ફળદ્રુપતા દર્શાવે છે, જ્યારે ખાતરની આ સમય-સારણી પાક માટે સચોટ સંતુલિત પોષક તત્વો પૂરા પાડે છે.';
+            }
+
+            return line;
+        });
+
+        return translatedLines.join('\n');
     }
 
     translatePage() {
