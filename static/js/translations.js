@@ -2647,17 +2647,55 @@ class I18nManager {
         const lang = this.currentLang;
         const low = text.toLowerCase();
 
+        // 1. Weather conditions are optimal for fertilizer application and top-dressing.
+        if (low.includes('optimal for fertilizer application') || low.includes('weather conditions are optimal') || low.includes('optimal for fertilizer broadcasting')) {
+            return lang === 'hi'
+                ? 'उर्वरक अनुप्रयोग और टॉप-ड्रेसिंग के लिए मौसम परिस्थितियां पूरी तरह अनुकूल हैं।'
+                : 'ખાતર આપવા અને પૂર્તિ ખાતર (ટોપ-ડ્રેસિંગ) માટે હવામાન અનુકૂળ છે.';
+        }
+
+        // 2. Weather is favorable ({temp}°C, {rain} mm rain). Ideal for fertilizer top-dressing followed by light irrigation.
         if (low.includes('favorable') || low.includes('ideal for fertilizer')) {
             const temp = (text.match(/([\d\.]+)\s*°c/i) || [])[1] || '28.5';
             const rain = (text.match(/([\d\.]+)\s*mm/i) || [])[1] || '0.0';
-            return lang === 'hi' ? `मौसम अनुकूल है (${temp}°C, ${rain} mm वर्षा)। उर्वरक टॉप-ड्रेसिंग और हल्की सिंचाई के लिए उत्तम समय है।` : `હવામાન અનુકૂળ છે (${temp}°C, ${rain} mm વરસાદ). પૂર્તિ ખાતર આપવા અને હળવા પિયત માટે શ્રેષ્ઠ સમય છે.`;
+            return lang === 'hi'
+                ? `मौसम अनुकूल है (${temp}°C, ${rain} mm वर्षा)। उर्वरक टॉप-ड्रेसिंग और हल्की सिंचाई के लिए उत्तम समय है।`
+                : `હવામાન અનુકૂળ છે (${temp}°C, ${rain} mm વરસાદ). પૂર્તિ ખાતર આપવા અને હળવા પિયત માટે શ્રેષ્ઠ સમય છે.`;
         }
-        if (low.includes('moderate rainfall')) {
-            const rain = (text.match(/([\d\.]+)\s*mm/i) || [])[1] || '8.0';
-            return lang === 'hi' ? `मध्यम वर्षा (${rain} mm) का अनुमान: बेसल उर्वरक मिट्टी में मिलाना सुरक्षित है, लेकिन पत्तियों पर छिड़काव न करें।` : `મધ્યમ વરસાદ (${rain} mm)ની આગાહી: પાયાનું ખાતર જમીનમાં ભેળવી શકાય છે, પરંતુ છંટકાવ ટાળો.`;
+
+        // 3. Heavy rainfall forecast in next 48h! Delay fertilizer broadcast to prevent runoff and leaching.
+        if (low.includes('heavy rainfall') || low.includes('delay fertilizer broadcast') || low.includes('prevent runoff')) {
+            return lang === 'hi'
+                ? 'अगले 48 घंटों में भारी वर्षा का अनुमान! बहाव और रिसाव से नुकसान रोकने के लिए उर्वरक छिड़काव में देरी करें।'
+                : 'આગામી 48 કલાકમાં ભારે વરસાદની આગાહી! ખાતર ધોવાઈ જતું અટકાવવા માટે ખાતર આપવાનું મુલતવી રાખો.';
         }
+
+        // 4. Moderate rain expected / Moderate rainfall ({rain} mm) forecasted
+        if (low.includes('moderate rain') || low.includes('moderate rainfall')) {
+            const rainMatch = text.match(/([\d\.]+)\s*mm/i);
+            if (rainMatch) {
+                const rain = rainMatch[1];
+                return lang === 'hi'
+                    ? `मध्यम वर्षा (${rain} mm) का अनुमान: बेसल उर्वरक मिट्टी में मिलाना सुरक्षित है, लेकिन पत्तियों पर छिड़काव न करें।`
+                    : `મધ્યમ વરસાદ (${rain} mm)ની આગાહી: પાયાનું ખાતર જમીનમાં ભેળવી શકાય છે, પરંતુ છંટકાવ ટાળો.`;
+            }
+            return lang === 'hi'
+                ? 'मध्यम वर्षा का अनुमान। पत्तियों पर छिड़काव न करें; खुराक को विभाजित करें या धीमी गति से घुलने वाले उर्वरक का प्रयोग करें।'
+                : 'મધ્યમ વરસાદની શક્યતા. પાન પર છંટકાવ ટાળો; ખાતર તબક્કાવાર વહેંચીને આપો અથવા ધીમે ઓગળતા ખાતરનો ઉપયોગ કરો.';
+        }
+
+        // 5. High ambient heat detected
+        if (low.includes('high ambient heat') || low.includes('ammonia volatilization')) {
+            return lang === 'hi'
+                ? 'अधिक तापमान दर्ज किया गया। अमोनिया गैस बनकर उड़ने से रोकने के लिए यूरिया का प्रयोग सुबह जल्दी या शाम को करें।'
+                : 'વધુ ગરમી/તાપમાન જણાયું છે. યુરિયાનું બાષ્પીભવન અટકાવવા માટે વહેલી સવારે અથવા મોડી સાંજે યુરિયા આપો.';
+        }
+
+        // 6. Postpone fertilizer application
         if (low.includes('postpone fertilizer')) {
-            return lang === 'hi' ? `वर्षा थमने और खेत से पानी निकलने तक उर्वरक का प्रयोग स्थगित रखें।` : `વરસાદ બંધ ન થાય અને ખેતરમાંથી પાણી ન નીકળે ત્યાં સુધી ખાતર આપવાનું મુલતવી રાખો.`;
+            return lang === 'hi'
+                ? 'वर्षा थमने और खेत से पानी निकलने तक उर्वरक का प्रयोग स्थगित रखें।'
+                : 'વરસાદ બંધ ન થાય અને ખેતરમાંથી પાણી ન નીકળે ત્યાં સુધી ખાતર આપવાનું મુલતવી રાખો.';
         }
 
         return text;

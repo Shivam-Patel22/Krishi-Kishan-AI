@@ -2358,3 +2358,38 @@ def localize_explanation(text: str, lang: str = 'en') -> str:
 
     return '\n'.join(translated_lines)
 
+
+def localize_weather_advisory(text: str, lang: str = 'en') -> str:
+    if not text or lang == 'en':
+        return text
+    low = text.lower()
+
+    if 'optimal for fertilizer application' in low or 'weather conditions are optimal' in low or 'optimal for fertilizer broadcasting' in low:
+        return 'उर्वरक अनुप्रयोग और टॉप-ड्रेसिंग के लिए मौसम परिस्थितियां पूरी तरह अनुकूल हैं।' if lang == 'hi' else 'ખાતર આપવા અને પૂર્તિ ખાતર (ટોપ-ડ્રેસિંગ) માટે હવામાન અનુકૂળ છે.'
+
+    if 'favorable' in low or 'ideal for fertilizer' in low:
+        temp_m = re.search(r'([\d\.]+)\s*°c', text, re.I)
+        rain_m = re.search(r'([\d\.]+)\s*mm', text, re.I)
+        temp = temp_m.group(1) if temp_m else '28.5'
+        rain = rain_m.group(1) if rain_m else '0.0'
+        return f"मौसम अनुकूल है ({temp}°C, {rain} mm वर्षा)। उर्वरक टॉप-ड्रेसिंग और हल्की सिंचाई के लिए उत्तम समय है।" if lang == 'hi' else f"હવામાન અનુકૂળ છે ({temp}°C, {rain} mm વરસાદ). પૂર્તિ ખાતર આપવા અને હળવા પિયત માટે શ્રેષ્ઠ સમય છે."
+
+    if 'heavy rainfall' in low or 'delay fertilizer broadcast' in low or 'prevent runoff' in low:
+        return 'अगले 48 घंटों में भारी वर्षा का अनुमान! बहाव और रिसाव से नुकसान रोकने के लिए उर्वरक छिड़काव में देरी करें।' if lang == 'hi' else 'આગામી 48 કલાકમાં ભારે વરસાદની આગાહી! ખાતર ધોવાઈ જતું અટકાવવા માટે ખાતર આપવાનું મુલતવી રાખો.'
+
+    if 'moderate rain' in low or 'moderate rainfall' in low:
+        rain_m = re.search(r'([\d\.]+)\s*mm', text, re.I)
+        if rain_m:
+            rain = rain_m.group(1)
+            return f"मध्यम वर्षा ({rain} mm) का अनुमान: बेसल उर्वरक मिट्टी में मिलाना सुरक्षित है, लेकिन पत्तियों पर छिड़काव न करें।" if lang == 'hi' else f"મધ્યમ વરસાદ ({rain} mm)ની આગાહી: પાયાનું ખાતર જમીનમાં ભેળવી શકાય છે, પરંતુ છંટકાવ ટાળો."
+        return 'मध्यम वर्षा का अनुमान। पत्तियों पर छिड़काव न करें; खुराक को विभाजित करें या धीमी गति से घुलने वाले उर्वरक का प्रयोग करें।' if lang == 'hi' else 'મધ્યમ વરસાદની શક્યતા. પાન પર છંટકાવ ટાળો; ખાતર તબક્કાવાર વહેંચીને આપો અથવા ધીમે ઓગળતા ખાતરનો ઉપયોગ કરો.'
+
+    if 'high ambient heat' in low or 'ammonia volatilization' in low:
+        return 'अधिक तापमान दर्ज किया गया। अमोनिया गैस बनकर उड़ने से रोकने के लिए यूरिया का प्रयोग सुबह जल्दी या शाम को करें।' if lang == 'hi' else 'વધુ ગરમી/તાપમાન જણાયું છે. યુરિયાનું બાષ્પીભવન અટકાવવા માટે વહેલી સવારે અથવા મોડી સાંજે યુરિયા આપો.'
+
+    if 'postpone fertilizer' in low:
+        return 'वर्षा थमने और खेत से पानी निकलने तक उर्वरक का प्रयोग स्थगित रखें।' if lang == 'hi' else 'વરસાદ બંધ ન થાય અને ખેતરમાંથી પાણી ન નીકળે ત્યાં સુધી ખાતર આપવાનું મુલતવી રાખો.'
+
+    return text
+
+

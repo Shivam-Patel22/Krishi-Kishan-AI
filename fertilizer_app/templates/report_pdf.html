@@ -427,7 +427,7 @@
                 <div><span style="color:#64748b; display:block;">{{ t.rain_label }}</span><strong>{{ rec.weather_record.rainfall_forecast_mm }} mm</strong></div>
                 <div><span style="color:#64748b; display:block;">{{ t.wind_label }}</span><strong>{{ rec.weather_record.wind_speed_kmh }} km/h</strong></div>
             </div>
-            <p style="font-size: 7pt; color: #64748b;">{{ t.weather_optimal_text }}</p>
+            <p style="font-size: 7pt; color: #64748b;">{{ weather_advisory_localized|default:t.weather_optimal_text }}</p>
         </div>
     </div>
 
