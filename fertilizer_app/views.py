@@ -27,7 +27,7 @@ from fertilizer_app.services.weather_service import fetch_weather_data
 from fertilizer_app.translations import (
     get_translations_for_lang, localize_crop, localize_fertilizer,
     localize_soil_type, localize_split_item, localize_ph_amendment,
-    localize_micronutrients
+    localize_micronutrients, localize_explanation, localize_decision_driver
 )
 
 
@@ -67,6 +67,7 @@ def download_recommendation_pdf_view(request, pk):
     soil_type = localize_soil_type(rec.field.soil_type, lang)
     ph_amendment = localize_ph_amendment(rec.ph_amendment, lang)
     micronutrient_advice = localize_micronutrients(rec.micronutrient_advice, lang)
+    explanation_localized = localize_explanation(rec.explanation, lang)
 
     split_schedule = []
     if rec.split_schedule:
@@ -91,6 +92,7 @@ def download_recommendation_pdf_view(request, pk):
         'soil_type': soil_type,
         'ph_amendment': ph_amendment,
         'micronutrient_advice': micronutrient_advice,
+        'explanation_localized': explanation_localized,
         'split_schedule': split_schedule,
         'alternatives_localized': alternatives_localized,
     })

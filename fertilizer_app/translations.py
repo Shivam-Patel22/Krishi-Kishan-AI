@@ -398,3 +398,301 @@ def localize_split_item(item: Dict[str, Any], lang: str = 'en') -> Dict[str, Any
     new_item['timing_days'] = timing
     new_item['instructions'] = instr
     return new_item
+
+
+def localize_decision_driver(text: str, lang: str = 'en') -> str:
+    if not text or lang == 'en':
+        return text
+    low = text.lower()
+
+    if 'acidic soil ph' in low and 'buffering' in low:
+        m = re.search(r'([\d\.]+)', text)
+        ph = m.group(1) if m else '5.0'
+        return f"अम्लीय मृदा pH ({ph}) चूना और फॉस्फेट बफरिंग स्रोतों को प्राथमिकता देता है" if lang == 'hi' else f"એસિડિક જમીન pH ({ph}) કેલ્શિયમ અને ફોસ્ફેટ બફરિંગ સ્રોતોને પ્રાથમિકતા આપે છે"
+    
+    if 'alkaline soil ph' in low and 'sulphate' in low:
+        m = re.search(r'([\d\.]+)', text)
+        ph = m.group(1) if m else '8.5'
+        return f"क्षारीय मृदा pH ({ph}) अम्लीय सल्फेट-आधारित उर्वरक स्रोतों को प्राथमिकता देता है" if lang == 'hi' else f"ક્ષારીય જમીન pH ({ph}) સલ્ફેટ-આધારિત ખાતર સ્રોતોને પ્રાથમિકતા આપે છે"
+    
+    if 'moderately alkaline' in low:
+        m = re.search(r'([\d\.]+)', text)
+        ph = m.group(1) if m else '7.8'
+        return f"मृदा pH मध्यम क्षारीय है ({ph}); पोषक तत्व आमतौर पर सुलभ रहते हैं" if lang == 'hi' else f"જમીનનું pH મધ્યમ ક્ષારીય છે ({ph}); પોષક તત્વો સામાન્ય રીતે પ્રાપ્ય રહે છે"
+
+    if 'phosphorus' in low and 'high' in low:
+        m = re.search(r'([\d\.]+)\s*kg\/ha', text, re.I)
+        val = m.group(1) if m else '144.0'
+        return f"उपलब्ध फॉस्फोरस अधिक है ({val} kg/ha); मॉडल मृदा भंडार पर भरोसा करते हुए केवल शुरुआती बेसल फॉस्फोरस का उपयोग करता है" if lang == 'hi' else f"ઉપલબ્ધ ફોસ્ફરસ વધુ છે ({val} kg/ha); મોડેલ જમીનના ભંડાર પર નિર્ભર રહીને માત્ર પાયાના ફોસ્ફરસનો ઉપયોગ કરે છે"
+
+    if 'phosphorus' in low and 'low' in low:
+        m = re.search(r'([\d\.]+)\s*kg\/ha', text, re.I)
+        val = m.group(1) if m else '10.0'
+        return f"उपलब्ध फॉस्फोरस कम है ({val} kg/ha); मॉडल फॉस्फेट पुनःपूर्ति को प्राथमिकता देता है" if lang == 'hi' else f"ઉપલબ્ધ ફોસ્ફરસ ઓછું છે ({val} kg/ha); મોડેલ ફોસ્ફરસ પૂર્તિને પ્રાથમિકતા આપે છે"
+
+    if 'potassium' in low and 'high' in low:
+        m = re.search(r'([\d\.]+)\s*kg\/ha', text, re.I)
+        val = m.group(1) if m else '280.0'
+        return f"उपलब्ध पोटैशियम अधिक है ({val} kg/ha); मॉडल मिट्टी की कमी के बजाय फसल पोषण के लिए पोटाश आवंटित करता है" if lang == 'hi' else f"ઉપલબ્ધ પોટેશિયમ વધુ છે ({val} kg/ha); મોડેલ જમીનની ખામીના બદલે પાકના નિભાવ માટે પોટાશ ફાળવે છે"
+
+    if 'potassium' in low and 'low' in low:
+        m = re.search(r'([\d\.]+)\s*kg\/ha', text, re.I)
+        val = m.group(1) if m else '110.0'
+        return f"उपलब्ध पोटैशियम कम है ({val} kg/ha); मॉडल पोटाश पूरकता को प्राथमिकता देता है" if lang == 'hi' else f"ઉપલબ્ધ પોટેશિયમ ઓછું છે ({val} kg/ha); મોડેલ પોટાશ પૂર્તિને પ્રાથમિકતા આપે છે"
+
+    if 'organic carbon' in low and 'low' in low:
+        m = re.search(r'([\d\.]+)\s*%', text, re.I)
+        val = m.group(1) if m else '0.50'
+        return f"मृदा जैविक कार्बन कम है ({val}%); जैविक खाद/गोबर खाद प्रबंधन मृदा स्वास्थ्य के लिए लाभकारी है" if lang == 'hi' else f"જમીનમાં ઓર્ગેનિક કાર્બન ઓછો છે ({val}%); દેશી ખાતર/સેન્દ્રીય ખાતર વ્યવસ્થાપન જમીન સ્વાસ્થ્ય માટે ફાયદાકારક છે"
+
+    if 'sulphur' in low and 'low' in low:
+        m = re.search(r'([\d\.]+)\s*ppm', text, re.I)
+        val = m.group(1) if m else '0.0'
+        return f"उपलब्ध सल्फर कम है ({val} ppm); मॉडल सल्फर-युक्त उर्वरक यौगिकों को शामिल करता है" if lang == 'hi' else f"ઉપલબ્ધ સલ્ફર ઓછું છે ({val} ppm); મોડેલ સલ્ફર-યુક્ત ખાતરોનો સમાવેશ કરે છે"
+
+    if 'nitrogen deficiency' in low or ('nitrogen' in low and 'urea' in low):
+        m = re.search(r'([\d\.]+)\s*kg\/ha', text, re.I)
+        val = m.group(1) if m else '140.0'
+        return f"नाइट्रोजन की कमी ({val} kg/ha < 280.0 kg/ha) के लिए यूरिया की बेसल और टॉप-ड्रेसिंग विभाजित खुराक आवश्यक है" if lang == 'hi' else f"નાઇટ્રોજનની ખામી (${val} kg/ha < 280.0 kg/ha) માટે યુરિયા પાયામાં અને પૂર્તિ ખાતર તરીકે તબક્કાવાર આપવું જરૂરી છે"
+
+    if 'standard nutrient balance' in low:
+        return "फसल की लक्षित वृद्धि आवश्यकताओं के अनुसार मानक पोषक तत्व संतुलन" if lang == 'hi' else "પાકની લક્ષિત વૃદ્ધિ જરૂરિયાતો મુજબ પ્રમાણભૂત પોષક તત્વ સંતુલન"
+
+    return text
+
+
+def localize_explanation(text: str, lang: str = 'en') -> str:
+    if not text or lang == 'en':
+        return text
+
+    lines = text.split('\n')
+    translated_lines = []
+
+    for line in lines:
+        tr = line.strip()
+        if not tr:
+            translated_lines.append('')
+            continue
+
+        if re.search(r'^1\.\s*SOIL NUTRIENT STATUS', tr, re.I):
+            crop_m = re.search(r'for\s+([^)]+)\)', tr, re.I)
+            raw_c = crop_m.group(1).strip() if crop_m else ''
+            crop = localize_crop(raw_c, lang) if raw_c else ''
+            translated_lines.append(
+                f"1. मृदा पोषक तत्व स्थिति ({crop + ' के लिए ' if crop else ''}परीक्षण मान बनाम मानक पैमाना):"
+                if lang == 'hi' else
+                f"1. જમીન પોષક તત્વોની સ્થિતિ ({crop + ' માટે ' if crop else ''}ચકાસણી પરિણામો વિરુદ્ધ સંદર્ભ માપદંડ):"
+            )
+            continue
+
+        if 'Available Nitrogen' in tr:
+            m = re.search(r':\s*([^->]+)->\s*(\w+)', tr, re.I)
+            val = m.group(1).strip() if m else '140.0 kg/ha'
+            rating = m.group(2).upper() if m else 'LOW'
+            r_tr = 'कम (LOW)' if 'LOW' in rating else ('मध्यम (MEDIUM)' if 'MED' in rating else 'अधिक (HIGH)')
+            if lang == 'gu':
+                r_tr = 'ઓછું (LOW)' if 'LOW' in rating else ('મધ્યમ (MEDIUM)' if 'MED' in rating else 'વધારે (HIGH)')
+            translated_lines.append(
+                f"  • उपलब्ध नाइट्रोजन (N)   : {val} -> {r_tr} (मानक पैमाना: <280 कम, 280-560 मध्यम, >560 अधिक)"
+                if lang == 'hi' else
+                f"  • ઉપલબ્ધ નાઇટ્રોજન (N)   : {val} -> {r_tr} (સંદર્ભ માપદંડ: <280 ઓછું, 280-560 મધ્યમ, >560 વધારે)"
+            )
+            continue
+
+        if 'Available Phosphorus' in tr:
+            m = re.search(r':\s*([^->]+)->\s*(\w+)', tr, re.I)
+            val = m.group(1).strip() if m else '18.0 kg/ha'
+            rating = m.group(2).upper() if m else 'MEDIUM'
+            r_tr = 'कम (LOW)' if 'LOW' in rating else ('मध्यम (MEDIUM)' if 'MED' in rating else 'अधिक (HIGH)')
+            if lang == 'gu':
+                r_tr = 'ઓછું (LOW)' if 'LOW' in rating else ('મધ્યમ (MEDIUM)' if 'MED' in rating else 'વધારે (HIGH)')
+            translated_lines.append(
+                f"  • उपलब्ध फॉस्फोरस (P)   : {val} -> {r_tr} (मानक पैमाना: <10 कम, 10-25 मध्यम, >25 अधिक)"
+                if lang == 'hi' else
+                f"  • ઉપલબ્ધ ફોસ્ફરસ (P)   : {val} -> {r_tr} (સંદર્ભ માપદંડ: <10 ઓછું, 10-25 મધ્યમ, >25 વધારે)"
+            )
+            continue
+
+        if 'Available Potassium' in tr:
+            m = re.search(r':\s*([^->]+)->\s*(\w+)', tr, re.I)
+            val = m.group(1).strip() if m else '180.0 kg/ha'
+            rating = m.group(2).upper() if m else 'MEDIUM'
+            r_tr = 'कम (LOW)' if 'LOW' in rating else ('मध्यम (MEDIUM)' if 'MED' in rating else 'अधिक (HIGH)')
+            if lang == 'gu':
+                r_tr = 'ઓછું (LOW)' if 'LOW' in rating else ('મધ્યમ (MEDIUM)' if 'MED' in rating else 'વધારે (HIGH)')
+            translated_lines.append(
+                f"  • उपलब्ध पोटैशियम (K)   : {val} -> {r_tr} (मानक पैमाना: <110 कम, 110-280 मध्यम, >280 अधिक)"
+                if lang == 'hi' else
+                f"  • ઉપલબ્ધ પોટેશિયમ (K)   : {val} -> {r_tr} (સંદર્ભ માપદંડ: <110 ઓછું, 110-280 મધ્યમ, >280 વધારે)"
+            )
+            continue
+
+        if 'Soil Organic Carbon' in tr or 'Soil जैविक कार्बन' in tr:
+            m = re.search(r':\s*([^->]+)->\s*(\w+)', tr, re.I)
+            val = m.group(1).strip() if m else '0.55%'
+            rating = m.group(2).upper() if m else 'MEDIUM'
+            r_tr = 'कम (LOW)' if 'LOW' in rating else ('मध्यम (MEDIUM)' if 'MED' in rating else 'अधिक (HIGH)')
+            if lang == 'gu':
+                r_tr = 'ઓછું (LOW)' if 'LOW' in rating else ('મધ્યમ (MEDIUM)' if 'MED' in rating else 'વધારે (HIGH)')
+            translated_lines.append(
+                f"  • मृदा जैविक कार्बन (OC) : {val} -> {r_tr} (मानक पैमाना: <0.50% कम, 0.50-0.75% मध्यम, >0.75% अधिक)"
+                if lang == 'hi' else
+                f"  • જમીન ઓર્ગેનિક કાર્બન (OC) : {val} -> {r_tr} (સંદર્ભ માપદંડ: <0.50% ઓછું, 0.50-0.75% મધ્યમ, >0.75% વધારે)"
+            )
+            continue
+
+        if '[Note on Organic Matter' in tr or '[जैविक पदार्थ पर टिप्पणी' in tr:
+            if re.search(r'adequate|high|पर्याप्त', tr, re.I):
+                translated_lines.append(
+                    "  [जैविक पदार्थ पर टिप्पणी: मृदा जैविक कार्बन पर्याप्त/उच्च श्रेणी में है, जो सूक्ष्मजीवों द्वारा पोषक तत्व उपलब्धता को बढ़ावा देता है।]"
+                    if lang == 'hi' else
+                    "  [સેન્દ્રીય પદાર્થ અંગે નોંધ: જમીનમાં ઓર્ગેનિક કાર્બન પૂરતો/વધુ છે, જે સૂક્ષ્મજીવાણુઓ દ્વારા પોષક તત્વો મુક્ત કરવામાં મદદરૂપ છે.]"
+                )
+            else:
+                translated_lines.append(
+                    "  [जैविक पदार्थ पर टिप्पणी: मृदा जैविक कार्बन कम है। मिट्टी के जैविक स्वास्थ्य और नमी धारण क्षमता के लिए नियमित रूप से जैविक खाद, गोबर खाद या कम्पोस्ट का प्रयोग लाभकारी है।]"
+                    if lang == 'hi' else
+                    "  [સેન્દ્રીય પદાર્થ અંગે નોંધ: જમીનમાં ઓર્ગેનિક કાર્બન ઓછો છે. જમીનનું સ્વાસ્થ્ય અને ભેજ સંગ્રહ શક્તિ વધારવા માટે નિયમિત સેન્દ્રીય/છાણિયું ખાતર આપવું ફાયદાકારક છે.]"
+                )
+            continue
+
+        if 'Soil pH' in tr:
+            m = re.search(r':\s*([\d\.]+)\s*->\s*([^(\.]+)', tr, re.I)
+            ph = m.group(1) if m else '6.8'
+            cat = m.group(2).strip() if m else 'NEUTRAL'
+            if 'acidic' in cat.lower():
+                cat_t = 'अम्लीय (ACIDIC)' if lang == 'hi' else 'એસિડિક (ACIDIC)'
+                det_t = 'फास्फोरस की उपलब्धता और पोषक तत्व अवशोषण बाधित हो सकता है; चूना या क्षारीय सुधारक की सिफारिश की जाती है।' if lang == 'hi' else 'ફોસ્ફરસની ઉપલબ્ધતા અને પોષક તત્વોનું શોષણ ઘટી શકે છે; ચૂનો અથવા ક્ષાર સુધારકની ભલામણ છે.'
+            elif 'alkaline' in cat.lower() or 'sodic' in cat.lower():
+                cat_t = 'क्षारीय (ALKALINE)' if lang == 'hi' else 'ક્ષારીય (ALKALINE)'
+                det_t = 'उच्च क्षारीयता सूक्ष्म पोषक तत्वों (Zn, Fe) की उपलब्धता को कम कर सकती है; जिप्सम प्रयोग की सिफारिश की जाती है।' if lang == 'hi' else 'વધુ ક્ષારીયતા સૂક્ષ્મ પોષક તત્વો (Zn, Fe) ની પ્રાપ્યતા ઘટાડી શકે છે; જીપ્સમ આપવાની ભલામણ છે.'
+            else:
+                cat_t = 'उदासीन / अनुकूल (NEUTRAL / OPTIMAL)' if lang == 'hi' else 'તટસ્થ / ઉત્તમ (NEUTRAL / OPTIMAL)'
+                det_t = 'फसल द्वारा पोषक तत्व अवशोषण और सूक्ष्मजीवी गतिविधि के लिए आदर्श स्थिति।' if lang == 'hi' else 'પાક દ્વારા પોષક તત્વો ગ્રહણ કરવા અને સૂક્ષ્મજીવાણુ પ્રવૃત્તિ માટે ઉત્તમ સ્થિતિ.'
+            translated_lines.append(
+                f"  • मृदा pH                  : {ph} -> {cat_t} (मानक: 6.0-7.5 उदासीन, 7.5-8.5 मध्यम क्षारीय, >8.5 क्षारीय)। {det_t}"
+                if lang == 'hi' else
+                f"  • જમીન pH                  : {ph} -> {cat_t} (સંદર્ભ: 6.0-7.5 તટસ્થ, 7.5-8.5 મધ્યમ ક્ષારીય, >8.5 ક્ષારીય). {det_t}"
+            )
+            continue
+
+        if 'Electrical Cond' in tr:
+            m = re.search(r':\s*([\d\.]+)\s*dS\/m\s*->\s*([^(\.]+)', tr, re.I)
+            ec = m.group(1) if m else '0.45'
+            cat = m.group(2).strip() if m else 'SALT-FREE'
+            if 'saline' in cat.lower():
+                cat_t = 'लवणीय (SALINE)' if lang == 'hi' else 'ખારવાળી (SALINE)'
+                det_t = 'बढ़ी हुई लवणता जड़ों द्वारा जल और पोषक तत्व अवशोषण को बाधित कर सकती है।' if lang == 'hi' else 'વધારે ક્ષારના કારણે મૂળ દ્વારા પાણી અને પોષક તત્વો ગ્રહણ કરવામાં અવરોધ આવી શકે છે.'
+            else:
+                cat_t = 'लवण-मुक्त (SALT-FREE)' if lang == 'hi' else 'ક્ષાર-મુક્ત (SALT-FREE)'
+                det_t = 'जड़ों द्वारा पोषक तत्व अवशोषण पर कोई लवणता का प्रतिकूल प्रभाव नहीं है।' if lang == 'hi' else 'મૂળ દ્વારા પોષક તત્વો ગ્રહણ કરવામાં કોઈ ક્ષારની પ્રતિકૂળ અસર નથી.'
+            translated_lines.append(
+                f"  • विद्युत चालकता (EC)    : {ec} dS/m -> {cat_t} (मानक पैमाना: <1.0 dS/m लवण-मुक्त)। {det_t}"
+                if lang == 'hi' else
+                f"  • વિદ્યુત વાહકતા (EC)    : {ec} dS/m -> {cat_t} (સંદર્ભ માપદંડ: <1.0 dS/m ક્ષાર-મુક્ત). {det_t}"
+            )
+            continue
+
+        if re.search(r'^2\.\s*MODEL PREDICTION', tr, re.I):
+            ha_m = re.search(r'\(([\d\.]+)\s*Hectare', tr, re.I)
+            ha = ha_m.group(1) if ha_m else '1.0'
+            translated_lines.append(
+                f"2. मॉडल पूर्वानुमान एवं उर्वरक सिफारिश का वैज्ञानिक आधार ({ha} हेक्टेयर प्लॉट):"
+                if lang == 'hi' else
+                f"2. મોડેલ પરિણામ અને ખાતર ભલામણનો વૈજ્ઞાનિક આધાર ({ha} હેક્ટર પ્લોટ):"
+            )
+            continue
+
+        if 'Phosphorus Management' in tr:
+            val_m = re.search(r'HIGH\s*\(([\d\.]+)\s*kg\/ha\)', tr, re.I) or re.search(r'LOW\s*\(([\d\.]+)\s*kg\/ha\)', tr, re.I) or re.search(r'\(([\d\.]+)\s*kg\/ha\)', tr, re.I)
+            val = val_m.group(1) if val_m else '18.0'
+            dap_m = re.search(r'recommends\s*([\d\.]+)\s*kg\/ha DAP', tr, re.I)
+            dap = dap_m.group(1) if dap_m else '73.4'
+            n_m = re.search(r'\(([\d\.]+)\s*kg N\)', tr, re.I)
+            n = n_m.group(1) if n_m else '13.2'
+            p_m = re.search(r'\(([\d\.]+)\s*kg P2O5\)', tr, re.I)
+            p = p_m.group(1) if p_m else '33.8'
+
+            if 'already HIGH' in tr or 'HIGH' in tr:
+                translated_lines.append(
+                    f"  • फॉस्फोरस प्रबंधन: मिट्टी में उपलब्ध फॉस्फोरस पहले से अधिक ({val} kg/ha) है। मिट्टी में फॉस्फोरस की कोई कमी नहीं है। मॉडल {dap} kg/ha DAP की सिफारिश मुख्य रूप से शुरुआती बेसल नाइट्रोजन ({n} kg N) और शुरुआती जड़ों के विकास के लिए न्यूनतम फॉस्फेट ({p} kg P₂O₅) प्रदान करने के लिए करता है, जबकि शेष आवश्यकता मिट्टी के मौजूदा भंडार से पूरी होती है।"
+                    if lang == 'hi' else
+                    f"  • ફોસ્ફરસ વ્યવસ્થાપન: જમીનમાં ઉપલબ્ધ ફોસ્ફરસ પહેલેથી વધુ ({val} kg/ha) છે. જમીનમાં ફોસ્ફરસની કોઈ ખામી નથી. મોડેલ {dap} kg/ha DAP ની ભલામણ મુખ્યત્વે પાયાનો નાઇટ્રોજન ({n} kg N) અને મૂળના પ્રારંભિક વિકાસ માટે જરૂરી ફોસ્ફેટ ({p} kg P₂O₅) આપવા માટે કરે છે, જ્યારે બાકીની જરૂરિયાત જમીનમાં રહેલા ફોસ્ફરસ ભંડારમાંથી પૂરી થાય છે."
+                )
+            elif 'LOW' in tr:
+                translated_lines.append(
+                    f"  • फॉस्फोरस प्रबंधन: मिट्टी में उपलब्ध फॉस्फोरस कम ({val} kg/ha) है। मॉडल मिट्टी की कमी को दूर करने और जड़ों के विकास के लिए {dap} kg/ha DAP ({p} kg P₂O₅) की सिफारिश करता है।"
+                    if lang == 'hi' else
+                    f"  • ફોસ્ફરસ વ્યવસ્થાપન: જમીનમાં ઉપલબ્ધ ફોસ્ફરસ ઓછું ({val} kg/ha) છે. મોડેલ જમીનની ખામી સુધારવા અને મૂળના વિકાસ માટે {dap} kg/ha DAP ({p} kg P₂O₅) ની ભલામણ કરે છે."
+                )
+            else:
+                translated_lines.append(
+                    f"  • फॉस्फोरस प्रबंधन: मिट्टी में उपलब्ध फॉस्फोरस मध्यम ({val} kg/ha) है। मॉडल मानक फसल मांग ({p} kg P₂O₅) पूरी करने और उर्वरता बनाए रखने के लिए {dap} kg/ha DAP की सिफारिश करता है।"
+                    if lang == 'hi' else
+                    f"  • ફોસ્ફરસ વ્યવસ્થાપન: જમીનમાં ઉપલબ્ધ ફોસ્ફરસ મધ્યમ ({val} kg/ha) છે. મોડેલ પાકની સામાન્ય જરૂરિયાત (${p} kg P₂O₅) પૂરી કરવા અને જમીનની ફળદ્રુપતા જાળવવા ${dap} kg/ha DAP ની ભલામણ કરે છે."
+                )
+            continue
+
+        if 'Nitrogen Management' in tr:
+            val_m = re.search(r'\(([\d\.]+)\s*kg\/ha\)', tr, re.I)
+            val = val_m.group(1) if val_m else '140.0'
+            t_m = re.search(r'target of\s*([\d\.]+)\s*kg\/ha N', tr, re.I)
+            target = t_m.group(1) if t_m else '112.5'
+            nd_m = re.search(r'Accounting for\s*([\d\.]+)\s*kg N', tr, re.I)
+            n_dap = nd_m.group(1) if nd_m else '13.2'
+            rem_m = re.search(r'remaining\s*([\d\.]+)\s*kg\/ha N', tr, re.I)
+            rem_n = rem_m.group(1) if rem_m else '99.3'
+            u_m = re.search(r'through\s*([\d\.]+)\s*kg\/ha', tr, re.I)
+            urea = u_m.group(1) if u_m else '215.9'
+
+            translated_lines.append(
+                f"  • नाइट्रोजन प्रबंधन : मिट्टी में उपलब्ध नाइट्रोजन ({val} kg/ha) है, जिससे फसल का समायोजित लक्ष्य {target} kg/ha N निर्धारित हुआ है। DAP से प्राप्त {n_dap} kg N को घटाकर, शेष {rem_n} kg/ha N की पूर्ति {urea} kg/ha यूरिया द्वारा की जाती है, जिसे नाइट्रोजन उपयोग दक्षता (NUE) बढ़ाने और बर्बादी रोकने के लिए विकास के विभिन्न चरणों में विभाजित खुराक में दिया जाता है।"
+                if lang == 'hi' else
+                f"  • નાઇટ્રોજન વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ નાઇટ્રોજન ({val} kg/ha) હોવાથી પાકનો સંશોધિત લક્ષ્યાંક {target} kg/ha N નક્કી થયો છે. DAP માંથી મળતા {n_dap} kg N ને બાદ કરતાં, બાકીનો {rem_n} kg/ha N {urea} kg/ha યુરિયા દ્વારા પૂરો પાડવામાં આવે છે, જે નાઇટ્રોજન ઉપયોગ ક્ષમતા (NUE) વધારવા અને બગાડ અટકાવવા તબક્કાવાર વહેંચીને આપવામાં આવે છે."
+            )
+            continue
+
+        if 'Potassium Management' in tr:
+            val_m = re.search(r'\(([\d\.]+)\s*kg\/ha\)', tr, re.I)
+            val = val_m.group(1) if val_m else '134.0'
+            mop_m = re.search(r'([\d\.]+)\s*kg\/ha MOP', tr, re.I)
+            mop = mop_m.group(1) if mop_m else '75.0'
+            k_m = re.search(r'supply\s*([\d\.]+)\s*kg K2O', tr, re.I)
+            k = k_m.group(1) if k_m else '45.0'
+
+            if 'already HIGH' in tr:
+                translated_lines.append(
+                    f"  • पोटैशियम प्रबंधन : मिट्टी में उपलब्ध पोटैशियम पहले से अधिक ({val} kg/ha) है। मॉडल मिट्टी की कमी सुधारने के बजाय दाना/फली भराव के लिए {mop} kg/ha MOP की रखरखाव खुराक की सिफारिश करता है।"
+                    if lang == 'hi' else
+                    f"  • પોટેશિયમ વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ પોટેશિયમ પહેલેથી વધુ ({val} kg/ha) છે. મોડેલ જમીનની ખામી સુધારવાને બદલે દાણા ભરાવ માટે {mop} kg/ha MOP નિભાવ માત્રા તરીકે આપવાની ભલામણ કરે છે."
+                )
+            elif 'LOW' in tr:
+                translated_lines.append(
+                    f"  • पोटैशियम प्रबंधन : मिट्टी में उपलब्ध पोटैशियम कम ({val} kg/ha) है। मॉडल मिट्टी की कमी दूर करने और पौधों की मजबूती के लिए {k} kg K₂O देने हेतु {mop} kg/ha MOP की सिफारिश करता है।"
+                    if lang == 'hi' else
+                    f"  • પોટેશિયમ વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ પોટેશિયમ ઓછું ({val} kg/ha) છે. મોડેલ જમીનની ખામી સુધારવા અને પાકની રોગપ્રતિકારક શક્તિ વધારવા {k} kg K₂O આપવા {mop} kg/ha MOP ની ભલામણ કરે છે."
+                )
+            else:
+                translated_lines.append(
+                    f"  • पोटैशियम प्रबंधन : मिट्टी में उपलब्ध पोटैशियम मध्यम ({val} kg/ha) श्रेणी में है। मॉडल मानक फसल अवशोषण आवश्यकताओं को पूरा करने के लिए {k} kg K₂O प्रदान करने हेतु {mop} kg/ha MOP की सिफारिश करता है।"
+                    if lang == 'hi' else
+                    f"  • પોટેશિયમ વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ પોટેશિયમ મધ્યમ ({val} kg/ha) છે. મોડેલ પાકની પ્રમાણભૂત પોષક જરૂરિયાતો પૂરી કરવા {k} kg K₂O આપવા માટે {mop} kg/ha MOP ની ભલામણ કરે છે."
+                )
+            continue
+
+        if re.search(r'^3\.\s*SUMMARY', tr, re.I):
+            translated_lines.append('3. सारांश:' if lang == 'hi' else '3. સારાંશ:')
+            continue
+
+        if 'The recommended fertilizer quantities are generated by the AI model' in tr:
+            translated_lines.append(
+                "  अनुशंसित उर्वरक मात्राएं AI मॉडल द्वारा फसल की आवश्यकताओं और मिट्टी की स्थिति के आधार पर निर्धारित की गई हैं। मिट्टी परीक्षण मान प्रारंभिक उर्वरता दर्शाते हैं, जबकि यह उर्वरक समय-सारणी लक्षित फसल के लिए सटीक संतुलित पोषक तत्व प्रदान करती है।"
+                if lang == 'hi' else
+                "  ભલામણ કરેલ ખાતરનો જથ્થો AI મોડેલ દ્વારા પાકની જરૂરિયાતો અને જમીનની સ્થિતિના આધારે નક્કી કરવામાં આવ્યો છે. જમીન ચકાસણી પરિણામો મૂળ ફળદ્રુપતા દર્શાવે છે, જ્યારે ખાતરની આ સમય-સારણી પાક માટે સચોટ સંતુલિત પોષક તત્વો પૂરા પાડે છે."
+            )
+            continue
+
+        translated_lines.append(line)
+
+    return '\n'.join(translated_lines)
+

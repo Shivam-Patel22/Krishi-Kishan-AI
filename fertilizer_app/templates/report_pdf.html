@@ -453,7 +453,7 @@
             <span class="card-title">💡 {{ t.explainable_rationale_title }}</span>
             <span class="badge badge-accent">{{ t.icar_badge }}</span>
         </div>
-        <div class="rationale-box">{{ rec.explanation }}</div>
+        <div class="rationale-box">{{ explanation_localized|default:rec.explanation }}</div>
     </div>
 
 </body>

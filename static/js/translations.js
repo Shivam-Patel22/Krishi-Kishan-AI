@@ -160,6 +160,7 @@ const translations = {
 
         // AI Ensemble & Rationale
         "report.aiTitle": "AI Multi-Model Ensemble Confidence & Alternative Formulations",
+        "report.metaEnsemble": "Weighted Soft-Voting Meta-Ensemble (250 RF + 250 ET + 250 HGB + Deep MLP)",
         "report.aiSubtitle": "Top-3 Alternative Formulations ranked by probability distribution:",
         "report.decisionFactors": "Key Decision Factors:",
         "report.rationaleTitle": "Explainable AI Scientific Rationale",
@@ -376,6 +377,7 @@ const translations = {
 
         // AI Ensemble & Rationale
         "report.aiTitle": "AI मल्टी-मॉडल एन्सेम्बल विश्वसनीयता और वैकल्पिक उर्वरक",
+        "report.metaEnsemble": "वेटेड सॉफ्ट-वोटिंग मेटा-एन्सेम्बल (250 RF + 250 ET + 250 HGB + Deep MLP)",
         "report.aiSubtitle": "संभाव्यता वितरण के अनुसार शीर्ष 3 वैकल्पिक उर्वरक:",
         "report.decisionFactors": "प्रमुख निर्णय कारक:",
         "report.rationaleTitle": "व्याख्यात्मक AI वैज्ञानिक आधार",
@@ -592,6 +594,7 @@ const translations = {
 
         // AI Ensemble & Rationale
         "report.aiTitle": "AI મલ્ટી-મોડેલ ચોકસાઈ અને વૈકલ્પિક ખાતરો",
+        "report.metaEnsemble": "વેઇટેડ સોફ્ટ-વોટિંગ મેટા-એન્સેમ્બલ (250 RF + 250 ET + 250 HGB + Deep MLP)",
         "report.aiSubtitle": "સંભાવના વિતરણ અનુસાર ટોચના 3 વૈકલ્પિક ખાતરો:",
         "report.decisionFactors": "મુખ્ય નિર્ણય પરિબળો:",
         "report.rationaleTitle": "વૈજ્ઞાનિક AI સમજૂતી અને આધાર",
@@ -940,20 +943,81 @@ class I18nManager {
         const lang = this.currentLang;
         const low = text.toLowerCase();
 
+        // 1. Acidic soil pH
+        if (low.includes('acidic soil ph') && low.includes('buffering')) {
+            const ph = (text.match(/([\d\.]+)/) || [])[1] || '5.0';
+            return lang === 'hi'
+                ? `अम्लीय मृदा pH (${ph}) चूना और फॉस्फेट बफरिंग स्रोतों को प्राथमिकता देता है`
+                : `એસિડિક જમીન pH (${ph}) કેલ્શિયમ અને ફોસ્ફેટ બફરિંગ સ્રોતોને પ્રાથમિકતા આપે છે`;
+        }
+        // 2. Alkaline soil pH
+        if (low.includes('alkaline soil ph') && low.includes('sulphate')) {
+            const ph = (text.match(/([\d\.]+)/) || [])[1] || '8.5';
+            return lang === 'hi'
+                ? `क्षारीय मृदा pH (${ph}) अम्लीय सल्फेट-आधारित उर्वरक स्रोतों को प्राथमिकता देता है`
+                : `ક્ષારીય જમીન pH (${ph}) સલ્ફેટ-આધારિત ખાતર સ્રોતોને પ્રાથમિકતા આપે છે`;
+        }
+        // 3. Moderately Alkaline
+        if (low.includes('moderately alkaline')) {
+            const ph = (text.match(/([\d\.]+)/) || [])[1] || '7.8';
+            return lang === 'hi'
+                ? `मृदा pH मध्यम क्षारीय है (${ph}); पोषक तत्व आमतौर पर सुलभ रहते हैं`
+                : `જમીનનું pH મધ્યમ ક્ષારીય છે (${ph}); પોષક તત્વો સામાન્ય રીતે પ્રાપ્ય રહે છે`;
+        }
+        // 4. Available Phosphorus is High
+        if (low.includes('phosphorus') && low.includes('high')) {
+            const val = (text.match(/([\d\.]+)\s*kg\/ha/i) || [])[1] || '144.0';
+            return lang === 'hi'
+                ? `उपलब्ध फॉस्फोरस अधिक है (${val} kg/ha); मॉडल मृदा भंडार पर भरोसा करते हुए केवल शुरुआती बेसल फॉस्फोरस का उपयोग करता है`
+                : `ઉપલબ્ધ ફોસ્ફરસ વધુ છે (${val} kg/ha); મોડેલ જમીનના ભંડાર પર નિર્ભર રહીને માત્ર પાયાના ફોસ્ફરસનો ઉપયોગ કરે છે`;
+        }
+        // 5. Available Phosphorus is Low
+        if (low.includes('phosphorus') && low.includes('low')) {
+            const val = (text.match(/([\d\.]+)\s*kg\/ha/i) || [])[1] || '10.0';
+            return lang === 'hi'
+                ? `उपलब्ध फॉस्फोरस कम है (${val} kg/ha); मॉडल फॉस्फेट पुनःपूर्ति को प्राथमिकता देता है`
+                : `ઉપલબ્ધ ફોસ્ફરસ ઓછું છે (${val} kg/ha); મોડેલ ફોસ્ફરસ પૂર્તિને પ્રાથમિકતા આપે છે`;
+        }
+        // 6. Available Potassium is High
+        if (low.includes('potassium') && low.includes('high')) {
+            const val = (text.match(/([\d\.]+)\s*kg\/ha/i) || [])[1] || '280.0';
+            return lang === 'hi'
+                ? `उपलब्ध पोटैशियम अधिक है (${val} kg/ha); मॉडल मिट्टी की कमी के बजाय फसल पोषण के लिए पोटाश आवंटित करता है`
+                : `ઉપલબ્ધ પોટેશિયમ વધુ છે (${val} kg/ha); મોડેલ જમીનની ખામીના બદલે પાકના નિભાવ માટે પોટાશ ફાળવે છે`;
+        }
+        // 7. Available Potassium is Low
+        if (low.includes('potassium') && low.includes('low')) {
+            const val = (text.match(/([\d\.]+)\s*kg\/ha/i) || [])[1] || '110.0';
+            return lang === 'hi'
+                ? `उपलब्ध पोटैशियम कम है (${val} kg/ha); मॉडल पोटाश पूरकता को प्राथमिकता देता है`
+                : `ઉપલબ્ધ પોટેશિયમ ઓછું છે (${val} kg/ha); મોડેલ પોટાશ પૂર્તિને પ્રાથમિકતા આપે છે`;
+        }
+        // 8. Soil Organic Carbon is Low
+        if (low.includes('organic carbon') && low.includes('low')) {
+            const val = (text.match(/([\d\.]+)\s*%/i) || [])[1] || '0.50';
+            return lang === 'hi'
+                ? `मृदा जैविक कार्बन कम है (${val}%); जैविक खाद/गोबर खाद प्रबंधन मृदा स्वास्थ्य के लिए लाभकारी है`
+                : `જમીનમાં ઓર્ગેનિક કાર્બન ઓછો છે (${val}%); દેશી ખાતર/સેન્દ્રીય ખાતર વ્યવસ્થાપન જમીન સ્વાસ્થ્ય માટે ફાયદાકારક છે`;
+        }
+        // 9. Available Sulphur is Low
+        if (low.includes('sulphur') && low.includes('low')) {
+            const val = (text.match(/([\d\.]+)\s*ppm/i) || [])[1] || '0.0';
+            return lang === 'hi'
+                ? `उपलब्ध सल्फर कम है (${val} ppm); मॉडल सल्फर-युक्त उर्वरक यौगिकों को शामिल करता है`
+                : `ઉપલબ્ધ સલ્ફર ઓછું છે (${val} ppm); મોડેલ સલ્ફર-યુક્ત ખાતરોનો સમાવેશ કરે છે`;
+        }
+        // 10. Nitrogen deficiency
         if (low.includes('nitrogen deficiency') || (low.includes('nitrogen') && low.includes('urea'))) {
-            const valMatch = text.match(/([\d\.]+)\s*kg\/ha/i);
-            const val = valMatch ? valMatch[1] : '140.0';
-            return lang === 'hi' ? `नाइट्रोजन की कमी (${val} kg/ha < 280.0 kg/ha) के लिए यूरिया की बेसल और टॉप-ड्रेसिंग विभाजित खुराक आवश्यक है।` : `નાઇટ્રોજનની ખામી (${val} kg/ha < 280.0 kg/ha) માટે યુરિયા પાયામાં અને પૂર્તિ ખાતર તરીકે તબક્કાવાર આપવું જરૂરી છે.`;
+            const val = (text.match(/([\d\.]+)\s*kg\/ha/i) || [])[1] || '140.0';
+            return lang === 'hi'
+                ? `नाइट्रोजन की कमी (${val} kg/ha < 280.0 kg/ha) के लिए यूरिया की बेसल और टॉप-ड्रेसिंग विभाजित खुराक आवश्यक है`
+                : `નાઇટ્રોજનની ખામી (${val} kg/ha < 280.0 kg/ha) માટે યુરિયા પાયામાં અને પૂર્તિ ખાતર તરીકે તબક્કાવાર આપવું જરૂરી છે`;
         }
-        if (low.includes('phosphorus deficiency') || (low.includes('phosphorus') && low.includes('dap'))) {
-            const valMatch = text.match(/([\d\.]+)\s*kg\/ha/i);
-            const val = valMatch ? valMatch[1] : '18.0';
-            return lang === 'hi' ? `फॉस्फोरस की कमी (${val} kg/ha < 25.0 kg/ha) की पूर्ति DAP द्वारा की गई है।` : `ફોસ્ફરસની ખામી (${val} kg/ha < 25.0 kg/ha) ડીએપી (DAP) દ્વારા પૂર્ણ કરવામાં આવી છે.`;
-        }
-        if (low.includes('potassium deficiency') || (low.includes('potassium') && low.includes('mop'))) {
-            const valMatch = text.match(/([\d\.]+)\s*kg\/ha/i);
-            const val = valMatch ? valMatch[1] : '180.0';
-            return lang === 'hi' ? `पोटैशियम की कमी (${val} kg/ha < 280.0 kg/ha) की पूर्ति MOP द्वारा की गई है।` : `પોટેશિયમની ખામી (${val} kg/ha < 280.0 kg/ha) એમઓપી (MOP) દ્વારા પૂર્ણ કરવામાં આવી છે.`;
+        // 11. Standard nutrient balance
+        if (low.includes('standard nutrient balance')) {
+            return lang === 'hi'
+                ? `फसल की लक्षित वृद्धि आवश्यकताओं के अनुसार मानक पोषक तत्व संतुलन`
+                : `પાકની લક્ષિત વૃદ્ધિ જરૂરિયાતો મુજબ પ્રમાણભૂત પોષક તત્વ સંતુલન`;
         }
 
         return text;
@@ -966,55 +1030,212 @@ class I18nManager {
         if (!text || this.currentLang === 'en') return text;
         const lang = this.currentLang;
 
-        let res = text;
-        if (lang === 'hi') {
-            res = res.replace(/ICAR Stoichiometric Agronomic Prescription Rationale/g, "ICAR वैज्ञानिक एवं संतुलित उर्वरक निर्धारण आधार")
-                     .replace(/Target Crop Requirements & Soil Adjustment/g, "लक्षित फसल की आवश्यकताएं एवं मृदा समायोजन")
-                     .replace(/Soil Diagnostic Baseline/g, "मृदा परीक्षण एवं नैदानिक आधार")
-                     .replace(/Fertilizer Formulation & Stoichiometry/g, "उर्वरक सम्मिश्रण एवं मात्रा निर्धारण")
-                     .replace(/Nitrogen Split Dosing/g, "नाइट्रोजन विभाजित अनुप्रयोग (Split Dosing)")
-                     .replace(/Soil Health & Secondary Amendments/g, "मृदा स्वास्थ्य एवं द्वितीयक सुधारक")
-                     .replace(/Weather Risk & Application Advisory/g, "मौसम जोखिम एवं छिड़काव परामर्श")
-                     .replace(/Basal Application/g, "आधारभूत खुराक (बेसल)")
-                     .replace(/First Top Dressing/g, "प्रथम टॉप ड्रेसिंग")
-                     .replace(/Second Top Dressing/g, "द्वितीय टॉप ड्रेसिंग")
-                     .replace(/Urea/g, "यूरिया")
-                     .replace(/Nitrogen \(N\)/g, "नाइट्रोजन (N)")
-                     .replace(/Phosphorus \(P2O5\)/g, "फॉस्फोरस (P₂O₅)")
-                     .replace(/Potassium \(K2O\)/g, "पोटैशियम (K₂O)")
-                     .replace(/Organic Carbon/g, "जैविक कार्बन")
-                     .replace(/Electrical Conductivity/g, "विद्युत चालकता")
-                     .replace(/Optimal/g, "अनुकूल")
-                     .replace(/Low/g, "कम")
-                     .replace(/Medium/g, "मध्यम")
-                     .replace(/High/g, "अधिक")
-                     .replace(/Acidic/g, "अम्लीय")
-                     .replace(/Alkaline/g, "क्षारीय");
-        } else if (lang === 'gu') {
-            res = res.replace(/ICAR Stoichiometric Agronomic Prescription Rationale/g, "ICAR વૈજ્ઞાનિક અને સંતુલિત ખાતર નિર્ધારણ આધાર")
-                     .replace(/Target Crop Requirements & Soil Adjustment/g, "લક્ષિત પાકની જરૂરિયાતો અને જમીન સમાયોજન")
-                     .replace(/Soil Diagnostic Baseline/g, "જમીન ચકાસણી અને પરિણામો")
-                     .replace(/Fertilizer Formulation & Stoichiometry/g, "ખાતર આયોજન અને માત્રા નિર્ધારણ")
-                     .replace(/Nitrogen Split Dosing/g, "તબક્કાવાર નાઇટ્રોજન વ્યવસ્થાપન (Split Dosing)")
-                     .replace(/Soil Health & Secondary Amendments/g, "જમીન સ્વાસ્થ્ય અને સુધારક ભલામણ")
-                     .replace(/Weather Risk & Application Advisory/g, "હવામાન જોખમ અને છંટકાવ સલાહ")
-                     .replace(/Basal Application/g, "પાયાનું ખાતર")
-                     .replace(/First Top Dressing/g, "પ્રથમ પૂર્તિ ખાતર")
-                     .replace(/Second Top Dressing/g, "બીજું પૂર્તિ ખાતર")
-                     .replace(/Urea/g, "યુરિયા")
-                     .replace(/Nitrogen \(N\)/g, "નાઇટ્રોજન (N)")
-                     .replace(/Phosphorus \(P2O5\)/g, "ફોસ્ફરસ (P₂O₅)")
-                     .replace(/Potassium \(K2O\)/g, "પોટેશિયમ (K₂O)")
-                     .replace(/Organic Carbon/g, "ઓર્ગેનિક કાર્બન")
-                     .replace(/Electrical Conductivity/g, "વિદ્યુત વાહકતા")
-                     .replace(/Optimal/g, "ઉત્તમ")
-                     .replace(/Low/g, "ઓછું")
-                     .replace(/Medium/g, "મધ્યમ")
-                     .replace(/High/g, "વધારે")
-                     .replace(/Acidic/g, "એસિડિક")
-                     .replace(/Alkaline/g, "ક્ષારીય");
-        }
-        return res;
+        const lines = text.split('\n');
+        const translatedLines = lines.map(line => {
+            const trLine = line.trim();
+            if (!trLine) return '';
+
+            // 1. Section 1 Heading: "1. SOIL NUTRIENT STATUS (Input Data vs Reference Scale for Mustard):"
+            if (/^1\.\s*SOIL NUTRIENT STATUS/i.test(trLine)) {
+                const cropMatch = trLine.match(/for\s+([^)]+)\)/i);
+                const rawCrop = cropMatch ? cropMatch[1].trim() : '';
+                const crop = rawCrop ? (this.translateCrop(rawCrop) || rawCrop) : '';
+                return lang === 'hi'
+                    ? `1. मृदा पोषक तत्व स्थिति (${crop ? `${crop} के लिए ` : ''}परीक्षण मान बनाम मानक पैमाना):`
+                    : `1. જમીન પોષક તત્વોની સ્થિતિ (${crop ? `${crop} માટે ` : ''}ચકાસણી પરિણામો વિરુદ્ધ સંદર્ભ માપદંડ):`;
+            }
+
+            // Available Nitrogen (N)
+            if (/Available Nitrogen/i.test(trLine)) {
+                const valMatch = trLine.match(/:\s*([^->]+)->\s*(\w+)/i);
+                const val = valMatch ? valMatch[1].trim() : '140.0 kg/ha';
+                const rawRating = valMatch ? valMatch[2] : 'LOW';
+                const rating = this.translateRating(rawRating);
+                return lang === 'hi'
+                    ? `  • उपलब्ध नाइट्रोजन (N)   : ${val} -> ${rating} (मानक पैमाना: <280 कम, 280-560 मध्यम, >560 अधिक)`
+                    : `  • ઉપલબ્ધ નાઇટ્રોજન (N)   : ${val} -> ${rating} (સંદર્ભ માપદંડ: <280 ઓછું, 280-560 મધ્યમ, >560 વધારે)`;
+            }
+
+            // Available Phosphorus (P)
+            if (/Available Phosphorus/i.test(trLine)) {
+                const valMatch = trLine.match(/:\s*([^->]+)->\s*(\w+)/i);
+                const val = valMatch ? valMatch[1].trim() : '18.0 kg/ha';
+                const rawRating = valMatch ? valMatch[2] : 'MEDIUM';
+                const rating = this.translateRating(rawRating);
+                return lang === 'hi'
+                    ? `  • उपलब्ध फॉस्फोरस (P)   : ${val} -> ${rating} (मानक पैमाना: <10 कम, 10-25 मध्यम, >25 अधिक)`
+                    : `  • ઉપલબ્ધ ફોસ્ફરસ (P)   : ${val} -> ${rating} (સંદર્ભ માપદંડ: <10 ઓછું, 10-25 મધ્યમ, >25 વધારે)`;
+            }
+
+            // Available Potassium (K)
+            if (/Available Potassium/i.test(trLine)) {
+                const valMatch = trLine.match(/:\s*([^->]+)->\s*(\w+)/i);
+                const val = valMatch ? valMatch[1].trim() : '180.0 kg/ha';
+                const rawRating = valMatch ? valMatch[2] : 'MEDIUM';
+                const rating = this.translateRating(rawRating);
+                return lang === 'hi'
+                    ? `  • उपलब्ध पोटैशियम (K)   : ${val} -> ${rating} (मानक पैमाना: <110 कम, 110-280 मध्यम, >280 अधिक)`
+                    : `  • ઉપલબ્ધ પોટેશિયમ (K)   : ${val} -> ${rating} (સંદર્ભ માપદંડ: <110 ઓછું, 110-280 મધ્યમ, >280 વધારે)`;
+            }
+
+            // Soil Organic Carbon (OC)
+            if (/Soil Organic Carbon/i.test(trLine) || /Soil जैविक कार्बन/i.test(trLine)) {
+                const valMatch = trLine.match(/:\s*([^->]+)->\s*(\w+)/i);
+                const val = valMatch ? valMatch[1].trim() : '0.55%';
+                const rawRating = valMatch ? valMatch[2] : 'MEDIUM';
+                const rating = this.translateRating(rawRating);
+                return lang === 'hi'
+                    ? `  • मृदा जैविक कार्बन (OC) : ${val} -> ${rating} (मानक पैमाना: <0.50% कम, 0.50-0.75% मध्यम, >0.75% अधिक)`
+                    : `  • જમીન ઓર્ગેનિક કાર્બન (OC) : ${val} -> ${rating} (સંદર્ભ માપદંડ: <0.50% ઓછું, 0.50-0.75% મધ્યમ, >0.75% વધારે)`;
+            }
+
+            // Note on Organic Matter
+            if (/\[Note on Organic Matter/i.test(trLine) || /\[जैविक पदार्थ पर टिप्पणी/i.test(trLine)) {
+                if (/adequate|high|पर्याप्त/i.test(trLine)) {
+                    return lang === 'hi'
+                        ? `  [जैविक पदार्थ पर टिप्पणी: मृदा जैविक कार्बन पर्याप्त/उच्च श्रेणी में है, जो सूक्ष्मजीवों द्वारा पोषक तत्व उपलब्धता को बढ़ावा देता है।]`
+                        : `  [સેન્દ્રીય પદાર્થ અંગે નોંધ: જમીનમાં ઓર્ગેનિક કાર્બન પૂરતો/વધુ છે, જે સૂક્ષ્મજીવાણુઓ દ્વારા પોષક તત્વો મુક્ત કરવામાં મદદરૂપ છે.]`;
+                } else {
+                    return lang === 'hi'
+                        ? `  [जैविक पदार्थ पर टिप्पणी: मृदा जैविक कार्बन कम है। मिट्टी के जैविक स्वास्थ्य और नमी धारण क्षमता के लिए नियमित रूप से जैविक खाद, गोबर खाद या कम्पोस्ट का प्रयोग लाभकारी है।]`
+                    : `  [સેન્દ્રીય પદાર્થ અંગે નોંધ: જમીનમાં ઓર્ગેનિક કાર્બન ઓછો છે. જમીનનું સ્વાસ્થ્ય અને ભેજ સંગ્રહ શક્તિ વધારવા માટે નિયમિત સેન્દ્રીય/છાણિયું ખાતર આપવું ફાયદાકારક છે.]`;
+                }
+            }
+
+            // Soil pH
+            if (/Soil pH/i.test(trLine)) {
+                const phMatch = trLine.match(/:\s*([\d\.]+)\s*->\s*([^(\.]+)/i);
+                const ph = phMatch ? phMatch[1] : '6.8';
+                const cat = phMatch ? phMatch[2].trim() : 'NEUTRAL';
+                let catText = cat;
+                let detailText = '';
+                if (/acidic/i.test(cat)) {
+                    catText = lang === 'hi' ? 'अम्लीय (ACIDIC)' : 'એસિડિક (ACIDIC)';
+                    detailText = lang === 'hi' ? 'फास्फोरस की उपलब्धता और पोषक तत्व अवशोषण बाधित हो सकता है; चूना या क्षारीय सुधारक की सिफारिश की जाती है।' : 'ફોસ્ફરસની ઉપલબ્ધતા અને પોષક તત્વોનું શોષણ ઘટી શકે છે; ચૂનો અથવા ક્ષાર સુધારકની ભલામણ છે.';
+                } else if (/alkaline|sodic/i.test(cat)) {
+                    catText = lang === 'hi' ? 'क्षारीय (ALKALINE)' : 'ક્ષારીય (ALKALINE)';
+                    detailText = lang === 'hi' ? 'उच्च क्षारीयता सूक्ष्म पोषक तत्वों (Zn, Fe) की उपलब्धता को कम कर सकती है; जिप्सम प्रयोग की सिफारिश की जाती है।' : 'વધુ ક્ષારીયતા સૂક્ષ્મ પોષક તત્વો (Zn, Fe) ની પ્રાપ્યતા ઘટાડી શકે છે; જીપ્સમ આપવાની ભલામણ છે.';
+                } else {
+                    catText = lang === 'hi' ? 'उदासीन / अनुकूल (NEUTRAL / OPTIMAL)' : 'તટસ્થ / ઉત્તમ (NEUTRAL / OPTIMAL)';
+                    detailText = lang === 'hi' ? 'फसल द्वारा पोषक तत्व अवशोषण और सूक्ष्मजीवी गतिविधि के लिए आदर्श स्थिति।' : 'પાક દ્વારા પોષક તત્વો ગ્રહણ કરવા અને સૂક્ષ્મજીવાણુ પ્રવૃત્તિ માટે ઉત્તમ સ્થિતિ.';
+                }
+                return lang === 'hi'
+                    ? `  • मृदा pH                  : ${ph} -> ${catText} (मानक: 6.0-7.5 उदासीन, 7.5-8.5 मध्यम क्षारीय, >8.5 क्षारीय)। ${detailText}`
+                    : `  • જમીન pH                  : ${ph} -> ${catText} (સંદર્ભ: 6.0-7.5 તટસ્થ, 7.5-8.5 મધ્યમ ક્ષારીય, >8.5 ક્ષારીય). ${detailText}`;
+            }
+
+            // Electrical Cond. (EC)
+            if (/Electrical Cond/i.test(trLine)) {
+                const ecMatch = trLine.match(/:\s*([\d\.]+)\s*dS\/m\s*->\s*([^(\.]+)/i);
+                const ec = ecMatch ? ecMatch[1] : '0.45';
+                const cat = ecMatch ? ecMatch[2].trim() : 'SALT-FREE';
+                let catText = cat;
+                let detailText = '';
+                if (/saline/i.test(cat)) {
+                    catText = lang === 'hi' ? 'लवणीय (SALINE)' : 'ખારવાળી (SALINE)';
+                    detailText = lang === 'hi' ? 'बढ़ी हुई लवणता जड़ों द्वारा जल और पोषक तत्व अवशोषण को बाधित कर सकती है।' : 'વધારે ક્ષારના કારણે મૂળ દ્વારા પાણી અને પોષક તત્વો ગ્રહણ કરવામાં અવરોધ આવી શકે છે.';
+                } else {
+                    catText = lang === 'hi' ? 'लवण-मुक्त (SALT-FREE)' : 'ક્ષાર-મુક્ત (SALT-FREE)';
+                    detailText = lang === 'hi' ? 'जड़ों द्वारा पोषक तत्व अवशोषण पर कोई लवणता का प्रतिकूल प्रभाव नहीं है।' : 'મૂળ દ્વારા પોષક તત્વો ગ્રહણ કરવામાં કોઈ ક્ષારની પ્રતિકૂળ અસર નથી.';
+                }
+                return lang === 'hi'
+                    ? `  • विद्युत चालकता (EC)    : ${ec} dS/m -> ${catText} (मानक पैमाना: <1.0 dS/m लवण-मुक्त)। ${detailText}`
+                    : `  • વિદ્યુત વાહકતા (EC)    : ${ec} dS/m -> ${catText} (સંદર્ભ માપદંડ: <1.0 dS/m ક્ષાર-મુક્ત). ${detailText}`;
+            }
+
+            // 2. Section 2 Heading: "2. MODEL PREDICTION & FERTILIZER RECOMMENDATION JUSTIFICATION (1.0 Hectare Plot):"
+            if (/^2\.\s*MODEL PREDICTION/i.test(trLine)) {
+                const haMatch = trLine.match(/\(([\d\.]+)\s*Hectare/i);
+                const ha = haMatch ? haMatch[1] : '1.0';
+                return lang === 'hi'
+                    ? `2. मॉडल पूर्वानुमान एवं उर्वरक सिफारिश का वैज्ञानिक आधार (${ha} हेक्टेयर प्लॉट):`
+                    : `2. મોડેલ પરિણામ અને ખાતર ભલામણનો વૈજ્ઞાનિક આધાર (${ha} હેક્ટર પ્લોટ):`;
+            }
+
+            // Phosphorus Management
+            if (/Phosphorus Management/i.test(trLine)) {
+                const valMatch = trLine.match(/HIGH\s*\(([\d\.]+)\s*kg\/ha\)/i) || trLine.match(/LOW\s*\(([\d\.]+)\s*kg\/ha\)/i) || trLine.match(/MEDIUM\s*range\s*\(([\d\.]+)\s*kg\/ha\)/i) || trLine.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '18.0';
+                const dapMatch = trLine.match(/recommends\s*([\d\.]+)\s*kg\/ha DAP/i);
+                const dap = dapMatch ? dapMatch[1] : '73.4';
+                const nMatch = trLine.match(/\(([\d\.]+)\s*kg N\)/i);
+                const n = nMatch ? nMatch[1] : '13.2';
+                const pMatch = trLine.match(/\(([\d\.]+)\s*kg P2O5\)/i);
+                const p = pMatch ? pMatch[1] : '33.8';
+
+                if (/already HIGH/i.test(trLine) || /HIGH/i.test(trLine)) {
+                    return lang === 'hi'
+                        ? `  • फॉस्फोरस प्रबंधन: मिट्टी में उपलब्ध फॉस्फोरस पहले से अधिक (${val} kg/ha) है। मिट्टी में फॉस्फोरस की कोई कमी नहीं है। मॉडल ${dap} kg/ha DAP की सिफारिश मुख्य रूप से शुरुआती बेसल नाइट्रोजन (${n} kg N) और शुरुआती जड़ों के विकास के लिए न्यूनतम फॉस्फेट (${p} kg P₂O₅) प्रदान करने के लिए करता है, जबकि शेष आवश्यकता मिट्टी के मौजूदा भंडार से पूरी होती है।`
+                        : `  • ફોસ્ફરસ વ્યવસ્થાપન: જમીનમાં ઉપલબ્ધ ફોસ્ફરસ પહેલેથી વધુ (${val} kg/ha) છે. જમીનમાં ફોસ્ફરસની કોઈ ખામી નથી. મોડેલ ${dap} kg/ha DAP ની ભલામણ મુખ્યત્વે પાયાનો નાઇટ્રોજન (${n} kg N) અને મૂળના પ્રારંભિક વિકાસ માટે જરૂરી ફોસ્ફેટ (${p} kg P₂O₅) આપવા માટે કરે છે, જ્યારે બાકીની જરૂરિયાત જમીનમાં રહેલા ફોસ્ફરસ ભંડારમાંથી પૂરી થાય છે.`;
+                } else if (/LOW/i.test(trLine)) {
+                    return lang === 'hi'
+                        ? `  • फॉस्फोरस प्रबंधन: मिट्टी में उपलब्ध फॉस्फोरस कम (${val} kg/ha) है। मॉडल मिट्टी की कमी को दूर करने और जड़ों के विकास के लिए ${dap} kg/ha DAP (${p} kg P₂O₅) की सिफारिश करता है।`
+                        : `  • ફોસ્ફરસ વ્યવસ્થાપન: જમીનમાં ઉપલબ્ધ ફોસ્ફરસ ઓછું (${val} kg/ha) છે. મોડેલ જમીનની ખામી સુધારવા અને મૂળના વિકાસ માટે ${dap} kg/ha DAP (${p} kg P₂O₅) ની ભલામણ કરે છે.`;
+                } else {
+                    return lang === 'hi'
+                        ? `  • फॉस्फोरस प्रबंधन: मिट्टी में उपलब्ध फॉस्फोरस मध्यम (${val} kg/ha) है। मॉडल मानक फसल मांग (${p} kg P₂O₅) पूरी करने और उर्वरता बनाए रखने के लिए ${dap} kg/ha DAP की सिफारिश करता है।`
+                        : `  • ફોસ્ફરસ વ્યવસ્થાપન: જમીનમાં ઉપલબ્ધ ફોસ્ફરસ મધ્યમ (${val} kg/ha) છે. મોડેલ પાકની સામાન્ય જરૂરિયાત (${p} kg P₂O₅) પૂરી કરવા અને જમીનની ફળદ્રુપતા જાળવવા ${dap} kg/ha DAP ની ભલામણ કરે છે.`;
+                }
+            }
+
+            // Nitrogen Management
+            if (/Nitrogen Management/i.test(trLine)) {
+                const valMatch = trLine.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '140.0';
+                const targetMatch = trLine.match(/target of\s*([\d\.]+)\s*kg\/ha N/i);
+                const target = targetMatch ? targetMatch[1] : '112.5';
+                const nDapMatch = trLine.match(/Accounting for\s*([\d\.]+)\s*kg N/i);
+                const nDap = nDapMatch ? nDapMatch[1] : '13.2';
+                const remNMatch = trLine.match(/remaining\s*([\d\.]+)\s*kg\/ha N/i);
+                const remN = remNMatch ? remNMatch[1] : '99.3';
+                const ureaMatch = trLine.match(/through\s*([\d\.]+)\s*kg\/ha/i);
+                const urea = ureaMatch ? ureaMatch[1] : '215.9';
+
+                return lang === 'hi'
+                    ? `  • नाइट्रोजन प्रबंधन : मिट्टी में उपलब्ध नाइट्रोजन (${val} kg/ha) है, जिससे फसल का समायोजित लक्ष्य ${target} kg/ha N निर्धारित हुआ है। DAP से प्राप्त ${nDap} kg N को घटाकर, शेष ${remN} kg/ha N की पूर्ति ${urea} kg/ha यूरिया द्वारा की जाती है, जिसे नाइट्रोजन उपयोग दक्षता (NUE) बढ़ाने और बर्बादी रोकने के लिए विकास के विभिन्न चरणों में विभाजित खुराक में दिया जाता है।`
+                    : `  • નાઇટ્રોજન વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ નાઇટ્રોજન (${val} kg/ha) હોવાથી પાકનો સંશોધિત લક્ષ્યાંક ${target} kg/ha N નક્કી થયો છે. DAP માંથી મળતા ${nDap} kg N ને બાદ કરતાં, બાકીનો ${remN} kg/ha N ${urea} kg/ha યુરિયા દ્વારા પૂરો પાડવામાં આવે છે, જે નાઇટ્રોજન ઉપયોગ ક્ષમતા (NUE) વધારવા અને બગાડ અટકાવવા તબક્કાવાર વહેંચીને આપવામાં આવે છે.`;
+            }
+
+            // Potassium Management
+            if (/Potassium Management/i.test(trLine)) {
+                const valMatch = trLine.match(/\(([\d\.]+)\s*kg\/ha\)/i);
+                const val = valMatch ? valMatch[1] : '134.0';
+                const mopMatch = trLine.match(/([\d\.]+)\s*kg\/ha MOP/i);
+                const mop = mopMatch ? mopMatch[1] : '75.0';
+                const kMatch = trLine.match(/supply\s*([\d\.]+)\s*kg K2O/i);
+                const k = kMatch ? kMatch[1] : '45.0';
+
+                if (/already HIGH/i.test(trLine)) {
+                    return lang === 'hi'
+                        ? `  • पोटैशियम प्रबंधन : मिट्टी में उपलब्ध पोटैशियम पहले से अधिक (${val} kg/ha) है। मॉडल मिट्टी की कमी सुधारने के बजाय दाना/फली भराव के लिए ${mop} kg/ha MOP की रखरखाव खुराक की सिफारिश करता है।`
+                        : `  • પોટેશિયમ વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ પોટેશિયમ પહેલેથી વધુ (${val} kg/ha) છે. મોડેલ જમીનની ખામી સુધારવાને બદલે દાણા ભરાવ માટે ${mop} kg/ha MOP નિભાવ માત્રા તરીકે આપવાની ભલામણ કરે છે.`;
+                } else if (/LOW/i.test(trLine)) {
+                    return lang === 'hi'
+                        ? `  • पोटैशियम प्रबंधन : मिट्टी में उपलब्ध पोटैशियम कम (${val} kg/ha) है। मॉडल मिट्टी की कमी दूर करने और पौधों की मजबूती के लिए ${k} kg K₂O देने हेतु ${mop} kg/ha MOP की सिफारिश करता है।`
+                        : `  • પોટેશિયમ વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ પોટેશિયમ ઓછું (${val} kg/ha) છે. મોડેલ જમીનની ખામી સુધારવા અને પાકની રોગપ્રતિકારક શક્તિ વધારવા ${k} kg K₂O આપવા ${mop} kg/ha MOP ની ભલામણ કરે છે.`;
+                } else {
+                    return lang === 'hi'
+                        ? `  • पोटैशियम प्रबंधन : मिट्टी में उपलब्ध पोटैशियम मध्यम (${val} kg/ha) श्रेणी में है। मॉडल मानक फसल अवशोषण आवश्यकताओं को पूरा करने के लिए ${k} kg K₂O प्रदान करने हेतु ${mop} kg/ha MOP की सिफारिश करता है।`
+                        : `  • પોટેશિયમ વ્યવસ્થાપન : જમીનમાં ઉપલબ્ધ પોટેશિયમ મધ્યમ (${val} kg/ha) છે. મોડેલ પાકની પ્રમાણભૂત પોષક જરૂરિયાતો પૂરી કરવા ${k} kg K₂O આપવા માટે ${mop} kg/ha MOP ની ભલામણ કરે છે.`;
+                }
+            }
+
+            // 3. Section 3 Heading: "3. SUMMARY:"
+            if (/^3\.\s*SUMMARY/i.test(trLine)) {
+                return lang === 'hi' ? '3. सारांश:' : '3. સારાંશ:';
+            }
+
+            // Summary content
+            if (/The recommended fertilizer quantities are generated by the AI model/i.test(trLine)) {
+                return lang === 'hi'
+                    ? '  अनुशंसित उर्वरक मात्राएं AI मॉडल द्वारा फसल की आवश्यकताओं और मिट्टी की स्थिति के आधार पर निर्धारित की गई हैं। मिट्टी परीक्षण मान प्रारंभिक उर्वरता दर्शाते हैं, जबकि यह उर्वरक समय-सारणी लक्षित फसल के लिए सटीक संतुलित पोषक तत्व प्रदान करती है।'
+                    : '  ભલામણ કરેલ ખાતરનો જથ્થો AI મોડેલ દ્વારા પાકની જરૂરિયાતો અને જમીનની સ્થિતિના આધારે નક્કી કરવામાં આવ્યો છે. જમીન ચકાસણી પરિણામો મૂળ ફળદ્રુપતા દર્શાવે છે, જ્યારે ખાતરની આ સમય-સારણી પાક માટે સચોટ સંતુલિત પોષક તત્વો પૂરા પાડે છે.';
+            }
+
+            return line;
+        });
+
+        return translatedLines.join('\n');
     }
 
     translatePage() {
