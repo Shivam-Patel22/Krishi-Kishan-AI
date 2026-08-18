@@ -758,6 +758,57 @@ body {
 .fill-p { background: var(--accent-amber); }
 .fill-k { background: var(--accent-blue); }
 
+/* Soil Chemistry Diagnostic Grid */
+.soil-chem-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.6rem;
+    margin-top: 1rem;
+}
+
+.soil-chem-item {
+    background: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: 0.55rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.2rem;
+    min-height: 52px;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.soil-chem-item:hover {
+    background: #ffffff;
+    border-color: #cbd5e1;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-sm);
+}
+
+.soil-chem-item-full {
+    grid-column: span 2;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.soil-chem-label {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+}
+
+.soil-chem-val {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-main);
+    word-break: break-word;
+}
+
+
 /* Table */
 .table-responsive {
     overflow-x: auto;

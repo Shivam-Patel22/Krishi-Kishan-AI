@@ -363,12 +363,13 @@
             </div>
 
             <div style="border-top: 1px solid #f1f5f9; padding-top: 6px; margin-top: 6px; font-size: 7pt; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
-                <div><span style="color: #64748b;">Soil pH:</span> <strong>{{ rec.soil_test.soil_ph }} (Neutral)</strong></div>
-                <div><span style="color: #64748b;">Organic Carbon:</span> <strong>{{ rec.soil_test.organic_carbon_pct }}%</strong></div>
-                <div><span style="color: #64748b;">EC:</span> <strong>{{ rec.soil_test.electrical_conductivity }} dS/m</strong></div>
-                <div><span style="color: #64748b;">Zinc (Zn):</span> <strong>{{ rec.soil_test.zinc }} ppm</strong></div>
-                <div><span style="color: #64748b;">Boron (B):</span> <strong>{{ rec.soil_test.boron }} ppm</strong></div>
-                <div><span style="color: #64748b;">Sulphur (S):</span> <strong>{{ rec.soil_test.sulphur }} ppm</strong></div>
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">Soil pH</span> <strong>{{ rec.soil_test.soil_ph }} (Neutral)</strong></div>
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">Organic Carbon (OC)</span> <strong>{{ rec.soil_test.organic_carbon_pct }}%</strong></div>
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">Electrical Cond. (EC)</span> <strong>{{ rec.soil_test.electrical_conductivity }} dS/m</strong></div>
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">Zinc (Zn)</span> <strong>{{ rec.soil_test.zinc }} ppm</strong></div>
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">Boron (B)</span> <strong>{{ rec.soil_test.boron }} ppm</strong></div>
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">Sulphur (S)</span> <strong>{{ rec.soil_test.sulphur }} ppm</strong></div>
+                <div style="grid-column: span 2; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; font-size: 6pt; text-transform: uppercase; font-weight: 700;">Iron (Fe)</span> <strong>{{ rec.soil_test.iron|default:"6.0" }} ppm</strong></div>
             </div>
         </div>
 
