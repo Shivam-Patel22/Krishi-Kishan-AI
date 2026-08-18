@@ -203,17 +203,26 @@ class GenerateRecommendationAPIView(APIView):
                     field.soil_type = custom_soil.get('soil_type')
                     field.save(update_fields=['soil_type'])
 
+                def _safe_soil_val(key, default_val=0.0):
+                    val = custom_soil.get(key)
+                    if val is None or val == '':
+                        return default_val
+                    try:
+                        return float(val)
+                    except (ValueError, TypeError):
+                        return default_val
+
                 soil_data = {
-                    'nitrogen': float(custom_soil.get('nitrogen', 140.0)),
-                    'phosphorus': float(custom_soil.get('phosphorus', 18.0)),
-                    'potassium': float(custom_soil.get('potassium', 180.0)),
-                    'soil_ph': float(custom_soil.get('soil_ph', 6.8)),
-                    'organic_carbon_pct': float(custom_soil.get('organic_carbon_pct', 0.55)),
-                    'electrical_conductivity': float(custom_soil.get('electrical_conductivity', 0.45)),
-                    'zinc': float(custom_soil.get('zinc', 0.8)),
-                    'boron': float(custom_soil.get('boron', 0.5)),
-                    'sulphur': float(custom_soil.get('sulphur', 12.0)),
-                    'iron': float(custom_soil.get('iron', 6.0)),
+                    'nitrogen': _safe_soil_val('nitrogen', 0.0),
+                    'phosphorus': _safe_soil_val('phosphorus', 0.0),
+                    'potassium': _safe_soil_val('potassium', 0.0),
+                    'soil_ph': _safe_soil_val('soil_ph', 0.0),
+                    'organic_carbon_pct': _safe_soil_val('organic_carbon_pct', 0.0),
+                    'electrical_conductivity': _safe_soil_val('electrical_conductivity', 0.0),
+                    'zinc': _safe_soil_val('zinc', 0.0),
+                    'boron': _safe_soil_val('boron', 0.0),
+                    'sulphur': _safe_soil_val('sulphur', 0.0),
+                    'iron': _safe_soil_val('iron', 0.0),
                     'source': custom_soil.get('source', 'Field Test / User Input')
                 }
             else:

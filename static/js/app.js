@@ -247,6 +247,14 @@ async function handleGenerateRecommendation(e) {
         return;
     }
 
+    const parseNum = (id, fallback = 0.0) => {
+        const el = document.getElementById(id);
+        if (!el || el.value === '' || el.value === null || isNaN(parseFloat(el.value))) {
+            return fallback;
+        }
+        return parseFloat(el.value);
+    };
+
     const payload = {
         crop_id: parseInt(cropId),
         area_hectares: parseFloat(areaHa) || 1.0,
@@ -255,16 +263,16 @@ async function handleGenerateRecommendation(e) {
             state: lookupState,
             district: lookupDistrict,
             block: lookupBlock,
-            nitrogen: parseFloat(document.getElementById('soilN').value || 140.0),
-            phosphorus: parseFloat(document.getElementById('soilP').value || 18.0),
-            potassium: parseFloat(document.getElementById('soilK').value || 180.0),
-            soil_ph: parseFloat(document.getElementById('soilPh').value || 6.8),
-            organic_carbon_pct: parseFloat(document.getElementById('soilOc').value || 0.55),
-            electrical_conductivity: parseFloat(document.getElementById('soilEc').value || 0.45),
-            zinc: parseFloat(document.getElementById('soilZn')?.value || 0.8),
-            boron: parseFloat(document.getElementById('soilB')?.value || 0.5),
-            sulphur: parseFloat(document.getElementById('soilS')?.value || 12.0),
-            iron: parseFloat(document.getElementById('soilFe')?.value || 6.0),
+            nitrogen: parseNum('soilN', 0.0),
+            phosphorus: parseNum('soilP', 0.0),
+            potassium: parseNum('soilK', 0.0),
+            soil_ph: parseNum('soilPh', 0.0),
+            organic_carbon_pct: parseNum('soilOc', 0.0),
+            electrical_conductivity: parseNum('soilEc', 0.0),
+            zinc: parseNum('soilZn', 0.0),
+            boron: parseNum('soilB', 0.0),
+            sulphur: parseNum('soilS', 0.0),
+            iron: parseNum('soilFe', 0.0),
             source: "Field Diagnostic Input"
         }
     };

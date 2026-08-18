@@ -127,30 +127,30 @@
                             <div class="form-row-3">
                                 <div class="form-group">
                                     <label for="soilN">Nitrogen (N) <span class="unit">kg/ha</span></label>
-                                    <input type="number" id="soilN" class="form-control" step="any" value="140.0" required>
+                                    <input type="number" id="soilN" class="form-control" min="0" step="any" value="0" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="soilP">Phosphorus (P) <span class="unit">kg/ha</span></label>
-                                    <input type="number" id="soilP" class="form-control" step="any" value="18.0" required>
+                                    <input type="number" id="soilP" class="form-control" min="0" step="any" value="0" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="soilK">Potassium (K) <span class="unit">kg/ha</span></label>
-                                    <input type="number" id="soilK" class="form-control" step="any" value="180.0" required>
+                                    <input type="number" id="soilK" class="form-control" min="0" step="any" value="0" required>
                                 </div>
                             </div>
 
                             <div class="form-row-3">
                                 <div class="form-group">
                                     <label for="soilPh">Soil pH (1-14)</label>
-                                    <input type="number" id="soilPh" class="form-control" min="3.5" max="10.5" step="any" value="6.8" required>
+                                    <input type="number" id="soilPh" class="form-control" min="0" max="14.0" step="any" value="0" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="soilOc">Organic Carbon <span class="unit">%</span></label>
-                                    <input type="number" id="soilOc" class="form-control" min="0.05" max="3.0" step="any" value="0.55" required>
+                                    <input type="number" id="soilOc" class="form-control" min="0" max="10.0" step="any" value="0" required>
                                 </div>
                                 <div class="form-group">
                                     <label for="soilEc">Electrical Cond. <span class="unit">dS/m</span></label>
-                                    <input type="number" id="soilEc" class="form-control" min="0.01" max="10.0" step="any" value="0.45">
+                                    <input type="number" id="soilEc" class="form-control" min="0" max="20.0" step="any" value="0">
                                 </div>
                             </div>
 
