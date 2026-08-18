@@ -33,8 +33,14 @@ d:/PROJECTS/HACKATHON/
 pip install -r requirements.txt
 ```
 
-### 2. Run the Conversion Pipeline
-To process the dataset into `data/agriculture.db` with automated cleaning, indexing, and validation:
+### 2. Start the Web Application
+```bash
+python manage.py runserver
+```
+Then open `http://127.0.0.1:8000` in your browser.
+
+### 3. Run the Conversion Pipeline (Optional - Database is already built)
+To re-process the raw dataset into `data/agriculture.db` with automated cleaning, indexing, and validation:
 ```bash
 python csv_to_sqlite.py --input soil-nutrient-analysis.csv
 ```

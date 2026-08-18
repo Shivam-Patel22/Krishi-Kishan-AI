@@ -8,9 +8,11 @@ and rule-based agro-meteorological spray safety indicators.
 
 import os
 import time
+import json
 import logging
+import urllib.request
+import urllib.parse
 from typing import Dict, Any, Optional, Tuple
-import requests
 
 logger = logging.getLogger("fertilizer_app.weather")
 
@@ -348,21 +350,24 @@ def _fetch_from_open_meteo(latitude: float, longitude: float) -> Dict[str, Any]:
     """
     endpoint = "https://api.open-meteo.com/v1/forecast"
     params = {
-        "latitude": latitude,
-        "longitude": longitude,
+        "latitude": str(latitude),
+        "longitude": str(longitude),
         "current": "temperature_2m,relative_humidity_2m,wind_speed_10m,weather_code",
         "hourly": "precipitation,temperature_2m,relative_humidity_2m,wind_speed_10m",
-        "forecast_days": 2,
+        "forecast_days": "2",
         "timezone": "Asia/Kolkata"
     }
 
-    session = requests.Session()
-    adapter = requests.adapters.HTTPAdapter(max_retries=2)
-    session.mount('https://', adapter)
-
-    resp = session.get(endpoint, params=params, timeout=6.0)
-    resp.raise_for_status()
-    return resp.json()
+    url = f"{endpoint}?{urllib.parse.urlencode(params)}"
+    req = urllib.request.Request(
+        url,
+        headers={"User-Agent": "KrishiKisan-Precision-Fertilizer/1.0"}
+    )
+    with urllib.request.urlopen(req, timeout=6.0) as response:
+        if response.status != 200:
+            raise RuntimeError(f"Open-Meteo HTTP error: status {response.status}")
+        raw_data = response.read().decode('utf-8')
+        return json.loads(raw_data)
 
 
 def _wmo_code_to_condition(code: int) -> str:
