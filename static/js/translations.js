@@ -5279,54 +5279,83 @@ class I18nManager {
         const lang = this.currentLang;
         const low = text.toLowerCase();
 
-        // 1. Weather conditions are optimal for fertilizer application and top-dressing.
-        if (low.includes('optimal for fertilizer application') || low.includes('weather conditions are optimal') || low.includes('optimal for fertilizer broadcasting')) {
-            return lang === 'hi'
-                ? 'उर्वरक अनुप्रयोग और टॉप-ड्रेसिंग के लिए मौसम परिस्थितियां पूरी तरह अनुकूल हैं।'
-                : 'ખાતર આપવા અને પૂર્તિ ખાતર (ટોપ-ડ્રેસિંગ) માટે હવામાન અનુકૂળ છે.';
-        }
-
-        // 2. Weather is favorable ({temp}°C, {rain} mm rain). Ideal for fertilizer top-dressing followed by light irrigation.
-        if (low.includes('favorable') || low.includes('ideal for fertilizer')) {
-            const temp = (text.match(/([\d\.]+)\s*°c/i) || [])[1] || '28.5';
-            const rain = (text.match(/([\d\.]+)\s*mm/i) || [])[1] || '0.0';
-            return lang === 'hi'
-                ? `मौसम अनुकूल है (${temp}°C, ${rain} mm वर्षा)। उर्वरक टॉप-ड्रेसिंग और हल्की सिंचाई के लिए उत्तम समय है।`
-                : `હવામાન અનુકૂળ છે (${temp}°C, ${rain} mm વરસાદ). પૂર્તિ ખાતર આપવા અને હળવા પિયત માટે શ્રેષ્ઠ સમય છે.`;
-        }
-
-        // 3. Heavy rainfall forecast in next 48h! Delay fertilizer broadcast to prevent runoff and leaching.
-        if (low.includes('heavy rainfall') || low.includes('delay fertilizer broadcast') || low.includes('prevent runoff')) {
-            return lang === 'hi'
-                ? 'अगले 48 घंटों में भारी वर्षा का अनुमान! बहाव और रिसाव से नुकसान रोकने के लिए उर्वरक छिड़काव में देरी करें।'
-                : 'આગામી 48 કલાકમાં ભારે વરસાદની આગાહી! ખાતર ધોવાઈ જતું અટકાવવા માટે ખાતર આપવાનું મુલતવી રાખો.';
-        }
-
-        // 4. Moderate rain expected / Moderate rainfall ({rain} mm) forecasted
-        if (low.includes('moderate rain') || low.includes('moderate rainfall')) {
+        // 1. Weather is optimal ({temp_c:.1f}°C, {humidity_pct:.0f}% humidity, {rain_48h_mm:.1f} mm rain). Ideal 48h window for fertilizer broadcasting, fertigation, and foliar spray.
+        // Also matches "Weather conditions are optimal..." or "Weather window is optimal..."
+        if (low.includes('optimal') || low.includes('favorable') || low.includes('ideal 48h window') || low.includes('ideal for fertilizer')) {
+            const tempMatch = text.match(/([\d\.]+)\s*°c/i);
+            const humMatch = text.match(/([\d\.]+)\s*%\s*humidity/i) || text.match(/([\d\.]+)\s*%/i);
             const rainMatch = text.match(/([\d\.]+)\s*mm/i);
-            if (rainMatch) {
-                const rain = rainMatch[1];
+
+            const temp = tempMatch ? tempMatch[1] : '';
+            const hum = humMatch ? humMatch[1] : '';
+            const rain = rainMatch ? rainMatch[1] : '';
+
+            if (temp && hum && rain) {
                 return lang === 'hi'
-                    ? `मध्यम वर्षा (${rain} mm) का अनुमान: बेसल उर्वरक मिट्टी में मिलाना सुरक्षित है, लेकिन पत्तियों पर छिड़काव न करें।`
-                    : `મધ્યમ વરસાદ (${rain} mm)ની આગાહી: પાયાનું ખાતર જમીનમાં ભેળવી શકાય છે, પરંતુ છંટકાવ ટાળો.`;
+                    ? `मौसम अनुकूल है (${temp}°C, ${hum}% आर्द्रता, ${rain} mm वर्षा)। उर्वरक छिड़काव, फर्टिगेशन और पर्णीय छिड़काव के लिए अगले 48 घंटे आदर्श हैं।`
+                    : `હવામાન અનુકૂળ છે (${temp}°C, ${hum}% ભેજ, ${rain} mm વરસાદ). ખાતર આપવા, ફર્ટિગેશન અને છંટકાવ માટે આગામી 48 કલાક ઉત્તમ છે.`;
+            } else if (temp && rain) {
+                return lang === 'hi'
+                    ? `मौसम अनुकूल है (${temp}°C, ${rain} mm वर्षा)। उर्वरक टॉप-ड्रेसिंग और हल्की सिंचाई के लिए उत्तम समय है।`
+                    : `હવામાન અનુકૂળ છે (${temp}°C, ${rain} mm વરસાદ). પૂર્તિ ખાતર આપવા અને હળવા પિયત માટે શ્રેષ્ઠ સમય છે.`;
+            } else {
+                return lang === 'hi'
+                    ? 'उर्वरक अनुप्रयोग और टॉप-ड्रेसिंग के लिए मौसम परिस्थितियां पूरी तरह अनुकूल हैं।'
+                    : 'ખાતર આપવા અને પૂર્તિ ખાતર (ટોપ-ડ્રેસિંગ) માટે હવામાન અનુકૂળ છે.';
             }
-            return lang === 'hi'
-                ? 'मध्यम वर्षा का अनुमान। पत्तियों पर छिड़काव न करें; खुराक को विभाजित करें या धीमी गति से घुलने वाले उर्वरक का प्रयोग करें।'
-                : 'મધ્યમ વરસાદની શક્યતા. પાન પર છંટકાવ ટાળો; ખાતર તબક્કાવાર વહેંચીને આપો અથવા ધીમે ઓગળતા ખાતરનો ઉપયોગ કરો.';
         }
 
-        // 5. High ambient heat detected
-        if (low.includes('high ambient heat') || low.includes('ammonia volatilization')) {
+        // 2. Heavy rainfall ({rain_48h_mm:.1f} mm) forecast in next 48h. AVOID fertilizer application and spraying to prevent severe nutrient runoff and leaching.
+        if (low.includes('heavy rainfall') || low.includes('delay fertilizer broadcast') || (low.includes('avoid') && low.includes('rain'))) {
+            const rainMatch = text.match(/([\d\.]+)\s*mm/i);
+            const rain = rainMatch ? rainMatch[1] : '25.0';
             return lang === 'hi'
-                ? 'अधिक तापमान दर्ज किया गया। अमोनिया गैस बनकर उड़ने से रोकने के लिए यूरिया का प्रयोग सुबह जल्दी या शाम को करें।'
-                : 'વધુ ગરમી/તાપમાન જણાયું છે. યુરિયાનું બાષ્પીભવન અટકાવવા માટે વહેલી સવારે અથવા મોડી સાંજે યુરિયા આપો.';
+                ? `अगले 48 घंटों में भारी वर्षा (${rain} mm) का अनुमान! पोषक तत्वों के बहाव और बर्बादी को रोकने के लिए उर्वरक अनुप्रयोग व छिड़काव से बचें।`
+                : `આગામી 48 કલાકમાં ભારે વરસાદ (${rain} mm) ની આગાહી! ખાતર ધોવાઈ જતું અટકાવવા માટે ખાતર આપવાનું અને છંટકાવ મુલતવી રાખો.`;
         }
 
-        // 6. Postpone fertilizer application
-        if (low.includes('postpone fertilizer')) {
+        // 3. Moderate rainfall ({rain_48h_mm:.1f} mm) expected. Delay foliar spraying; incorporate basal fertilizer deep into soil to minimize surface loss.
+        if (low.includes('moderate rainfall') || low.includes('moderate rain')) {
+            const rainMatch = text.match(/([\d\.]+)\s*mm/i);
+            const rain = rainMatch ? rainMatch[1] : '12.0';
             return lang === 'hi'
-                ? 'वर्षा थमने और खेत से पानी निकलने तक उर्वरक का प्रयोग स्थगित रखें।'
+                ? `मध्यम वर्षा (${rain} mm) की संभावना। पत्तियों पर छिड़काव टालें; सतह से नुकसान कम करने के लिए बेसल खाद मिट्टी में गहराई से मिलाएं।`
+                : `મધ્યમ વરસાદ (${rain} mm) ની શક્યતા. પાન પર છંટકાવ મુલતવી રાખો; ખાતરનો બગાડ અટકાવવા પાયાનું ખાતર જમીનમાં ઊંડે સુધી ભેળવો.`;
+        }
+
+        // 4. High wind velocity ({wind_kmh:.1f} km/h) detected. AVOID fine foliar spray to prevent chemical drift; soil application acceptable.
+        if (low.includes('high wind') || low.includes('wind velocity')) {
+            const windMatch = text.match(/([\d\.]+)\s*km\/h/i);
+            const wind = windMatch ? windMatch[1] : '20.0';
+            return lang === 'hi'
+                ? `तेज हवा की गति (${wind} km/h) दर्ज की गई। दवा को उड़ने से रोकने के लिए पर्णीय छिड़काव से बचें; मिट्टी में खाद देना सुरक्षित है।`
+                : `પવનની ગતિ વધુ (${wind} km/h) જણાઈ છે. દવાનો છંટકાવ ઉડી ન જાય તે માટે છંટકાવ ટાળો; જમીનમાં ખાતર આપવું સુરક્ષિત છે.`;
+        }
+
+        // 5. High ambient heat ({temp_c:.1f}°C). Apply nitrogenous fertilizers during early morning or late evening followed by light irrigation to curb volatilization.
+        if (low.includes('high ambient heat') || low.includes('extreme heat') || (low.includes('heat') && low.includes('volatilization'))) {
+            const tempMatch = text.match(/([\d\.]+)\s*°c/i);
+            const temp = tempMatch ? tempMatch[1] : '38.0';
+            return lang === 'hi'
+                ? `अधिक तापमान (${temp}°C): अमोनिया गैस बनकर उड़ने से रोकने के लिए नाइट्रोजन उर्वरक सुबह जल्दी या शाम को दें और हल्की सिंचाई करें।`
+                : `વધુ ગરમી/તાપમાન (${temp}°C): યુરિયાનું બાષ્પીભવન અટકાવવા માટે નાઇટ્રોજન ખાતર વહેલી સવારે અથવા સાંજે આપો અને હળવું પિયત આપો.`;
+        }
+
+        // 6. High relative humidity ({humidity_pct:.0f}%) with wet conditions ({rain_48h_mm:.1f} mm). Ensure good field aeration before top-dressing.
+        if (low.includes('humidity') && (low.includes('wet conditions') || low.includes('aeration'))) {
+            const humMatch = text.match(/([\d\.]+)\s*%/i);
+            const rainMatch = text.match(/([\d\.]+)\s*mm/i);
+            const hum = humMatch ? humMatch[1] : '85';
+            const rain = rainMatch ? rainMatch[1] : '5.0';
+            return lang === 'hi'
+                ? `अधिक आर्द्रता (${hum}%) और गीली परिस्थितियां (${rain} mm)। टॉप-ड्रेसिंग से पहले खेत में उचित वायु संचार सुनिश्चित करें।`
+                : `વધુ ભેજ (${hum}%) અને ભીની પરિસ્થિતિ (${rain} mm). પૂર્તિ ખાતર આપતા પહેલાં ખેતરમાં યોગ્ય હવા ઉજાસ થવા દો.`;
+        }
+
+        // 7. Postpone fertilizer application until rainfall subsides and standing water drains.
+        if (low.includes('postpone fertilizer') || low.includes('standing water')) {
+            return lang === 'hi'
+                ? 'वर्षा थमने और खेत से जमा पानी निकलने तक उर्वरक का प्रयोग स्थगित रखें।'
                 : 'વરસાદ બંધ ન થાય અને ખેતરમાંથી પાણી ન નીકળે ત્યાં સુધી ખાતર આપવાનું મુલતવી રાખો.';
         }
 
