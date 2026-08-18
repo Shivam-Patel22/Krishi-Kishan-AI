@@ -24,6 +24,10 @@ from fertilizer_app.services.soil_lookup_service import (
     get_villages_by_block, get_soil_benchmark_profile
 )
 from fertilizer_app.services.weather_service import fetch_weather_data
+from fertilizer_app.translations import (
+    get_translations_for_lang, localize_crop, localize_fertilizer,
+    localize_soil_type, localize_split_item
+)
 
 
 def index_view(request):
@@ -42,19 +46,48 @@ def report_view(request):
 
 def download_recommendation_pdf_view(request, pk):
     """
-    Generates and returns an instant downloadable A4 PDF prescription.
+    Generates and returns an instant downloadable A4 PDF prescription with multilingual support (en, hi, gu).
     """
     rec = get_object_or_404(
         Recommendation.objects.select_related('crop', 'field', 'soil_test', 'weather_record'),
         pk=pk
     )
 
+    lang = request.GET.get('lang', 'en').lower()
+    if lang not in ['en', 'hi', 'gu']:
+        lang = 'en'
+
+    t = get_translations_for_lang(lang)
     area_ha = float(rec.field.area_hectares or 1.0)
     area_acres = round(area_ha * 2.471, 1)
 
+    crop_name = localize_crop(rec.crop.name, lang)
+    primary_fert = localize_fertilizer(rec.primary_fertilizer, lang)
+    soil_type = localize_soil_type(rec.field.soil_type, lang)
+
+    split_schedule = []
+    if rec.split_schedule:
+        for split in rec.split_schedule:
+            split_schedule.append(localize_split_item(split, lang))
+
+    alternatives_localized = []
+    if rec.ai_alternatives:
+        for alt in rec.ai_alternatives:
+            alternatives_localized.append({
+                'fertilizer': localize_fertilizer(alt.get('fertilizer', ''), lang),
+                'probability_pct': alt.get('probability_pct', 0)
+            })
+
     html_string = render_to_string('report_pdf.html', {
         'rec': rec,
-        'area_acres': area_acres
+        'area_acres': area_acres,
+        'lang': lang,
+        't': t,
+        'crop_name': crop_name,
+        'primary_fert': primary_fert,
+        'soil_type': soil_type,
+        'split_schedule': split_schedule,
+        'alternatives_localized': alternatives_localized,
     })
 
     edge_path = r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'

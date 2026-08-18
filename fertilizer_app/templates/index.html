@@ -6,7 +6,7 @@
     <title>KrishiKisan AI • Precision Fertilizer Recommendation Platform (PS-SW-002)</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;500;600;700;800&family=Noto+Sans+Gujarati:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/static/css/style.css">
 </head>
 <body>
@@ -18,18 +18,26 @@
         <div class="nav-brand">
             <div class="brand-icon">🌱</div>
             <div class="brand-text">
-                <span class="brand-title">KrishiKisan AI</span>
+                <span class="brand-title" data-i18n="brand.title">KrishiKisan AI</span>
             </div>
         </div>
         <div class="nav-stats">
-            <div class="stat-pill">
-                <span class="stat-indicator pulse-green"></span>
-                <span class="stat-label">National Soil DB:</span>
-                <span class="stat-value" id="statDbCount">10.85M Records</span>
+            <div class="lang-selector-wrap">
+                <span class="lang-icon">🌐</span>
+                <select id="langSelect" class="lang-selector-select" aria-label="Select language" onchange="window.i18n.setLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="gu">ગુજરાતી</option>
+                </select>
             </div>
             <div class="stat-pill">
-                <span class="stat-label">Model Accuracy:</span>
-                <span class="stat-value highlight-green">99.95% (F3: 0.9995)</span>
+                <span class="stat-indicator pulse-green"></span>
+                <span class="stat-label" data-i18n="nav.dbLabel">National Soil DB:</span>
+                <span class="stat-value" id="statDbCount" data-i18n="nav.dbCount">10.85M Records</span>
+            </div>
+            <div class="stat-pill">
+                <span class="stat-label" data-i18n="nav.accuracyLabel">Model Accuracy:</span>
+                <span class="stat-value highlight-green" data-i18n="nav.accuracyVal">99.95% (F3: 0.9995)</span>
             </div>
         </div>
     </header>
@@ -49,45 +57,45 @@
                 <div class="card form-card">
                     <div class="card-header">
                         <div>
-                            <h2 class="card-title"><span>🌾</span> Farm Plot & Soil Diagnostics</h2>
-                            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.25rem;">
+                            <h2 class="card-title"><span>🌾</span> <span data-i18n="form.plotTitle">Farm Plot & Soil Diagnostics</span></h2>
+                            <p style="font-size: 0.82rem; color: var(--text-muted); margin-top: 0.25rem;" data-i18n="form.plotSubtitle">
                                 Enter your farm parameters or auto-fetch regional benchmarks to generate your AI precision prescription.
                             </p>
                         </div>
-                        <span class="badge badge-accent">Interactive Engine</span>
+                        <span class="badge badge-accent" data-i18n="form.badgeInteractive">Interactive Engine</span>
                     </div>
 
                     <form id="recommendationForm">
                         
                         <!-- 1. Target Crop & Soil Parameters -->
                         <div class="form-section">
-                            <label class="section-heading">1. Select Plot & Target Crop</label>
+                            <label class="section-heading" data-i18n="form.sec1Heading">1. Select Plot & Target Crop</label>
                             
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="cropSelect">Target Crop</label>
+                                    <label for="cropSelect" data-i18n="form.targetCrop">Target Crop</label>
                                     <select id="cropSelect" class="form-control" required>
-                                        <option value="">-- Choose Target Crop --</option>
+                                        <option value="" data-i18n="form.chooseCrop">-- Choose Target Crop --</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="soilType">Soil Type</label>
+                                    <label for="soilType" data-i18n="form.soilType">Soil Type</label>
                                     <select id="soilType" class="form-control">
-                                        <option value="Loamy Soil">Loamy Soil (Alluvial / Medium)</option>
-                                        <option value="Black Soil">Black Cotton Soil (Regur)</option>
-                                        <option value="Red Soil">Red & Yellow Soil</option>
-                                        <option value="Sandy Loam">Sandy Loam / Light Texture</option>
-                                        <option value="Clayey Soil">Clayey Soil / Heavy Texture</option>
-                                        <option value="Laterite Soil">Laterite Soil</option>
+                                        <option value="Loamy Soil" data-i18n="soil.loamy">Loamy Soil (Alluvial / Medium)</option>
+                                        <option value="Black Soil" data-i18n="soil.black">Black Cotton Soil (Regur)</option>
+                                        <option value="Red Soil" data-i18n="soil.red">Red & Yellow Soil</option>
+                                        <option value="Sandy Loam" data-i18n="soil.sandyLoam">Sandy Loam / Light Texture</option>
+                                        <option value="Clayey Soil" data-i18n="soil.clayey">Clayey Soil / Heavy Texture</option>
+                                        <option value="Laterite Soil" data-i18n="soil.laterite">Laterite Soil</option>
                                     </select>
                                 </div>
                             </div>
 
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label for="fieldArea">Field Area (Hectares)</label>
+                                    <label for="fieldArea" data-i18n="form.fieldArea">Field Area (Hectares)</label>
                                     <input type="number" id="fieldArea" class="form-control" min="0.1" step="0.1" value="1.0" required>
-                                    <small class="helper-text">1 Hectare ≈ 2.471 Acres</small>
+                                    <small class="helper-text" data-i18n="form.hectareHelp">1 Hectare ≈ 2.471 Acres</small>
                                 </div>
                             </div>
                         </div>
@@ -95,26 +103,26 @@
                         <!-- 2. National DB Auto-Fill Helper -->
                         <div class="form-section highlight-box">
                             <div class="box-header">
-                                <span class="box-title">📍 Auto-Fetch from 10.85M National Soil Database</span>
+                                <span class="box-title" data-i18n="form.autoFetchTitle">📍 Auto-Fetch from 10.85M National Soil Database</span>
                             </div>
                             
                             <div id="autoFetchControls" class="autofetch-grid" style="margin-top: 0.75rem;">
                                 <div class="form-group">
-                                    <label for="lookupState">State</label>
+                                    <label for="lookupState" data-i18n="form.state">State</label>
                                     <select id="lookupState" class="form-control form-control-sm" required>
-                                        <option value="">-- Select State --</option>
+                                        <option value="" data-i18n="form.selectState">-- Select State --</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="lookupDistrict">District</label>
+                                    <label for="lookupDistrict" data-i18n="form.district">District</label>
                                     <select id="lookupDistrict" class="form-control form-control-sm" disabled required>
-                                        <option value="">-- Select District --</option>
+                                        <option value="" data-i18n="form.selectDistrict">-- Select District --</option>
                                     </select>
                                 </div>
                                 <div class="form-group">
-                                    <label for="lookupBlock">Block / Taluka</label>
+                                    <label for="lookupBlock" data-i18n="form.block">Block / Taluka</label>
                                     <select id="lookupBlock" class="form-control form-control-sm" disabled required>
-                                        <option value="">-- Select Block / Taluka --</option>
+                                        <option value="" data-i18n="form.selectBlock">-- Select Block / Taluka --</option>
                                     </select>
                                 </div>
                             </div>
@@ -122,34 +130,34 @@
 
                         <!-- 3. Soil Health Parameters (Editable) -->
                         <div class="form-section">
-                            <label class="section-heading">2. Soil Chemistry & Nutrient Test (kg/ha & ppm)</label>
+                            <label class="section-heading" data-i18n="form.sec2Heading">2. Soil Chemistry & Nutrient Test (kg/ha & ppm)</label>
                             
                             <div class="form-row-3">
                                 <div class="form-group">
-                                    <label for="soilN">Nitrogen (N) <span class="unit">kg/ha</span></label>
+                                    <label for="soilN"><span data-i18n="form.nitrogen">Nitrogen (N)</span> <span class="unit">kg/ha</span></label>
                                     <input type="number" id="soilN" class="form-control" min="0" step="any" value="0" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="soilP">Phosphorus (P) <span class="unit">kg/ha</span></label>
+                                    <label for="soilP"><span data-i18n="form.phosphorus">Phosphorus (P)</span> <span class="unit">kg/ha</span></label>
                                     <input type="number" id="soilP" class="form-control" min="0" step="any" value="0" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="soilK">Potassium (K) <span class="unit">kg/ha</span></label>
+                                    <label for="soilK"><span data-i18n="form.potassium">Potassium (K)</span> <span class="unit">kg/ha</span></label>
                                     <input type="number" id="soilK" class="form-control" min="0" step="any" value="0" required>
                                 </div>
                             </div>
 
                             <div class="form-row-3">
                                 <div class="form-group">
-                                    <label for="soilPh">Soil pH (1-14)</label>
+                                    <label for="soilPh" data-i18n="form.ph">Soil pH (1-14)</label>
                                     <input type="number" id="soilPh" class="form-control" min="0" max="14.0" step="any" value="0" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="soilOc">Organic Carbon <span class="unit">%</span></label>
+                                    <label for="soilOc"><span data-i18n="form.oc">Organic Carbon</span> <span class="unit">%</span></label>
                                     <input type="number" id="soilOc" class="form-control" min="0" max="10.0" step="any" value="0" required>
                                 </div>
                                 <div class="form-group">
-                                    <label for="soilEc">Electrical Cond. <span class="unit">dS/m</span></label>
+                                    <label for="soilEc"><span data-i18n="form.ec">Electrical Cond.</span> <span class="unit">dS/m</span></label>
                                     <input type="number" id="soilEc" class="form-control" min="0" max="20.0" step="any" value="0">
                                 </div>
                             </div>
@@ -158,31 +166,31 @@
 
                         <!-- 4. Weather Conditions & Spray Radar -->
                         <div class="form-section">
-                            <label class="section-heading">3. Local Agro-Meteorology (48-hr Window)</label>
+                            <label class="section-heading" data-i18n="form.sec3Heading">3. Local Agro-Meteorology (48-hr Window)</label>
                             
                             <div class="weather-preview-box">
                                 <div class="weather-metric">
-                                    <span class="w-label">Temperature</span>
+                                    <span class="w-label" data-i18n="weather.temp">Temperature</span>
                                     <span class="w-val" id="dispTemp">28.5 °C</span>
                                 </div>
                                 <div class="weather-metric">
-                                    <span class="w-label">Humidity</span>
+                                    <span class="w-label" data-i18n="weather.humidity">Humidity</span>
                                     <span class="w-val" id="dispHumidity">62 %</span>
                                 </div>
                                 <div class="weather-metric">
-                                    <span class="w-label">Rain Forecast</span>
+                                    <span class="w-label" data-i18n="weather.rain">Rain Forecast</span>
                                     <span class="w-val" id="dispRain">0.0 mm</span>
                                 </div>
                                 <div class="weather-metric">
-                                    <span class="w-label">Spray Safety</span>
-                                    <span class="badge badge-success" id="dispSpraySafety">OPTIMAL</span>
+                                    <span class="w-label" data-i18n="weather.spraySafety">Spray Safety</span>
+                                    <span class="badge badge-success" id="dispSpraySafety" data-i18n="weather.optimal">OPTIMAL</span>
                                 </div>
                             </div>
                         </div>
 
                         <!-- Submit Button -->
                         <button type="submit" id="btnGenerateRec" class="btn btn-primary btn-block" style="padding: 0.85rem; font-size: 1rem;">
-                            <span>✨</span> Generate AI Precision Recommendation
+                            <span>✨</span> <span id="btnRecText" data-i18n="form.btnGenerate">Generate AI Precision Recommendation</span>
                         </button>
                     </form>
                 </div>
@@ -194,9 +202,10 @@
     </main>
 
     <footer class="app-footer">
-        <p>Smart India Hackathon (SIH 2026) • Problem Statement PS-SW-002 • AI-Powered Precision Fertilizer Platform</p>
+        <p data-i18n="footer.text">Smart India Hackathon (SIH 2026) • Problem Statement PS-SW-002 • AI-Powered Precision Fertilizer Platform</p>
     </footer>
 
+    <script src="/static/js/translations.js"></script>
     <script src="/static/js/app.js"></script>
 </body>
 </html>

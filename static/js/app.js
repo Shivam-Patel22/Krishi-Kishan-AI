@@ -5,6 +5,14 @@
 document.addEventListener('DOMContentLoaded', () => {
     loadInitialData();
     setupEventListeners();
+
+    if (window.i18n) {
+        window.i18n.onLanguageChange(() => {
+            if (appState.crops && appState.crops.length > 0) {
+                populateCropSelect(appState.crops);
+            }
+        });
+    }
 });
 
 // State Store
@@ -48,14 +56,22 @@ async function loadLookupStates() {
 function populateCropSelect(crops) {
     const select = document.getElementById('cropSelect');
     if (!select) return;
-    select.innerHTML = '<option value="">-- Choose Target Crop --</option>';
+    const currentVal = select.value;
+    const chooseText = window.i18n ? window.i18n.t('form.chooseCrop') : '-- Choose Target Crop --';
+    select.innerHTML = `<option value="" data-i18n="form.chooseCrop">${chooseText}</option>`;
 
     crops.forEach(crop => {
         const opt = document.createElement('option');
         opt.value = crop.id;
-        opt.textContent = `${crop.name} (${crop.category})`;
+        const cropName = window.i18n ? window.i18n.translateCrop(crop.name) : crop.name;
+        const catName = window.i18n ? window.i18n.translateCategory(crop.category) : crop.category;
+        opt.textContent = `${cropName} (${catName})`;
         select.appendChild(opt);
     });
+
+    if (currentVal) {
+        select.value = currentVal;
+    }
 }
 
 function setupEventListeners() {
@@ -113,9 +129,11 @@ function setupEventListeners() {
     if (lookupState) {
         lookupState.addEventListener('change', async (e) => {
             const st = e.target.value;
-            lookupDistrict.innerHTML = '<option value="">-- Select District --</option>';
+            const selectDistText = window.i18n ? window.i18n.t('form.selectDistrict') : '-- Select District --';
+            const selectBlockText = window.i18n ? window.i18n.t('form.selectBlock') : '-- Select Block / Taluka --';
+            lookupDistrict.innerHTML = `<option value="" data-i18n="form.selectDistrict">${selectDistText}</option>`;
             lookupDistrict.disabled = true;
-            lookupBlock.innerHTML = '<option value="">-- Select Block / Taluka --</option>';
+            lookupBlock.innerHTML = `<option value="" data-i18n="form.selectBlock">${selectBlockText}</option>`;
             lookupBlock.disabled = true;
             if (btnApplyBenchmark) btnApplyBenchmark.disabled = true;
 
@@ -143,7 +161,8 @@ function setupEventListeners() {
         lookupDistrict.addEventListener('change', async (e) => {
             const st = lookupState.value;
             const dist = e.target.value;
-            lookupBlock.innerHTML = '<option value="">-- Select Block / Taluka --</option>';
+            const selectBlockText = window.i18n ? window.i18n.t('form.selectBlock') : '-- Select Block / Taluka --';
+            lookupBlock.innerHTML = `<option value="" data-i18n="form.selectBlock">${selectBlockText}</option>`;
             lookupBlock.disabled = true;
             if (btnApplyBenchmark) btnApplyBenchmark.disabled = !dist;
 
@@ -175,7 +194,7 @@ function setupEventListeners() {
 
             if (!st || !dist) return;
 
-            btnApplyBenchmark.textContent = "Loading Benchmark...";
+            btnApplyBenchmark.textContent = window.i18n ? window.i18n.t('form.loadingBenchmark') : "Loading Benchmark...";
             try {
                 let url = `/api/soil-lookup/?type=benchmark&state=${encodeURIComponent(st)}&district=${encodeURIComponent(dist)}`;
                 if (block) url += `&block=${encodeURIComponent(block)}`;
@@ -194,12 +213,13 @@ function setupEventListeners() {
                     if (document.getElementById('soilS')) document.getElementById('soilS').value = profile.sulphur;
                     if (document.getElementById('soilFe')) document.getElementById('soilFe').value = profile.iron;
 
-                    alert(`Applied 10.85M National Soil Database Benchmark for ${dist}, ${st}!`);
+                    const msg = window.i18n ? window.i18n.t('alert.benchmarkApplied', { district: dist, state: st }) : `Applied 10.85M National Soil Database Benchmark for ${dist}, ${st}!`;
+                    alert(msg);
                 }
             } catch (err) {
                 console.error("Error applying soil benchmark:", err);
             } finally {
-                btnApplyBenchmark.textContent = "Apply Regional Benchmark";
+                btnApplyBenchmark.textContent = window.i18n ? window.i18n.t('form.applyBenchmark') : "Apply Regional Benchmark";
             }
         });
     }
@@ -217,19 +237,22 @@ async function handleGenerateRecommendation(e) {
     const lookupBlock = document.getElementById('lookupBlock')?.value?.trim();
 
     if (!lookupState) {
-        alert("Please select a State.");
+        const msg = window.i18n ? window.i18n.t('alert.selectState') : "Please select a State.";
+        alert(msg);
         document.getElementById('lookupState')?.focus();
         return;
     }
 
     if (!lookupDistrict) {
-        alert("Please select a District.");
+        const msg = window.i18n ? window.i18n.t('alert.selectDistrict') : "Please select a District.";
+        alert(msg);
         document.getElementById('lookupDistrict')?.focus();
         return;
     }
 
     if (!lookupBlock) {
-        alert("Please select a Block / Taluka.");
+        const msg = window.i18n ? window.i18n.t('alert.selectBlock') : "Please select a Block / Taluka.";
+        alert(msg);
         document.getElementById('lookupBlock')?.focus();
         return;
     }
@@ -243,7 +266,8 @@ async function handleGenerateRecommendation(e) {
     const btn = document.getElementById('btnGenerateRec');
 
     if (!cropId) {
-        alert("Please select a Target Crop.");
+        const msg = window.i18n ? window.i18n.t('alert.selectCrop') : "Please select a Target Crop.";
+        alert(msg);
         return;
     }
 
@@ -277,14 +301,13 @@ async function handleGenerateRecommendation(e) {
         }
     };
 
-
     if (fieldId) {
         payload.field_id = parseInt(fieldId);
     }
 
     btn.disabled = true;
-    btn.innerHTML = `<span>⏳</span> Calculating Agronomic & AI Dosage...`;
-
+    const calcText = window.i18n ? window.i18n.t('form.btnCalculating') : "Calculating Agronomic & AI Dosage...";
+    btn.innerHTML = `<span>⏳</span> ${calcText}`;
 
     try {
         const res = await fetch('/api/recommendations/generate/', {
@@ -309,12 +332,10 @@ async function handleGenerateRecommendation(e) {
 
     } catch (err) {
         console.error("Failed to generate recommendation:", err);
-        alert(`Recommendation Generation Error: ${err.message}`);
+        const errMsg = window.i18n ? window.i18n.t('alert.recError', { error: err.message }) : `Recommendation Generation Error: ${err.message}`;
+        alert(errMsg);
         btn.disabled = false;
-        btn.innerHTML = `<span>✨</span> Generate AI Precision Recommendation`;
+        const genText = window.i18n ? window.i18n.t('form.btnGenerate') : "Generate AI Precision Recommendation";
+        btn.innerHTML = `<span>✨</span> ${genText}`;
     }
 }
-
-
-
-
