@@ -5,8 +5,10 @@ Views and API Endpoints for Precision Fertilizer Recommendation Platform (PS-SW-
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.template.loader import render_to_string
-import os, tempfile, subprocess
+import os, tempfile, subprocess, logging
 from rest_framework import viewsets, status
+
+logger = logging.getLogger("fertilizer_app.views")
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -281,13 +283,31 @@ class GenerateRecommendationAPIView(APIView):
                         field.farm.block_name, field.farm.village_name
                     )
 
-            # Resolve weather
-            weather_data = fetch_weather_data(
-                latitude=float(field.farm.latitude) if field.farm.latitude else None,
-                longitude=float(field.farm.longitude) if field.farm.longitude else None,
-                state_name=field.farm.state_name,
-                district_name=field.farm.district_name
-            )
+            # Resolve weather using custom_soil state & district if provided, or field.farm
+            target_state = (custom_soil.get('state') if custom_soil else None) or (field.farm.state_name if field and field.farm else None)
+            target_district = (custom_soil.get('district') if custom_soil else None) or (field.farm.district_name if field and field.farm else None)
+            target_lat = float(field.farm.latitude) if (field and field.farm and field.farm.latitude) else None
+            target_lon = float(field.farm.longitude) if (field and field.farm and field.farm.longitude) else None
+
+            try:
+                weather_data = fetch_weather_data(
+                    latitude=target_lat,
+                    longitude=target_lon,
+                    state_name=target_state,
+                    district_name=target_district
+                )
+            except Exception as w_err:
+                logger.warning("Live weather fetch failed in recommendation pipeline, using safe climatic baseline: %s", str(w_err))
+                weather_data = {
+                    "temperature_c": 28.0,
+                    "humidity_pct": 65.0,
+                    "rainfall_forecast_mm": 0.0,
+                    "wind_speed_kmh": 10.0,
+                    "is_safe_to_apply": True,
+                    "risk_level": "LOW",
+                    "spray_safety": "OPTIMAL",
+                    "advice": "Weather is favorable for standard application."
+                }
 
             # 1. AI ML Ensemble Prediction
             ml_result = predict_fertilizer_ml(crop.name, soil_data, weather_data)
@@ -418,11 +438,28 @@ class WeatherAPIView(APIView):
         lon = request.GET.get('lon')
         state = request.GET.get('state')
         district = request.GET.get('district')
+        force = request.GET.get('refresh', '').lower() in ['true', '1', 'yes']
 
-        weather = fetch_weather_data(
-            latitude=float(lat) if lat else None,
-            longitude=float(lon) if lon else None,
-            state_name=state,
-            district_name=district
-        )
-        return Response(weather)
+        try:
+            weather = fetch_weather_data(
+                latitude=float(lat) if lat else None,
+                longitude=float(lon) if lon else None,
+                state_name=state,
+                district_name=district,
+                force_refresh=force
+            )
+            return Response(weather, status=status.HTTP_200_OK)
+        except Exception as e:
+            logger.error("Error in WeatherAPIView: %s", str(e), exc_info=True)
+            return Response(
+                {
+                    "error": f"Weather data temporarily unavailable for {district or state or 'selected location'}.",
+                    "detail": str(e),
+                    "location": {
+                        "state": state or "India",
+                        "district": district or state or "India",
+                        "display_name": f"{district}, {state}" if (district and state) else (state or district or "India")
+                    }
+                },
+                status=status.HTTP_503_SERVICE_UNAVAILABLE
+            )

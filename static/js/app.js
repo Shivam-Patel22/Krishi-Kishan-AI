@@ -1,25 +1,43 @@
 /**
  * KrishiKisan AI Precision Fertilizer Frontend Application
+ * Live State- & District-Based Agro-Meteorology Client
  */
 
 document.addEventListener('DOMContentLoaded', () => {
     loadInitialData();
     setupEventListeners();
+    initWeatherModule();
 
     if (window.i18n) {
         window.i18n.onLanguageChange(() => {
             if (appState.crops && appState.crops.length > 0) {
                 populateCropSelect(appState.crops);
             }
+            if (weatherState.lastData) {
+                renderWeatherData(weatherState.lastData);
+            }
         });
     }
 });
 
-// State Store
+// ---------------------------------------------------------------------------
+// 1. Application State Store
+// ---------------------------------------------------------------------------
 const appState = {
     crops: [],
 };
 
+const weatherState = {
+    currentLocation: { state: 'Gujarat', district: 'Ahmedabad', name: 'Ahmedabad, Gujarat', lat: null, lon: null },
+    lastData: null,
+    isFetching: false,
+    autoRefreshInterval: null,
+    cache: {} // Key: `${lat}_${lon}_${state}_${district}` -> { timestamp, data }
+};
+
+// ---------------------------------------------------------------------------
+// 2. Initial Data Loaders
+// ---------------------------------------------------------------------------
 async function loadInitialData() {
     try {
         const cropsRes = await fetch('/api/crops/');
@@ -31,7 +49,10 @@ async function loadInitialData() {
     } catch (err) {
         console.error("Failed to load initial crop catalogs:", err);
     }
-    loadLookupStates();
+    await loadLookupStates();
+
+    // Default initial live weather for Gujarat / Ahmedabad
+    fetchLiveWeather({ state: 'Gujarat', district: 'Ahmedabad' });
 }
 
 async function loadLookupStates() {
@@ -74,6 +95,220 @@ function populateCropSelect(crops) {
     }
 }
 
+// ---------------------------------------------------------------------------
+// 3. Live Agro-Meteorology Module
+// ---------------------------------------------------------------------------
+function initWeatherModule() {
+    // Setup periodic automatic weather refresh (every 15 minutes)
+    if (weatherState.autoRefreshInterval) {
+        clearInterval(weatherState.autoRefreshInterval);
+    }
+    weatherState.autoRefreshInterval = setInterval(() => {
+        fetchLiveWeather({ forceRefresh: false });
+    }, 15 * 60 * 1000);
+}
+
+function renderWeatherLoading() {
+    const tLoading = window.i18n ? window.i18n.t('weather.loading') : 'Loading...';
+    const tAnalyzing = window.i18n ? window.i18n.t('weather.analyzing') : 'Analyzing...';
+
+    const dispTemp = document.getElementById('dispTemp');
+    const dispHumidity = document.getElementById('dispHumidity');
+    const dispRain = document.getElementById('dispRain');
+    const dispSpraySafety = document.getElementById('dispSpraySafety');
+    const errBox = document.getElementById('weatherErrorContainer');
+    const spinner = document.getElementById('refreshWeatherSpinner');
+
+    if (dispTemp) dispTemp.textContent = tLoading;
+    if (dispHumidity) dispHumidity.textContent = tLoading;
+    if (dispRain) dispRain.textContent = tLoading;
+    if (dispSpraySafety) {
+        dispSpraySafety.textContent = tAnalyzing;
+        dispSpraySafety.className = 'badge badge-accent';
+    }
+    if (errBox) errBox.style.display = 'none';
+    if (spinner) spinner.classList.add('spin-icon');
+}
+
+function renderWeatherData(data) {
+    const dispTemp = document.getElementById('dispTemp');
+    const dispHumidity = document.getElementById('dispHumidity');
+    const dispRain = document.getElementById('dispRain');
+    const dispSpraySafety = document.getElementById('dispSpraySafety');
+    const dispLoc = document.getElementById('dispWeatherLocation');
+    const dispLastUpdated = document.getElementById('weatherLastUpdated');
+    const errBox = document.getElementById('weatherErrorContainer');
+    const spinner = document.getElementById('refreshWeatherSpinner');
+
+    if (spinner) spinner.classList.remove('spin-icon');
+    if (errBox) errBox.style.display = 'none';
+
+    // 1. Temperature: XX.X °C
+    const temp = (data.current && data.current.temperature !== undefined) ? data.current.temperature : data.temperature_c;
+    if (dispTemp) {
+        dispTemp.textContent = (temp !== undefined && temp !== null) ? `${Number(temp).toFixed(1)} °C` : '-- °C';
+    }
+
+    // 2. Relative Humidity: XX %
+    const humidity = (data.current && data.current.humidity !== undefined) ? data.current.humidity : data.humidity_pct;
+    if (dispHumidity) {
+        dispHumidity.textContent = (humidity !== undefined && humidity !== null) ? `${Math.round(Number(humidity))} %` : '-- %';
+    }
+
+    // 3. 48-Hour Rain Forecast: sum of hourly precipitation (XX.X mm)
+    const rain = (data.forecast_48h && data.forecast_48h.rain_mm !== undefined) ? data.forecast_48h.rain_mm : data.rainfall_forecast_mm;
+    if (dispRain) {
+        dispRain.textContent = (rain !== undefined && rain !== null) ? `${Number(rain).toFixed(1)} mm` : '0.0 mm';
+    }
+
+    // 4. Dynamic Spray Safety: OPTIMAL, CAUTION, or AVOID
+    const safety = (data.agro && data.agro.spray_safety) ? data.agro.spray_safety : (data.spray_safety || 'OPTIMAL');
+    if (dispSpraySafety) {
+        let badgeClass = 'badge badge-success';
+        let safetyTextKey = 'weather.optimal';
+
+        if (safety === 'AVOID') {
+            badgeClass = 'badge badge-danger';
+            safetyTextKey = 'weather.avoid';
+        } else if (safety === 'CAUTION') {
+            badgeClass = 'badge badge-warning';
+            safetyTextKey = 'weather.caution';
+        }
+
+        const localizedSafety = window.i18n ? window.i18n.t(safetyTextKey) : safety;
+        dispSpraySafety.textContent = localizedSafety;
+        dispSpraySafety.className = badgeClass;
+    }
+
+    // 5. Location Display Badge: 📍 District, State
+    const locName = data.location?.display_name ||
+                    (data.location ? `${data.location.district || ''}, ${data.location.state || ''}`.replace(/^,\s*|,\s*$/g, '') : 'Selected Location');
+    if (dispLoc) dispLoc.textContent = locName;
+
+    // 6. Last Updated Time
+    const timeStr = data.formatted_time || (new Date()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    if (dispLastUpdated) dispLastUpdated.textContent = timeStr;
+}
+
+function renderWeatherError(errorMsg, state, district) {
+    const dispTemp = document.getElementById('dispTemp');
+    const dispHumidity = document.getElementById('dispHumidity');
+    const dispRain = document.getElementById('dispRain');
+    const dispSpraySafety = document.getElementById('dispSpraySafety');
+    const errBox = document.getElementById('weatherErrorContainer');
+    const errMsgEl = document.getElementById('weatherErrorMessage');
+    const dispLoc = document.getElementById('dispWeatherLocation');
+    const spinner = document.getElementById('refreshWeatherSpinner');
+
+    if (spinner) spinner.classList.remove('spin-icon');
+
+    const defaultUnavailable = window.i18n ? window.i18n.t('weather.unavailable') : 'Weather data temporarily unavailable';
+    const locLabel = (district && state) ? `${district}, ${state}` : (state || district || '');
+    const displayErr = locLabel ? `${defaultUnavailable} (${locLabel})` : defaultUnavailable;
+
+    if (errMsgEl) errMsgEl.textContent = displayErr;
+    if (errBox) errBox.style.display = 'flex';
+
+    if (dispTemp) dispTemp.textContent = '-- °C';
+    if (dispHumidity) dispHumidity.textContent = '-- %';
+    if (dispRain) dispRain.textContent = '-- mm';
+    if (dispSpraySafety) {
+        dispSpraySafety.textContent = '--';
+        dispSpraySafety.className = 'badge';
+    }
+    if (dispLoc && locLabel) dispLoc.textContent = locLabel;
+}
+
+async function fetchLiveWeather({ state = null, district = null, lat = null, lon = null, forceRefresh = false } = {}) {
+    // Resolve active state & district parameters
+    const activeState = state !== null ? state : (document.getElementById('lookupState')?.value?.trim() || weatherState.currentLocation.state);
+    const activeDistrict = district !== null ? district : (document.getElementById('lookupDistrict')?.value?.trim() || null);
+
+    weatherState.currentLocation = {
+        state: activeState,
+        district: activeDistrict,
+        lat: lat,
+        lon: lon
+    };
+
+    const cacheKey = `${lat || ''}_${lon || ''}_${activeState || ''}_${activeDistrict || ''}`;
+    const now = Date.now();
+
+    // Check client-side cache (10 min TTL) unless forced refresh
+    if (!forceRefresh && weatherState.cache[cacheKey] && (now - weatherState.cache[cacheKey].timestamp < 600000)) {
+        weatherState.lastData = weatherState.cache[cacheKey].data;
+        renderWeatherData(weatherState.cache[cacheKey].data);
+        return;
+    }
+
+    renderWeatherLoading();
+    weatherState.isFetching = true;
+
+    try {
+        let url = '/api/weather/?';
+        const params = new URLSearchParams();
+        if (lat !== null && lon !== null) {
+            params.append('lat', lat);
+            params.append('lon', lon);
+        } else {
+            if (activeState) params.append('state', activeState);
+            if (activeDistrict) params.append('district', activeDistrict);
+        }
+        if (forceRefresh) params.append('refresh', '1');
+
+        const res = await fetch(url + params.toString());
+        if (!res.ok) {
+            const errData = await res.json().catch(() => ({}));
+            throw new Error(errData.error || `Weather API error status: ${res.status}`);
+        }
+
+        const data = await res.json();
+        weatherState.cache[cacheKey] = {
+            timestamp: now,
+            data: data
+        };
+        weatherState.lastData = data;
+        renderWeatherData(data);
+
+    } catch (err) {
+        console.error("Live weather fetch error:", err);
+        renderWeatherError(err.message, activeState, activeDistrict);
+    } finally {
+        weatherState.isFetching = false;
+    }
+}
+
+function fetchWeatherByGPS() {
+    if (!navigator.geolocation) {
+        alert("Geolocation is not supported by your browser.");
+        return;
+    }
+    const btnGps = document.getElementById('btnGpsWeather');
+    if (btnGps) btnGps.disabled = true;
+
+    renderWeatherLoading();
+    navigator.geolocation.getCurrentPosition(
+        (pos) => {
+            if (btnGps) btnGps.disabled = false;
+            fetchLiveWeather({
+                lat: pos.coords.latitude,
+                lon: pos.coords.longitude,
+                forceRefresh: true
+            });
+        },
+        (err) => {
+            if (btnGps) btnGps.disabled = false;
+            console.warn("GPS Geolocation error:", err);
+            alert("Could not access GPS location. Using selected State/District instead.");
+            fetchLiveWeather({ forceRefresh: true });
+        },
+        { timeout: 8000, enableHighAccuracy: true }
+    );
+}
+
+// ---------------------------------------------------------------------------
+// 4. Form Event Listeners & Interactive Handlers
+// ---------------------------------------------------------------------------
 function setupEventListeners() {
     const farmSelect = document.getElementById('farmSelect');
     const fieldSelect = document.getElementById('fieldSelect');
@@ -82,6 +317,28 @@ function setupEventListeners() {
     const lookupDistrict = document.getElementById('lookupDistrict');
     const lookupBlock = document.getElementById('lookupBlock');
     const btnApplyBenchmark = document.getElementById('btnFetchSoilBenchmark');
+    const btnRefreshWeather = document.getElementById('btnRefreshWeather');
+    const btnRetryWeather = document.getElementById('btnRetryWeather');
+    const btnGpsWeather = document.getElementById('btnGpsWeather');
+
+    // Live Weather Actions
+    if (btnRefreshWeather) {
+        btnRefreshWeather.addEventListener('click', () => {
+            fetchLiveWeather({ forceRefresh: true });
+        });
+    }
+
+    if (btnRetryWeather) {
+        btnRetryWeather.addEventListener('click', () => {
+            fetchLiveWeather({ forceRefresh: true });
+        });
+    }
+
+    if (btnGpsWeather) {
+        btnGpsWeather.addEventListener('click', () => {
+            fetchWeatherByGPS();
+        });
+    }
 
     if (farmSelect) {
         farmSelect.addEventListener('change', async (e) => {
@@ -126,6 +383,7 @@ function setupEventListeners() {
         });
     }
 
+    // State Selection -> Fetch Live Weather + Load Districts
     if (lookupState) {
         lookupState.addEventListener('change', async (e) => {
             const st = e.target.value;
@@ -138,6 +396,9 @@ function setupEventListeners() {
             if (btnApplyBenchmark) btnApplyBenchmark.disabled = true;
 
             if (!st) return;
+
+            // Trigger live weather fetch immediately for selected state
+            fetchLiveWeather({ state: st, district: null, forceRefresh: true });
 
             try {
                 const res = await fetch(`/api/soil-lookup/?type=districts&state=${encodeURIComponent(st)}`);
@@ -157,6 +418,7 @@ function setupEventListeners() {
         });
     }
 
+    // District Selection -> Fetch Live Weather for District + Load Blocks
     if (lookupDistrict) {
         lookupDistrict.addEventListener('change', async (e) => {
             const st = lookupState.value;
@@ -166,7 +428,16 @@ function setupEventListeners() {
             lookupBlock.disabled = true;
             if (btnApplyBenchmark) btnApplyBenchmark.disabled = !dist;
 
-            if (!st || !dist) return;
+            if (!st) return;
+
+            // Trigger live weather fetch for state + district
+            if (dist) {
+                fetchLiveWeather({ state: st, district: dist, forceRefresh: true });
+            } else {
+                fetchLiveWeather({ state: st, district: null, forceRefresh: true });
+            }
+
+            if (!dist) return;
 
             try {
                 const res = await fetch(`/api/soil-lookup/?type=blocks&state=${encodeURIComponent(st)}&district=${encodeURIComponent(dist)}`);
@@ -229,6 +500,9 @@ function setupEventListeners() {
     }
 }
 
+// ---------------------------------------------------------------------------
+// 5. Generate AI Precision Recommendation
+// ---------------------------------------------------------------------------
 async function handleGenerateRecommendation(e) {
     e.preventDefault();
 

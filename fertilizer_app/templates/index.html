@@ -165,26 +165,55 @@
                         </div>
 
                         <!-- 4. Weather Conditions & Spray Radar -->
-                        <div class="form-section">
-                            <label class="section-heading" data-i18n="form.sec3Heading">3. Local Agro-Meteorology (48-hr Window)</label>
+                        <div class="form-section" id="weatherSection">
+                            <div class="weather-header-wrap">
+                                <label class="section-heading" style="margin-bottom: 0;" data-i18n="form.sec3Heading">3. Local Agro-Meteorology (48-hr Window)</label>
+                                <div class="weather-actions">
+                                    <div class="weather-location-badge" id="weatherLocationBadge">
+                                        <span>📍</span>
+                                        <span id="dispWeatherLocation">Ahmedabad, Gujarat</span>
+                                    </div>
+                                    <button type="button" id="btnGpsWeather" class="btn-weather-action" title="Use current GPS location">
+                                        <span>🎯</span> <span data-i18n="weather.gps">GPS</span>
+                                    </button>
+                                    <button type="button" id="btnRefreshWeather" class="btn-weather-action" title="Refresh Live Weather">
+                                        <span id="refreshWeatherSpinner">↻</span> <span data-i18n="weather.refresh">Refresh</span>
+                                    </button>
+                                </div>
+                            </div>
                             
-                            <div class="weather-preview-box">
+                            <!-- Dynamic Error Container (Hidden by default) -->
+                            <div id="weatherErrorContainer" class="weather-error-box" style="display: none;">
+                                <div>
+                                    <span>⚠️</span>
+                                    <span id="weatherErrorMessage" data-i18n="weather.unavailable">Weather data temporarily unavailable</span>
+                                </div>
+                                <button type="button" id="btnRetryWeather" class="btn-weather-retry" data-i18n="weather.retry">Retry</button>
+                            </div>
+
+                            <div class="weather-preview-box" id="weatherPreviewBox">
                                 <div class="weather-metric">
                                     <span class="w-label" data-i18n="weather.temp">Temperature</span>
-                                    <span class="w-val" id="dispTemp">28.5 °C</span>
+                                    <span class="w-val" id="dispTemp">-- °C</span>
                                 </div>
                                 <div class="weather-metric">
                                     <span class="w-label" data-i18n="weather.humidity">Humidity</span>
-                                    <span class="w-val" id="dispHumidity">62 %</span>
+                                    <span class="w-val" id="dispHumidity">-- %</span>
                                 </div>
                                 <div class="weather-metric">
                                     <span class="w-label" data-i18n="weather.rain">Rain Forecast</span>
-                                    <span class="w-val" id="dispRain">0.0 mm</span>
+                                    <span class="w-val" id="dispRain">-- mm</span>
+                                    <span class="w-sub" style="font-size: 0.65rem; color: var(--text-muted); display: block;" data-i18n="weather.next48h">(Next 48h)</span>
                                 </div>
                                 <div class="weather-metric">
                                     <span class="w-label" data-i18n="weather.spraySafety">Spray Safety</span>
                                     <span class="badge badge-success" id="dispSpraySafety" data-i18n="weather.optimal">OPTIMAL</span>
                                 </div>
+                            </div>
+
+                            <div class="weather-footer-meta">
+                                <span id="weatherSourceTag">📡 Live Open-Meteo Agro Feeds</span>
+                                <span><span data-i18n="weather.lastUpdated">Last updated</span>: <span id="weatherLastUpdated">--:--</span></span>
                             </div>
                         </div>
 
