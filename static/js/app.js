@@ -1,6 +1,6 @@
 /**
  * KrishiKisan AI Precision Fertilizer Frontend Application
- * Live State- & District-Based Agro-Meteorology Client
+ * Live State- & District-Based Agro-Meteorology & Soil DB Lookup Client
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -13,10 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
             if (appState.crops && appState.crops.length > 0) {
                 populateCropSelect(appState.crops);
             }
-<<<<<<< HEAD
-            if (weatherState.lastData) {
-                renderWeatherData(weatherState.lastData);
-=======
             if (appState.states && appState.states.length > 0) {
                 populateStateSelect(appState.states);
             }
@@ -25,7 +21,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (appState.blocks && appState.blocks.length > 0) {
                 populateBlockSelect(appState.blocks);
->>>>>>> 10cc4db5550b3f945f222490e6c0922e0a83d3ed
+            }
+            if (weatherState.lastData) {
+                renderWeatherData(weatherState.lastData);
             }
         });
     }
