@@ -32,7 +32,68 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
-/* Navbar */
+/* ====================================================================
+   ANIMATION KEYFRAMES
+   ==================================================================== */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes bannerShimmer {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes progressShimmer {
+    0% {
+        transform: translateX(-100%);
+    }
+    100% {
+        transform: translateX(200%);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 6px rgba(21, 128, 61, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(21, 128, 61, 0);
+    }
+}
+
+/* ====================================================================
+   NAVBAR
+   ==================================================================== */
 .navbar {
     display: flex;
     justify-content: space-between;
@@ -43,16 +104,24 @@ body {
     position: sticky;
     top: 0;
     z-index: 50;
+    transition: box-shadow 0.25s ease;
 }
 
 .nav-brand {
     display: flex;
     align-items: center;
     gap: 0.75rem;
+    cursor: default;
 }
 
 .brand-icon {
     font-size: 1.75rem;
+    display: inline-block;
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.nav-brand:hover .brand-icon {
+    transform: scale(1.15) rotate(6deg);
 }
 
 .brand-title {
@@ -83,6 +152,13 @@ body {
     display: flex;
     align-items: center;
     gap: 0.4rem;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-pill:hover {
+    transform: translateY(-1px);
+    border-color: #cbd5e1;
+    box-shadow: var(--shadow-sm);
 }
 
 .stat-label {
@@ -107,13 +183,9 @@ body {
     animation: pulse 2s infinite;
 }
 
-@keyframes pulse {
-    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(21, 128, 61, 0.7); }
-    70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(21, 128, 61, 0); }
-    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(21, 128, 61, 0); }
-}
-
-/* App Container */
+/* ====================================================================
+   APP CONTAINER
+   ==================================================================== */
 .app-container {
     max-width: 1380px;
     margin: 1.5rem auto;
@@ -143,12 +215,13 @@ body {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    transition: all 0.15s ease;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .tab-btn:hover {
     color: var(--text-main);
     background: #f1f5f9;
+    transform: translateY(-1px);
 }
 
 .tab-btn.active {
@@ -162,6 +235,7 @@ body {
 
 .tab-pane.active {
     display: block;
+    animation: fadeIn 0.3s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
 /* Grid */
@@ -177,13 +251,23 @@ body {
     }
 }
 
-/* Card */
+/* ====================================================================
+   CARD
+   ==================================================================== */
 .card {
     background: var(--bg-card);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-lg);
     padding: 1.5rem;
     box-shadow: var(--shadow-sm);
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.25s ease;
+    animation: fadeInUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -4px rgba(0, 0, 0, 0.07), 0 3px 6px -2px rgba(0, 0, 0, 0.04);
+    border-color: #cbd5e1;
 }
 
 .card-header {
@@ -202,7 +286,9 @@ body {
     gap: 0.5rem;
 }
 
-/* Form Styles */
+/* ====================================================================
+   FORM STYLES
+   ==================================================================== */
 .form-section {
     margin-bottom: 1.25rem;
     padding-bottom: 1.25rem;
@@ -256,6 +342,11 @@ body {
     font-size: 0.82rem;
     font-weight: 600;
     color: #334155;
+    transition: color 0.15s ease;
+}
+
+.form-group:focus-within label {
+    color: var(--primary);
 }
 
 .unit {
@@ -274,12 +365,17 @@ body {
     background: #ffffff;
     color: var(--text-main);
     outline: none;
-    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease, background-color 0.15s ease;
+}
+
+.form-control:hover {
+    border-color: #cbd5e1;
 }
 
 .form-control:focus {
     border-color: var(--primary);
     box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.15);
+    transform: translateY(-1px);
 }
 
 .form-control-sm {
@@ -298,6 +394,12 @@ body {
     border: 1px dashed #cbd5e1;
     border-radius: var(--radius-md);
     padding: 0.85rem;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.highlight-box:hover {
+    border-color: #94a3b8;
+    background: #f1f5f9;
 }
 
 .box-header {
@@ -327,6 +429,11 @@ body {
     cursor: pointer;
     outline: none;
     margin-top: 0.5rem;
+    transition: color 0.15s ease;
+}
+
+.micronutrients-accordion summary:hover {
+    color: #0369a1;
 }
 
 /* Weather Box */
@@ -339,6 +446,20 @@ body {
     padding: 0.75rem;
     text-align: center;
     gap: 0.5rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.weather-preview-box:hover {
+    border-color: #86efac;
+    box-shadow: 0 4px 12px rgba(21, 128, 61, 0.08);
+}
+
+.weather-metric {
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.weather-preview-box:hover .weather-metric {
+    transform: translateY(-1px);
 }
 
 .w-label {
@@ -353,7 +474,9 @@ body {
     color: var(--text-main);
 }
 
-/* Buttons */
+/* ====================================================================
+   BUTTONS
+   ==================================================================== */
 .btn {
     font-family: inherit;
     font-size: 0.88rem;
@@ -366,7 +489,15 @@ body {
     align-items: center;
     justify-content: center;
     gap: 0.4rem;
-    transition: all 0.15s ease;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1.5px);
+}
+
+.btn:active {
+    transform: translateY(0.5px) scale(0.98);
 }
 
 .btn-primary {
@@ -376,6 +507,7 @@ body {
 
 .btn-primary:hover {
     background: var(--primary-hover);
+    box-shadow: 0 4px 14px rgba(21, 128, 61, 0.3);
 }
 
 .btn-secondary {
@@ -385,6 +517,7 @@ body {
 
 .btn-secondary:hover {
     background: #1e293b;
+    box-shadow: 0 4px 12px rgba(30, 41, 59, 0.25);
 }
 
 .btn-outline {
@@ -395,6 +528,8 @@ body {
 
 .btn-outline:hover {
     background: #f1f5f9;
+    border-color: #cbd5e1;
+    box-shadow: var(--shadow-sm);
 }
 
 .btn-block {
@@ -414,20 +549,36 @@ body {
     border-radius: 4px;
     text-transform: uppercase;
     letter-spacing: 0.03em;
+    transition: transform 0.2s ease;
+}
+
+.badge:hover {
+    transform: scale(1.05);
 }
 
 .badge-primary { background: var(--primary-light); color: var(--primary); }
 .badge-accent { background: var(--accent-blue-light); color: var(--accent-blue); }
 .badge-success { background: #dcfce7; color: #15803d; }
 .badge-warning { background: #fef3c7; color: #b45309; }
+.badge-danger { background: #fee2e2; color: #b91c1c; }
 
-/* Primary Rec Banner */
+/* ====================================================================
+   PRIMARY REC BANNER
+   ==================================================================== */
 .primary-rec-banner {
-    background: linear-gradient(135deg, #15803d 0%, #166534 100%);
+    background: linear-gradient(135deg, #15803d 0%, #166534 50%, #15803d 100%);
+    background-size: 200% 200%;
+    animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) both, bannerShimmer 9s ease infinite;
     color: #ffffff;
     border-radius: var(--radius-md);
     padding: 1.25rem;
     margin-bottom: 1.25rem;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+.primary-rec-banner:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px -4px rgba(21, 128, 61, 0.35);
 }
 
 .banner-top {
@@ -450,6 +601,7 @@ body {
     font-size: 1.15rem;
     font-weight: 800;
     margin-top: 0.2rem;
+    transition: transform 0.2s ease;
 }
 
 .banner-cost {
@@ -466,6 +618,7 @@ body {
     font-size: 1.25rem;
     font-weight: 800;
     color: #fef08a;
+    transition: transform 0.2s ease;
 }
 
 .banner-metrics {
@@ -476,6 +629,11 @@ body {
 
 .metric-item {
     font-size: 0.78rem;
+    transition: transform 0.2s ease;
+}
+
+.primary-rec-banner:hover .metric-item {
+    transform: translateY(-1px);
 }
 
 .metric-label {
@@ -488,7 +646,9 @@ body {
     font-size: 0.95rem;
 }
 
-/* Timeline */
+/* ====================================================================
+   TIMELINE
+   ==================================================================== */
 .split-timeline {
     display: flex;
     flex-direction: column;
@@ -503,6 +663,14 @@ body {
     border: 1px solid var(--border-color);
     padding: 0.75rem;
     border-radius: var(--radius-md);
+    transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.timeline-item:hover {
+    transform: translateX(4px);
+    background: #ffffff;
+    border-color: #86efac;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
 .timeline-step {
@@ -517,6 +685,12 @@ body {
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.25s ease;
+}
+
+.timeline-item:hover .timeline-step {
+    transform: scale(1.15);
+    box-shadow: 0 0 0 3px rgba(21, 128, 61, 0.2);
 }
 
 .timeline-content {
@@ -537,7 +711,9 @@ body {
     margin-top: 0.2rem;
 }
 
-/* Progress Bars */
+/* ====================================================================
+   PROGRESS BARS
+   ==================================================================== */
 .nutrient-bar-group {
     margin-bottom: 0.85rem;
 }
@@ -555,12 +731,27 @@ body {
     height: 8px;
     border-radius: 9999px;
     overflow: hidden;
+    position: relative;
 }
 
 .progress-fill {
     height: 100%;
     border-radius: 9999px;
-    transition: width 0.4s ease;
+    transition: width 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.35), transparent);
+    transform: translateX(-100%);
+    animation: progressShimmer 3s infinite cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .fill-n { background: var(--primary); }
@@ -591,6 +782,11 @@ body {
     padding: 0.75rem 1rem;
     border-bottom: 1px solid var(--border-color);
     color: var(--text-main);
+    transition: background-color 0.15s ease;
+}
+
+.data-table tr:hover td {
+    background-color: #f8fafc;
 }
 
 /* Footer */
@@ -614,10 +810,16 @@ body {
     margin: 0 auto;
 }
 
-/* Report Page Container & Components */
+/* ====================================================================
+   REPORT PAGE CONTAINER & COMPONENTS
+   ==================================================================== */
 .report-page-container {
     max-width: 1040px;
     margin: 1.5rem auto;
+}
+
+.report-header-card {
+    animation-delay: 0.05s;
 }
 
 .report-header-flex {
@@ -657,6 +859,12 @@ body {
     font-size: 0.78rem;
     display: flex;
     gap: 0.35rem;
+    transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.meta-pill:hover {
+    transform: translateY(-1px);
+    border-color: #cbd5e1;
 }
 
 .plot-context-strip {
@@ -668,16 +876,33 @@ body {
     border-radius: var(--radius-md);
     padding: 0.85rem 1rem;
     margin-top: 1rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.plot-context-strip:hover {
+    border-color: #cbd5e1;
+    box-shadow: var(--shadow-sm);
 }
 
 .context-item {
     display: flex;
     align-items: center;
     gap: 0.6rem;
+    transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.context-item:hover {
+    transform: translateY(-1px);
 }
 
 .context-icon {
     font-size: 1.35rem;
+    display: inline-block;
+    transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.context-item:hover .context-icon {
+    transform: scale(1.2);
 }
 
 .context-label {
@@ -694,6 +919,15 @@ body {
     font-size: 0.88rem;
     color: var(--text-main);
     font-weight: 700;
+}
+
+/* Staggered entrance for report grid cards */
+.report-grid-2col > .card:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+.report-grid-2col > .card:nth-child(2) {
+    animation-delay: 0.18s;
 }
 
 @media (max-width: 860px) {
@@ -714,7 +948,23 @@ body {
     }
 }
 
-/* PDF Page Break & Print Rules */
+/* ====================================================================
+   ACCESSIBILITY & REDUCED MOTION
+   ==================================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* ====================================================================
+   PDF PAGE BREAK & PRINT RULES
+   ==================================================================== */
 @page {
     size: A4 portrait;
     margin: 10mm;
@@ -762,12 +1012,21 @@ body {
         margin: 0 !important;
         padding: 0 !important;
     }
-    .card {
+    .card,
+    .primary-rec-banner,
+    .timeline-item,
+    .stat-pill,
+    .weather-preview-box,
+    .context-item {
         box-shadow: none !important;
         border: 1px solid #cbd5e1 !important;
         page-break-inside: auto;
         margin-bottom: 1rem !important;
+        animation: none !important;
+        transition: none !important;
+        transform: none !important;
+    }
+    .progress-fill::after {
+        display: none !important;
     }
 }
-
-
