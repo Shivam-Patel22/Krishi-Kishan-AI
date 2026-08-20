@@ -435,11 +435,20 @@ def calculate_agronomic_recommendation(
         }
     ]
 
+    total_all_fertilizers = total_dap + total_urea + total_mop
+    total_dosage_per_ha = dap_kg_per_ha + urea_kg_per_ha + mop_kg_per_ha
+
     return {
         "primary_fertilizer": f"DAP ({dap_kg_per_ha:.1f} kg/ha) + Urea ({urea_kg_per_ha:.1f} kg/ha) + MOP ({mop_kg_per_ha:.1f} kg/ha)",
-        "dosage_kg_per_ha": round(dap_kg_per_ha, 1),
-        "dosage_kg_per_acre": round(dap_kg_per_ha / 2.471, 1),
-        "total_quantity_kg": round(total_dap, 1),
+        "dosage_kg_per_ha": round(total_dosage_per_ha, 1),
+        "dosage_kg_per_acre": round(total_dosage_per_ha / 2.471, 1),
+        "total_quantity_kg": round(total_all_fertilizers, 1),
+        "dap_kg_per_ha": round(dap_kg_per_ha, 1),
+        "urea_kg_per_ha": round(urea_kg_per_ha, 1),
+        "mop_kg_per_ha": round(mop_kg_per_ha, 1),
+        "total_dap_kg": round(total_dap, 1),
+        "total_urea_kg": round(total_urea, 1),
+        "total_mop_kg": round(total_mop, 1),
         "n_contribution_kg": round((n_from_dap + n_from_urea) * area_ha, 1),
         "p_contribution_kg": round(p_from_dap * area_ha, 1),
         "k_contribution_kg": round(k_from_mop * area_ha, 1),

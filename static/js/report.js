@@ -1,10 +1,19 @@
 /**
  * KrishiKisan AI • Recommendation Report Script
  * Loads and renders precision fertilizer report on /report/ with full multilingual support,
- * clean typography, balanced spacing, and structured alignment.
+ * clean typography, balanced spacing, structured alignment, and interactive 3-stage Split Schedule Carousel.
  */
 
 let cachedReportData = null;
+
+const splitCarouselState = {
+    currentSlide: 0,
+    totalSlides: 3,
+    isDragging: false,
+    startX: 0,
+    currentX: 0,
+    diffX: 0
+};
 
 document.addEventListener('DOMContentLoaded', () => {
     loadReportData();
@@ -22,22 +31,7 @@ async function loadReportData() {
     const emptyState = document.getElementById('reportEmptyState');
     const reportContent = document.getElementById('reportContent');
 
-    // 1. Try to load from sessionStorage (saved during generation from dashboard)
-    const sessionData = sessionStorage.getItem('currentRecommendation');
-    if (sessionData) {
-        try {
-            const data = JSON.parse(sessionData);
-            if (data && (data.agronomic_recommendation || data.primary_fertilizer)) {
-                cachedReportData = data;
-                renderReport(data);
-                return;
-            }
-        } catch (e) {
-            console.error("Error parsing session recommendation:", e);
-        }
-    }
-
-    // 2. Try to load from URL parameter (?id=123)
+    // 1. Try to load from URL parameter (?id=123) first if specified
     const urlParams = new URLSearchParams(window.location.search);
     const recId = urlParams.get('id');
 
@@ -55,6 +49,21 @@ async function loadReportData() {
         }
     }
 
+    // 2. Try to load from sessionStorage (saved during generation from dashboard)
+    const sessionData = sessionStorage.getItem('currentRecommendation');
+    if (sessionData) {
+        try {
+            const data = JSON.parse(sessionData);
+            if (data && (data.agronomic_recommendation || data.primary_fertilizer)) {
+                cachedReportData = data;
+                renderReport(data);
+                return;
+            }
+        } catch (e) {
+            console.error("Error parsing session recommendation:", e);
+        }
+    }
+
     // 3. Fallback: No data available -> Show graceful empty state
     if (emptyState) emptyState.style.display = 'block';
     if (reportContent) reportContent.style.display = 'none';
@@ -69,8 +78,8 @@ function renderReport(data) {
 
     const agri = data.agronomic_recommendation || {};
     const ml = data.ml_prediction || {};
-    const soil = data.soil_profile || {};
-    const weather = data.weather_conditions || {};
+    const soil = data.soil_profile || data.soil_test || {};
+    const weather = data.weather_conditions || data.weather_record || {};
 
     const recId = data.recommendation_id || data.id || '-';
     const rawCropName = data.crop_name || data.crop?.name || 'Crop';
@@ -105,21 +114,39 @@ function renderReport(data) {
     if (document.getElementById('repSoilType')) document.getElementById('repSoilType').textContent = soilType;
     if (document.getElementById('repSource')) document.getElementById('repSource').textContent = source;
 
-    // 2. Primary Recommendation Banner
-    const rawPrimaryFert = agri.primary_fertilizer || data.primary_fertilizer || '-';
+    // 2. Primary Recommendation Banner (All 3 Fertilizers)
+    let rawPrimaryFert = agri.primary_fertilizer || data.primary_fertilizer || '-';
+    let totalQty = parseFloat(agri.total_quantity_kg || data.total_quantity_kg || 0);
+    const splits = agri.split_schedule || data.split_schedule || [];
+
+    // Ensure all 3 fertilizers are represented if full split details are available
+    if (splits.length > 0 && splits[0].dap_kg_per_ha !== undefined) {
+        const totalDapPerHa = splits[0].dap_kg_per_ha || 0;
+        const totalUreaPerHa = splits.reduce((acc, s) => acc + (parseFloat(s.urea_kg_per_ha) || 0), 0);
+        const totalMopPerHa = splits[0].mop_kg_per_ha || 0;
+        const calcTotalKg = splits.reduce((acc, s) => acc + (parseFloat(s.total_stage_kg) || 0), 0);
+
+        if (totalDapPerHa > 0 && totalUreaPerHa > 0 && totalMopPerHa > 0) {
+            rawPrimaryFert = `DAP (${totalDapPerHa.toFixed(1)} kg/ha) + Urea (${totalUreaPerHa.toFixed(1)} kg/ha) + MOP (${totalMopPerHa.toFixed(1)} kg/ha)`;
+        }
+        if (calcTotalKg > totalQty) {
+            totalQty = calcTotalKg;
+        }
+    }
+
     const primaryFert = window.i18n ? window.i18n.translateFertilizer(rawPrimaryFert) : rawPrimaryFert;
     const totalCost = parseFloat(agri.estimated_cost_inr || data.estimated_cost_inr || 0);
-    const totalQty = parseFloat(agri.total_quantity_kg || data.total_quantity_kg || 0);
     const confidencePct = parseFloat(ml.confidence_pct || data.ai_confidence || 95.0);
 
     if (document.getElementById('repPrimaryFertilizer')) document.getElementById('repPrimaryFertilizer').textContent = primaryFert;
     if (document.getElementById('repTotalCost')) document.getElementById('repTotalCost').textContent = `₹${totalCost.toLocaleString('en-IN')}`;
-    if (document.getElementById('repTotalQuantity')) document.getElementById('repTotalQuantity').textContent = `${totalQty} kg`;
+    if (document.getElementById('repTotalQuantity')) document.getElementById('repTotalQuantity').textContent = `${totalQty.toFixed(1)} kg`;
     if (document.getElementById('repConfidence')) document.getElementById('repConfidence').textContent = `${confidencePct.toFixed(1)}%`;
     if (document.getElementById('repWeatherSafety')) {
         const safeText = window.i18n ? window.i18n.t('report.windowOptimal') : "Optimal / Safe";
         const cautionText = window.i18n ? window.i18n.t('report.windowCaution') : "Caution Advised";
-        document.getElementById('repWeatherSafety').textContent = weather.is_safe_to_apply === false ? cautionText : safeText;
+        const isSafe = (weather.is_safe_to_apply !== undefined) ? weather.is_safe_to_apply : (weather.spray_safety !== 'AVOID');
+        document.getElementById('repWeatherSafety').textContent = isSafe === false ? cautionText : safeText;
     }
 
     // 3. Warnings Container
@@ -193,75 +220,8 @@ function renderReport(data) {
     if (document.getElementById('repSVal')) document.getElementById('repSVal').textContent = `${parseFloat(soil.sulphur || 12.0).toFixed(1)} ppm`;
     if (document.getElementById('repFeVal')) document.getElementById('repFeVal').textContent = `${parseFloat(soil.iron || 6.0).toFixed(1)} ppm`;
 
-    // 5. Split Application Schedule
-    const splits = agri.split_schedule || data.split_schedule || [];
-    const timelineContainer = document.getElementById('repSplitTimeline');
-    if (timelineContainer) {
-        timelineContainer.innerHTML = '';
-        if (splits.length === 0) {
-            const defSplit = window.i18n ? window.i18n.t('report.defaultSplitText') : 'Standard basal and top-dressing application recommended.';
-            timelineContainer.innerHTML = `<p class="section-lead-desc">${defSplit}</p>`;
-        } else {
-            splits.forEach((split, idx) => {
-                const item = document.createElement('div');
-                item.className = 'timeline-item';
-                const totalStageKg = split.total_stage_kg !== undefined ? `${split.total_stage_kg} kg` : (split.total_dose_kg !== undefined ? `${split.total_dose_kg} kg` : '');
-                
-                // Localize stage name
-                let stageName = split.stage;
-                let timingText = split.timing_days;
-                let instrText = split.instructions || split.application_method || '';
-
-                if (window.i18n) {
-                    if (idx === 0 || stageName.toLowerCase().includes('basal')) {
-                        stageName = window.i18n.t('stage.basal');
-                        timingText = window.i18n.t('timing.basal');
-                        instrText = window.i18n.t('instr.basal');
-                    } else if (idx === 1 || stageName.toLowerCase().includes('first')) {
-                        stageName = window.i18n.t('stage.top1');
-                        timingText = window.i18n.t('timing.top1');
-                        instrText = window.i18n.t('instr.top1');
-                    } else if (idx === 2 || stageName.toLowerCase().includes('second')) {
-                        stageName = window.i18n.t('stage.top2');
-                        timingText = window.i18n.t('timing.top2');
-                        instrText = window.i18n.t('instr.top2');
-                    }
-                }
-
-                const timingLabel = window.i18n ? window.i18n.t('report.timing') : 'Timing:';
-                const instrLabel = window.i18n ? window.i18n.t('report.instructions') : 'Instructions:';
-
-                let doseChipsHtml = '';
-                if (split.dap_kg_per_ha !== undefined) {
-                    const chips = [];
-                    if (split.dap_kg_per_ha > 0) chips.push(`<span class="dosage-chip">🌿 DAP: <strong>${split.dap_kg_per_ha} kg/ha</strong> (${split.dap_kg_per_acre} kg/acre)</span>`);
-                    if (split.urea_kg_per_ha > 0) chips.push(`<span class="dosage-chip">⚡ Urea: <strong>${split.urea_kg_per_ha} kg/ha</strong> (${split.urea_kg_per_acre} kg/acre)</span>`);
-                    if (split.mop_kg_per_ha > 0) chips.push(`<span class="dosage-chip">🛡️ MOP: <strong>${split.mop_kg_per_ha} kg/ha</strong> (${split.mop_kg_per_acre} kg/acre)</span>`);
-                    if (chips.length > 0) {
-                        doseChipsHtml = `<div class="dosage-chips-wrap">${chips.join('')}</div>`;
-                    }
-                }
-
-                item.innerHTML = `
-                    <div class="timeline-step">${idx + 1}</div>
-                    <div class="timeline-content">
-                        <div class="timeline-title">
-                            <span>${stageName}</span>
-                            <span style="color:var(--primary); font-weight:800; font-size:1.05rem;">${totalStageKg}</span>
-                        </div>
-                        <div class="timeline-timing">
-                            <strong>${timingLabel}</strong> ${timingText}
-                        </div>
-                        ${doseChipsHtml}
-                        <div class="timeline-desc">
-                            <strong>${instrLabel}</strong> ${instrText}
-                        </div>
-                    </div>
-                `;
-                timelineContainer.appendChild(item);
-            });
-        }
-    }
+    // 5. Agronomic Split Application Schedule (Horizontal Carousel Slider)
+    renderSplitScheduleCarousel(splits);
 
     // 6. Amendments (Fully localized)
     const rawPhAdvice = agri.ph_amendment || data.ph_amendment || "Optimal soil pH (6.0-7.5). No liming or gypsum amendments required.";
@@ -323,6 +283,279 @@ function renderReport(data) {
     const rawExplanation = agri.explanation || data.explanation || (window.i18n ? window.i18n.t('report.defaultRationale') : "");
     const localizedExplanation = window.i18n ? window.i18n.translateExplanation(rawExplanation) : rawExplanation;
     if (document.getElementById('repExplanation')) document.getElementById('repExplanation').textContent = localizedExplanation;
+}
+
+/**
+ * Renders the 3 application stages into a horizontal carousel slider with
+ * Previous/Next navigation, 3 pagination dots, and touch/mouse swipe support.
+ */
+function renderSplitScheduleCarousel(splits) {
+    const timelineContainer = document.getElementById('repSplitTimeline');
+    if (!timelineContainer) return;
+
+    timelineContainer.innerHTML = '';
+    splitCarouselState.totalSlides = splits.length || 3;
+
+    if (splits.length === 0) {
+        const defSplit = window.i18n ? window.i18n.t('report.defaultSplitText') : 'Standard basal and top-dressing application recommended.';
+        timelineContainer.innerHTML = `<p class="section-lead-desc" style="padding:1rem;">${defSplit}</p>`;
+        return;
+    }
+
+    splits.forEach((split, idx) => {
+        const item = document.createElement('div');
+        item.className = 'timeline-item';
+        item.setAttribute('role', 'group');
+        item.setAttribute('aria-roledescription', 'slide');
+        item.setAttribute('aria-label', `Stage ${idx + 1} of ${splits.length}`);
+
+        const totalStageKg = split.total_stage_kg !== undefined ? `${split.total_stage_kg} kg` : (split.total_dose_kg !== undefined ? `${split.total_dose_kg} kg` : '');
+        
+        // Localize stage name, timing, instructions
+        let stageName = split.stage;
+        let timingText = split.timing_days;
+        let instrText = split.instructions || split.application_method || '';
+
+        if (window.i18n) {
+            if (idx === 0 || stageName.toLowerCase().includes('basal')) {
+                stageName = window.i18n.t('stage.basal');
+                timingText = window.i18n.t('timing.basal');
+                instrText = window.i18n.t('instr.basal');
+            } else if (idx === 1 || stageName.toLowerCase().includes('first')) {
+                stageName = window.i18n.t('stage.top1');
+                timingText = window.i18n.t('timing.top1');
+                instrText = window.i18n.t('instr.top1');
+            } else if (idx === 2 || stageName.toLowerCase().includes('second')) {
+                stageName = window.i18n.t('stage.top2');
+                timingText = window.i18n.t('timing.top2');
+                instrText = window.i18n.t('instr.top2');
+            }
+        }
+
+        const timingLabel = window.i18n ? window.i18n.t('report.timing') : 'Timing:';
+        const instrLabel = window.i18n ? window.i18n.t('report.instructions') : 'Instructions:';
+
+        let doseChipsHtml = '';
+        if (split.dap_kg_per_ha !== undefined) {
+            const chips = [];
+            if (split.dap_kg_per_ha > 0) chips.push(`<span class="dosage-chip">🌿 DAP: <strong>${split.dap_kg_per_ha} kg/ha</strong> (${split.dap_kg_per_acre} kg/acre)</span>`);
+            if (split.urea_kg_per_ha > 0) chips.push(`<span class="dosage-chip">⚡ Urea: <strong>${split.urea_kg_per_ha} kg/ha</strong> (${split.urea_kg_per_acre} kg/acre)</span>`);
+            if (split.mop_kg_per_ha > 0) chips.push(`<span class="dosage-chip">🛡️ MOP: <strong>${split.mop_kg_per_ha} kg/ha</strong> (${split.mop_kg_per_acre} kg/acre)</span>`);
+            if (chips.length > 0) {
+                doseChipsHtml = `<div class="dosage-chips-wrap">${chips.join('')}</div>`;
+            }
+        }
+
+        item.innerHTML = `
+            <div class="timeline-step">${idx + 1}</div>
+            <div class="timeline-content">
+                <div class="timeline-title">
+                    <span>${stageName}</span>
+                    <span style="color:var(--primary); font-weight:800; font-size:1.05rem;">${totalStageKg}</span>
+                </div>
+                <div class="timeline-timing">
+                    <strong>${timingLabel}</strong> ${timingText}
+                </div>
+                ${doseChipsHtml}
+                <div class="timeline-desc">
+                    <strong>${instrLabel}</strong> ${instrText}
+                </div>
+            </div>
+        `;
+        timelineContainer.appendChild(item);
+    });
+
+    initSplitCarouselControls();
+    updateSplitCarouselSlide(splitCarouselState.currentSlide);
+}
+
+/**
+ * Configures event bindings for Prev/Next buttons, pagination dots, mouse drag, and touch swipe.
+ */
+function initSplitCarouselControls() {
+    const btnPrev = document.getElementById('btnPrevSplit');
+    const btnNext = document.getElementById('btnNextSplit');
+    const paginationContainer = document.getElementById('splitCarouselPagination');
+    const viewport = document.getElementById('splitCarouselViewport');
+    const track = document.getElementById('repSplitTimeline');
+
+    if (btnPrev && !btnPrev.dataset.bound) {
+        btnPrev.dataset.bound = 'true';
+        btnPrev.addEventListener('click', () => {
+            if (splitCarouselState.currentSlide > 0) {
+                updateSplitCarouselSlide(splitCarouselState.currentSlide - 1);
+            }
+        });
+    }
+
+    if (btnNext && !btnNext.dataset.bound) {
+        btnNext.dataset.bound = 'true';
+        btnNext.addEventListener('click', () => {
+            if (splitCarouselState.currentSlide < splitCarouselState.totalSlides - 1) {
+                updateSplitCarouselSlide(splitCarouselState.currentSlide + 1);
+            }
+        });
+    }
+
+    if (paginationContainer && !paginationContainer.dataset.bound) {
+        paginationContainer.dataset.bound = 'true';
+        paginationContainer.addEventListener('click', (e) => {
+            const dot = e.target.closest('.pagination-dot');
+            if (dot && dot.dataset.index !== undefined) {
+                const targetIdx = parseInt(dot.dataset.index, 10);
+                updateSplitCarouselSlide(targetIdx);
+            }
+        });
+    }
+
+    if (viewport && !viewport.dataset.bound) {
+        viewport.dataset.bound = 'true';
+
+        // Keyboard navigation
+        viewport.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                if (splitCarouselState.currentSlide > 0) {
+                    updateSplitCarouselSlide(splitCarouselState.currentSlide - 1);
+                }
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                if (splitCarouselState.currentSlide < splitCarouselState.totalSlides - 1) {
+                    updateSplitCarouselSlide(splitCarouselState.currentSlide + 1);
+                }
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                updateSplitCarouselSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                updateSplitCarouselSlide(splitCarouselState.totalSlides - 1);
+            }
+        });
+
+        // Touch Swipe Handling
+        viewport.addEventListener('touchstart', (e) => {
+            if (!e.touches || e.touches.length === 0) return;
+            splitCarouselState.isDragging = true;
+            splitCarouselState.startX = e.touches[0].clientX;
+            splitCarouselState.diffX = 0;
+            if (track) track.classList.add('no-transition');
+        }, { passive: true });
+
+        viewport.addEventListener('touchmove', (e) => {
+            if (!splitCarouselState.isDragging || !e.touches || e.touches.length === 0) return;
+            splitCarouselState.currentX = e.touches[0].clientX;
+            splitCarouselState.diffX = splitCarouselState.currentX - splitCarouselState.startX;
+
+            if (track && viewport.offsetWidth > 0) {
+                const baseOffset = -(splitCarouselState.currentSlide * 100);
+                const dragPct = (splitCarouselState.diffX / viewport.offsetWidth) * 100;
+                track.style.transform = `translateX(${baseOffset + dragPct}%)`;
+            }
+        }, { passive: true });
+
+        const endTouch = () => {
+            if (!splitCarouselState.isDragging) return;
+            splitCarouselState.isDragging = false;
+            if (track) track.classList.remove('no-transition');
+
+            const threshold = 40; // px
+            if (splitCarouselState.diffX < -threshold && splitCarouselState.currentSlide < splitCarouselState.totalSlides - 1) {
+                updateSplitCarouselSlide(splitCarouselState.currentSlide + 1);
+            } else if (splitCarouselState.diffX > threshold && splitCarouselState.currentSlide > 0) {
+                updateSplitCarouselSlide(splitCarouselState.currentSlide - 1);
+            } else {
+                updateSplitCarouselSlide(splitCarouselState.currentSlide);
+            }
+            splitCarouselState.diffX = 0;
+        };
+
+        viewport.addEventListener('touchend', endTouch);
+        viewport.addEventListener('touchcancel', endTouch);
+
+        // Desktop Mouse Drag Handling
+        viewport.addEventListener('mousedown', (e) => {
+            splitCarouselState.isDragging = true;
+            splitCarouselState.startX = e.pageX;
+            splitCarouselState.diffX = 0;
+            viewport.classList.add('is-dragging');
+            if (track) track.classList.add('no-transition');
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!splitCarouselState.isDragging) return;
+            splitCarouselState.currentX = e.pageX;
+            splitCarouselState.diffX = splitCarouselState.currentX - splitCarouselState.startX;
+
+            if (track && viewport.offsetWidth > 0) {
+                const baseOffset = -(splitCarouselState.currentSlide * 100);
+                const dragPct = (splitCarouselState.diffX / viewport.offsetWidth) * 100;
+                track.style.transform = `translateX(${baseOffset + dragPct}%)`;
+            }
+        });
+
+        window.addEventListener('mouseup', () => {
+            if (!splitCarouselState.isDragging) return;
+            splitCarouselState.isDragging = false;
+            viewport.classList.remove('is-dragging');
+            if (track) track.classList.remove('no-transition');
+
+            const threshold = 50; // px
+            if (splitCarouselState.diffX < -threshold && splitCarouselState.currentSlide < splitCarouselState.totalSlides - 1) {
+                updateSplitCarouselSlide(splitCarouselState.currentSlide + 1);
+            } else if (splitCarouselState.diffX > threshold && splitCarouselState.currentSlide > 0) {
+                updateSplitCarouselSlide(splitCarouselState.currentSlide - 1);
+            } else {
+                updateSplitCarouselSlide(splitCarouselState.currentSlide);
+            }
+            splitCarouselState.diffX = 0;
+        });
+    }
+}
+
+/**
+ * Updates active slide position, stage counter, button states, and pagination dots.
+ */
+function updateSplitCarouselSlide(slideIndex) {
+    const total = splitCarouselState.totalSlides || 3;
+    const clampedIndex = Math.max(0, Math.min(slideIndex, total - 1));
+    splitCarouselState.currentSlide = clampedIndex;
+
+    const track = document.getElementById('repSplitTimeline');
+    const counter = document.getElementById('splitStageCounter');
+    const btnPrev = document.getElementById('btnPrevSplit');
+    const btnNext = document.getElementById('btnNextSplit');
+    const dots = document.querySelectorAll('#splitCarouselPagination .pagination-dot');
+
+    // 1. Move Track
+    if (track) {
+        track.style.transform = `translateX(-${clampedIndex * 100}%)`;
+    }
+
+    // 2. Update Counter
+    if (counter) {
+        counter.textContent = `${clampedIndex + 1} / ${total}`;
+    }
+
+    // 3. Update Prev / Next Buttons
+    if (btnPrev) {
+        btnPrev.disabled = (clampedIndex === 0);
+    }
+    if (btnNext) {
+        btnNext.disabled = (clampedIndex === total - 1);
+    }
+
+    // 4. Update Pagination Dots
+    dots.forEach((dot, idx) => {
+        if (idx === clampedIndex) {
+            dot.classList.add('active');
+            dot.setAttribute('aria-selected', 'true');
+            dot.setAttribute('tabindex', '0');
+        } else {
+            dot.classList.remove('active');
+            dot.setAttribute('aria-selected', 'false');
+            dot.setAttribute('tabindex', '-1');
+        }
+    });
 }
 
 function downloadReportPDF() {

@@ -5061,8 +5061,24 @@ class I18nManager {
         if (translations[this.currentLang] && translations[this.currentLang][key]) {
             return translations[this.currentLang][key];
         }
+        if (name.includes('+')) {
+            const parts = name.split('+').map(part => {
+                const trimmed = part.trim();
+                for (const k of Object.keys(translations.en)) {
+                    if (k.startsWith('fert.')) {
+                        const fertName = k.replace('fert.', '');
+                        if (trimmed === fertName || trimmed.startsWith(fertName + ' ') || trimmed.startsWith(fertName + '(')) {
+                            const translated = this.t(k);
+                            return trimmed.replace(fertName, translated);
+                        }
+                    }
+                }
+                return trimmed;
+            });
+            return parts.join(' + ');
+        }
         for (const k of Object.keys(translations.en)) {
-            if (k.startsWith('fert.') && name.includes(k.replace('fert.', ''))) {
+            if (k.startsWith('fert.') && (name === k.replace('fert.', '') || name.startsWith(k.replace('fert.', '') + ' '))) {
                 return this.t(k, {}, name);
             }
         }
