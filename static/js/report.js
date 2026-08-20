@@ -555,7 +555,8 @@ function updateSplitCarouselSlide(slideIndex) {
 }
 
 function downloadReportPDF() {
-    const recId = (document.getElementById('repId')?.textContent || '').replace('#', '').trim();
+    const urlParams = new URLSearchParams(window.location.search);
+    const recId = cachedReportData?.recommendation_id || cachedReportData?.id || urlParams.get('id') || (document.getElementById('repId')?.textContent || '').replace('#', '').trim();
     const currentLang = window.i18n ? window.i18n.getCurrentLanguage() : 'en';
     if (recId && recId !== '-' && recId !== '') {
         window.location.href = `/api/recommendations/${recId}/pdf/?lang=${currentLang}`;
