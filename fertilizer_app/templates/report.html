@@ -137,135 +137,136 @@
             <!-- Warnings / Alerts Container -->
             <div id="repWarningsContainer" class="report-warnings-wrap"></div>
 
-            <!-- Grid Layout for Nutrient Status and Split Schedule -->
-            <div class="report-grid-2col">
+            <!-- Main 2-Column Responsive Dashboard Layout -->
+            <div class="report-main-grid">
                 
-                <!-- Left: Soil Nutrient Status Matrix -->
-                <div class="card report-section-card">
-                    <div class="card-header">
-                        <h2 class="card-title"><span>📊</span> <span data-i18n="report.diagTitle">Soil Nutrient Status & Balance</span></h2>
-                        <span class="badge badge-accent" data-i18n="report.diagMatrix">Diagnostic Matrix</span>
+                <!-- Left Column -->
+                <div class="report-col">
+                    <!-- 1. Soil Nutrient Status Matrix -->
+                    <div class="card report-section-card">
+                        <div class="card-header">
+                            <h2 class="card-title"><span>📊</span> <span data-i18n="report.diagTitle">Soil Nutrient Status & Balance</span></h2>
+                            <span class="badge badge-accent" data-i18n="report.diagMatrix">Diagnostic Matrix</span>
+                        </div>
+
+                        <!-- Macro Nutrients (N, P, K) with Progress Bars -->
+                        <div class="nutrient-bars-container">
+                            <div class="nutrient-bar-group">
+                                <div class="nutrient-bar-header">
+                                    <div class="nutrient-name-wrap">
+                                        <strong class="nutrient-name" data-i18n="report.nutrientN">Nitrogen (N)</strong>
+                                        <span class="unit" id="repNVal">(0.0 kg/ha)</span>
+                                    </div>
+                                    <span class="badge" id="repNStatus">LOW</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill fill-n" id="repNBar" style="width: 35%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="nutrient-bar-group">
+                                <div class="nutrient-bar-header">
+                                    <div class="nutrient-name-wrap">
+                                        <strong class="nutrient-name" data-i18n="report.nutrientP">Phosphorus (P₂O₅)</strong>
+                                        <span class="unit" id="repPVal">(0.0 kg/ha)</span>
+                                    </div>
+                                    <span class="badge" id="repPStatus">MEDIUM</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill fill-p" id="repPBar" style="width: 50%;"></div>
+                                </div>
+                            </div>
+
+                            <div class="nutrient-bar-group">
+                                <div class="nutrient-bar-header">
+                                    <div class="nutrient-name-wrap">
+                                        <strong class="nutrient-name" data-i18n="report.nutrientK">Potassium (K₂O)</strong>
+                                        <span class="unit" id="repKVal">(0.0 kg/ha)</span>
+                                    </div>
+                                    <span class="badge" id="repKStatus">MEDIUM</span>
+                                </div>
+                                <div class="progress-track">
+                                    <div class="progress-fill fill-k" id="repKBar" style="width: 65%;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Soil Chemistry & Secondary Diagnostics (pH, OC, EC) -->
+                        <div class="soil-chem-divider">
+                            <div class="soil-chem-grid">
+                                <div class="soil-chem-item">
+                                    <span class="soil-chem-label" data-i18n="report.soilPh">Soil pH</span>
+                                    <strong class="soil-chem-val" id="repPhVal">6.8 (Neutral)</strong>
+                                </div>
+                                <div class="soil-chem-item">
+                                    <span class="soil-chem-label" data-i18n="report.soilOc">Organic Carbon (OC)</span>
+                                    <strong class="soil-chem-val" id="repOcVal">0.55%</strong>
+                                </div>
+                                <div class="soil-chem-item">
+                                    <span class="soil-chem-label" data-i18n="report.soilEc">Electrical Cond. (EC)</span>
+                                    <strong class="soil-chem-val" id="repEcVal">0.45 dS/m</strong>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
-                    <!-- Macro Nutrients (N, P, K) with Progress Bars -->
-                    <div class="nutrient-bars-container">
-                        <div class="nutrient-bar-group">
-                            <div class="nutrient-bar-header">
-                                <div class="nutrient-name-wrap">
-                                    <strong class="nutrient-name" data-i18n="report.nutrientN">Nitrogen (N)</strong>
-                                    <span class="unit" id="repNVal">(0.0 kg/ha)</span>
-                                </div>
-                                <span class="badge" id="repNStatus">LOW</span>
-                            </div>
-                            <div class="progress-track">
-                                <div class="progress-fill fill-n" id="repNBar" style="width: 35%;"></div>
-                            </div>
+                    <!-- 2. Soil Amendments & Micronutrients -->
+                    <div class="card report-section-card">
+                        <div class="card-header">
+                            <h2 class="card-title"><span>🧪</span> <span data-i18n="report.amendTitle">Soil Amendments & Micronutrient Prescriptions</span></h2>
                         </div>
-
-                        <div class="nutrient-bar-group">
-                            <div class="nutrient-bar-header">
-                                <div class="nutrient-name-wrap">
-                                    <strong class="nutrient-name" data-i18n="report.nutrientP">Phosphorus (P₂O₅)</strong>
-                                    <span class="unit" id="repPVal">(0.0 kg/ha)</span>
-                                </div>
-                                <span class="badge" id="repPStatus">MEDIUM</span>
-                            </div>
-                            <div class="progress-track">
-                                <div class="progress-fill fill-p" id="repPBar" style="width: 50%;"></div>
-                            </div>
+                        <div class="amend-block">
+                            <strong class="amend-heading" data-i18n="report.phAmendHeading">🌾 Soil pH Amendment (Lime / Gypsum):</strong>
+                            <p id="repPhAmendment" class="amend-body">Optimal range</p>
                         </div>
-
-                        <div class="nutrient-bar-group">
-                            <div class="nutrient-bar-header">
-                                <div class="nutrient-name-wrap">
-                                    <strong class="nutrient-name" data-i18n="report.nutrientK">Potassium (K₂O)</strong>
-                                    <span class="unit" id="repKVal">(0.0 kg/ha)</span>
-                                </div>
-                                <span class="badge" id="repKStatus">MEDIUM</span>
-                            </div>
-                            <div class="progress-track">
-                                <div class="progress-fill fill-k" id="repKBar" style="width: 65%;"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Soil Chemistry & Secondary Diagnostics (pH, OC, EC) -->
-                    <div class="soil-chem-divider">
-                        <div class="soil-chem-grid">
-                            <div class="soil-chem-item">
-                                <span class="soil-chem-label" data-i18n="report.soilPh">Soil pH</span>
-                                <strong class="soil-chem-val" id="repPhVal">6.8 (Neutral)</strong>
-                            </div>
-                            <div class="soil-chem-item">
-                                <span class="soil-chem-label" data-i18n="report.soilOc">Organic Carbon (OC)</span>
-                                <strong class="soil-chem-val" id="repOcVal">0.55%</strong>
-                            </div>
-                            <div class="soil-chem-item">
-                                <span class="soil-chem-label" data-i18n="report.soilEc">Electrical Cond. (EC)</span>
-                                <strong class="soil-chem-val" id="repEcVal">0.45 dS/m</strong>
-                            </div>
+                        <div class="amend-block">
+                            <strong class="amend-heading" data-i18n="report.microAmendHeading">🔬 Micronutrient Corrections (Zn, B, S, Fe):</strong>
+                            <p id="repMicronutrients" class="amend-body">Adequate</p>
                         </div>
                     </div>
                 </div>
 
-                <!-- Right: Split Application Timeline -->
-                <div class="card report-section-card">
-                    <div class="card-header">
-                        <h2 class="card-title"><span>📅</span> <span data-i18n="report.splitTitle">Agronomic Split Application Schedule</span></h2>
-                        <span class="badge badge-primary" data-i18n="report.splitBadge">3-Stage Plan</span>
+                <!-- Right Column -->
+                <div class="report-col">
+                    <!-- 3. Agronomic Split Application Schedule -->
+                    <div class="card report-section-card">
+                        <div class="card-header">
+                            <h2 class="card-title"><span>📅</span> <span data-i18n="report.splitTitle">Agronomic Split Application Schedule</span></h2>
+                            <span class="badge badge-primary" data-i18n="report.splitBadge">3-Stage Plan</span>
+                        </div>
+                        <p class="section-lead-desc" data-i18n="report.splitDesc">
+                            Multi-stage split dosing enhances Nitrogen Use Efficiency (NUE) by up to 35% and minimizes environmental leaching.
+                        </p>
+                        <div class="split-timeline" id="repSplitTimeline"></div>
                     </div>
-                    <p class="section-lead-desc" data-i18n="report.splitDesc">
-                        Multi-stage split dosing enhances Nitrogen Use Efficiency (NUE) by up to 35% and minimizes environmental leaching.
-                    </p>
-                    <div class="split-timeline" id="repSplitTimeline"></div>
-                </div>
 
-            </div>
-
-            <!-- Secondary Amendments & Weather Safety Grid -->
-            <div class="report-grid-2col">
-                
-                <!-- Soil Amendments & Micronutrients -->
-                <div class="card report-section-card">
-                    <div class="card-header">
-                        <h2 class="card-title"><span>🧪</span> <span data-i18n="report.amendTitle">Soil Amendments & Micronutrient Prescriptions</span></h2>
-                    </div>
-                    <div class="amend-block">
-                        <strong class="amend-heading" data-i18n="report.phAmendHeading">🌾 Soil pH Amendment (Lime / Gypsum):</strong>
-                        <p id="repPhAmendment" class="amend-body">Optimal range</p>
-                    </div>
-                    <div class="amend-block">
-                        <strong class="amend-heading" data-i18n="report.microAmendHeading">🔬 Micronutrient Corrections (Zn, B, S, Fe):</strong>
-                        <p id="repMicronutrients" class="amend-body">Adequate</p>
-                    </div>
-                </div>
-
-                <!-- Weather & Spray Safety Radar -->
-                <div class="card report-section-card">
-                    <div class="card-header">
-                        <h2 class="card-title"><span>🌤️</span> <span data-i18n="report.radarTitle">Agro-Meteorology & Spray Safety Radar</span></h2>
-                    </div>
-                    <div class="weather-preview-box report-weather-box">
-                        <div class="weather-metric">
-                            <span class="w-label" data-i18n="weather.temp">Temperature</span>
-                            <span class="w-val" id="repWeatherTemp">28.5 °C</span>
+                    <!-- 4. Weather & Spray Safety Radar -->
+                    <div class="card report-section-card">
+                        <div class="card-header">
+                            <h2 class="card-title"><span>🌤️</span> <span data-i18n="report.radarTitle">Agro-Meteorology & Spray Safety Radar</span></h2>
                         </div>
-                        <div class="weather-metric">
-                            <span class="w-label" data-i18n="weather.humidity">Humidity</span>
-                            <span class="w-val" id="repWeatherHumidity">62 %</span>
+                        <div class="weather-preview-box report-weather-box">
+                            <div class="weather-metric">
+                                <span class="w-label" data-i18n="weather.temp">Temperature</span>
+                                <span class="w-val" id="repWeatherTemp">28.5 °C</span>
+                            </div>
+                            <div class="weather-metric">
+                                <span class="w-label" data-i18n="weather.humidity">Humidity</span>
+                                <span class="w-val" id="repWeatherHumidity">62 %</span>
+                            </div>
+                            <div class="weather-metric">
+                                <span class="w-label" data-i18n="weather.rain">Rain Forecast</span>
+                                <span class="w-val" id="repWeatherRain">0.0 mm</span>
+                            </div>
+                            <div class="weather-metric">
+                                <span class="w-label" data-i18n="weather.wind">Wind Speed</span>
+                                <span class="w-val" id="repWeatherWind">8.5 km/h</span>
+                            </div>
                         </div>
-                        <div class="weather-metric">
-                            <span class="w-label" data-i18n="weather.rain">Rain Forecast</span>
-                            <span class="w-val" id="repWeatherRain">0.0 mm</span>
+                        <div class="weather-advisory-container">
+                            <span class="advisory-icon">📢</span>
+                            <p id="repWeatherAdvisory" class="weather-advisory-text"></p>
                         </div>
-                        <div class="weather-metric">
-                            <span class="w-label" data-i18n="weather.wind">Wind Speed</span>
-                            <span class="w-val" id="repWeatherWind">8.5 km/h</span>
-                        </div>
-                    </div>
-                    <div class="weather-advisory-container">
-                        <span class="advisory-icon">📢</span>
-                        <p id="repWeatherAdvisory" class="weather-advisory-text"></p>
                     </div>
                 </div>
 

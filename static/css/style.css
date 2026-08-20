@@ -1301,13 +1301,21 @@ body {
     line-height: 1.65;
 }
 
-/* 2-Column Report Grid */
+/* 2-Column Main Report Grid */
+.report-main-grid,
 .report-grid-2col {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 1.75rem;
     margin-bottom: 1.75rem;
     align-items: start;
+}
+
+.report-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    width: 100%;
 }
 
 .report-section-card {
@@ -1319,7 +1327,8 @@ body {
     display: flex;
     flex-direction: column;
     height: fit-content;
-    align-self: start;
+    box-sizing: border-box;
+    width: 100%;
 }
 
 .card-header {
@@ -1788,8 +1797,12 @@ body {
 
 /* Responsive Media Queries */
 @media (max-width: 860px) {
+    .report-main-grid,
     .report-grid-2col {
         grid-template-columns: 1fr !important;
+        gap: 1.25rem;
+    }
+    .report-col {
         gap: 1.25rem;
     }
     .plot-context-strip {
