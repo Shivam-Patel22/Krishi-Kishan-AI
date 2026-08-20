@@ -1307,7 +1307,7 @@ body {
     grid-template-columns: 1fr 1fr;
     gap: 1.75rem;
     margin-bottom: 1.75rem;
-    align-items: stretch;
+    align-items: start;
 }
 
 .report-section-card {
@@ -1318,6 +1318,8 @@ body {
     box-shadow: var(--shadow-sm);
     display: flex;
     flex-direction: column;
+    height: fit-content;
+    align-self: start;
 }
 
 .card-header {
