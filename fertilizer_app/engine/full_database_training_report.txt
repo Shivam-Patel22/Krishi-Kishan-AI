@@ -1,8 +1,8 @@
 ================================================================================
- FULL DATABASE FERTILIZER ML TRAINING REPORT (V4)
+ FULL DATABASE FERTILIZER ML TRAINING REPORT (V4 - 80/20 SPLIT)
 ================================================================================
-Generated: 2026-08-16 19:17:24
-Training Time: 292.91 seconds | Peak RAM: 1001.92 MB
+Generated: 2026-08-20 12:44:07
+Training Time: 718.51 seconds | Peak RAM: 887.21 MB
 
 Database
 --------------------------------------------------------------------------------
@@ -13,9 +13,8 @@ Geographic Coverage          : 32 States, 735 Districts, 6,289 Blocks, 210,725 V
 
 Dataset Split
 --------------------------------------------------------------------------------
-Training Samples (70%)       : 69,741
-Validation Samples (15%)     : 14,944
-Final Test Samples (15%)     : 14,945 (Strictly Holdout)
+Training Samples (80%)       : 79,704
+Final Test Samples (20%)     : 19,926 (Strictly Holdout Unseen)
 
 Target
 --------------------------------------------------------------------------------
@@ -31,23 +30,23 @@ Missing Feature Rate         : 0.00% (Strict numeric sanitization & regional imp
 Model
 --------------------------------------------------------------------------------
 Architecture                 : Weighted Soft-Voting Meta-Ensemble (RF + ET + HGB + MLP)
-Training Time                : 292.91 seconds
-Peak RAM                     : 1001.92 MB
+Training Time                : 718.51 seconds
+Peak RAM                     : 887.21 MB
 Model Size                   : ~404 MB (Serialized joblib ensemble)
 
-Validation (15,000 Holdout Test Samples)
+Validation (20,000 Holdout Test Samples)
 --------------------------------------------------------------------------------
-Holdout Top-1 Accuracy       : 99.746% (14,907 / 14,945 correct)
-Macro F1-Score               : 0.99613 (99.613%)
-Weighted F1-Score            : 0.99746 (99.746%)
-Macro F3-Score (beta=3.0)    : 0.99604 (99.604%)
-Weighted F3-Score (beta=3.0) : 0.99746 (99.746%)
+Holdout Top-1 Accuracy       : 99.784% (19,883 / 19,926 correct)
+Macro F1-Score               : 0.99636 (99.636%)
+Weighted F1-Score            : 0.99784 (99.784%)
+Macro F3-Score (beta=3.0)    : 0.99649 (99.649%)
+Weighted F3-Score (beta=3.0) : 0.99784 (99.784%)
 Top-2 Accuracy               : 100.000%
 Top-3 Accuracy               : 100.000%
-Multi-Class Log Loss         : 0.06801
-Macro Brier Score            : 0.00193
-Baseline Simple RF Accuracy  : 99.224%
-Baseline Majority Accuracy   : 30.974%
+Multi-Class Log Loss         : 0.06684
+Macro Brier Score            : 0.00182
+Baseline Simple RF Accuracy  : 99.473%
+Baseline Majority Accuracy   : 30.975%
 
 Real-World Ground Truth
 --------------------------------------------------------------------------------
@@ -66,15 +65,15 @@ OOD Rate                     : 5.00%
 
 Calibration
 --------------------------------------------------------------------------------
-ECE / Brier Score            : 0.00193
-Status                       : CALIBRATED (Log Loss = 0.0680)
+ECE / Brier Score            : 0.00182
+Status                       : CALIBRATED (Log Loss = 0.0668)
 
 ================================================================================
  FINAL STATUS
 ================================================================================
 PARTIALLY VALIDATED
   * Real Soil Database Training       : PASSED (Trained on full 10.85M database distributions)
-  * Technical & Leakage Validation    : PASSED (Zero data leakage, 70/15/15 split)
+  * Technical & Leakage Validation    : PASSED (Zero data leakage, 80/20 split)
   * Real-World Yield Trial Validation : NOT YET VALIDATED (Pending field trial logs)
 
 ================================================================================

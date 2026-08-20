@@ -1,8 +1,8 @@
 ================================================================================
  REAL-WORLD FERTILIZER ML VALIDATION SUMMARY
 ================================================================================
-Generated: 2026-08-16 18:35:33
-Execution Duration: 15.64 seconds
+Generated: 2026-08-20 12:45:41
+Execution Duration: 78.31 seconds
 
 Synthetic Rule Validation
 --------------------------------------------------------------------------------
@@ -24,7 +24,7 @@ Real Database Records          : 10,853,209
 Database Schema Audit Case     : Case A: Real Soil Distribution Validation Only
 Complete Feature Vectors       : 10,853,209 survey records
 Feature Coverage               : 100.00% (All primary, secondary, and trace soil features verified)
-Covariate Shift Discrimination : 85.41% ± 0.55% (High Covariate Shift (>85%): Domain discriminator easily distinguishes synthetic from real records.)
+Covariate Shift Discrimination : 74.99% ± 0.63% (Moderate Covariate Shift (65% - 85%): Distributions share common ranges with some density variation.)
 OOD Percentage                 : 5.0%
 
 Real Fertilizer Recommendation Validation
@@ -69,7 +69,7 @@ Confidence / Abstention
 --------------------------------------------------------------------------------
 Status                         : CALIBRATED & EVALUATED
 Validated Confidence Threshold : 0.70
-Mean Model Confidence          : 96.48%
+Mean Model Confidence          : 94.36%
 Abstention Recommendation      : Predictions with confidence < 0.70 trigger an advisory flag.
 
 ================================================================================

@@ -9,7 +9,7 @@ Architecture:
   - Source: 10,853,209 real national soil survey records across 287,331 villages in 32 Indian states.
   - Chunked Streaming: Processed in memory-efficient batches of 100,000 records.
   - Target Label: Rule-Derived ICAR Domain Labels (as the public survey dataset records soil chemistry tests rather than farmer historical purchase/application logs).
-  - Preprocessing: RobustScaler fitted strictly on X_train only (70% Train, 15% Val, 15% Test).
+  - Preprocessing: RobustScaler fitted strictly on X_train only (80% Train, 20% Holdout Unseen Test).
   - Scalable Production Meta-Ensemble: Weighted Soft-Voting (Random Forest 250 + Extra Trees 250 + HistGradientBoosting 250 + Deep MLP 256x128x64).
   - Reports: full_database_training_report.json, full_database_training_report.txt, model_audit.json.
 """
@@ -361,17 +361,27 @@ def stream_database_training_matrix(
     return df, crop_encoder, label_encoder
 
 
+def build_enterprise_corpus(num_samples: int = 10000) -> pd.DataFrame:
+    """
+    Builds or returns a representative enterprise sample for validation checks.
+    """
+    df, crop_enc, _ = stream_database_training_matrix(target_sample_size=num_samples)
+    if 'crop' not in df.columns:
+        df['crop'] = crop_enc.inverse_transform(df['crop_encoded'])
+    return df
+
+
 def train_full_database_pipeline_v4(
     db_path: str = "data/agriculture.db",
     output_dir: str = "fertilizer_app/engine"
 ) -> Dict[str, Any]:
     """
-    Executes the full database ML training pipeline V4.
+    Executes the full database ML training pipeline V4 with 80% Training / 20% Unseen Testing split.
     """
     start_time = time.time()
     os.makedirs(output_dir, exist_ok=True)
     print("=" * 85)
-    print("   FULL DATABASE FERTILIZER ML TRAINING PIPELINE V4 (10.85M RECORDS)")
+    print("   FULL DATABASE FERTILIZER ML TRAINING PIPELINE V4 (80/20 SPLIT)")
     print("=" * 85)
 
     # 1. Database Schema & Resource Audit
@@ -392,24 +402,18 @@ def train_full_database_pipeline_v4(
     X = df[FEATURE_COLUMNS]
     y = df['label_encoded']
 
-    # 3. Strict 70% Train / 15% Validation / 15% Test Split (No Data Leakage)
-    print("\n[3/6] Splitting data into 70% Train (70,000) / 15% Val (15,000) / 15% Final Test (15,000)...")
-    X_train_raw, X_temp_raw, y_train, y_temp = train_test_split(
-        X, y, test_size=0.30, random_state=42, stratify=y
+    # 3. Strict 80% Train / 20% Unseen Test Split (Zero Data Leakage)
+    print("\n[3/6] Splitting data into 80% Train (80,000) / 20% Final Unseen Test (20,000)...")
+    X_train_raw, X_test_raw, y_train, y_test = train_test_split(
+        X, y, test_size=0.20, random_state=42, stratify=y
     )
 
-    X_val_raw, X_test_raw, y_val, y_test = train_test_split(
-        X_temp_raw, y_temp, test_size=0.50, random_state=42, stratify=y_temp
-    )
-
-    print(f"      * Training Samples (70%)       : {X_train_raw.shape[0]:,}")
-    print(f"      * Validation Samples (15%)     : {X_val_raw.shape[0]:,}")
-    print(f"      * Final Holdout Test Set (15%) : {X_test_raw.shape[0]:,}")
+    print(f"      * Training Samples (80%)       : {X_train_raw.shape[0]:,}")
+    print(f"      * Final Holdout Test Set (20%) : {X_test_raw.shape[0]:,}")
 
     scaler = RobustScaler()
     X_train = scaler.fit_transform(X_train_raw)  # fit strictly on X_train only
-    X_val = scaler.transform(X_val_raw)
-    X_test = scaler.transform(X_test_raw)
+    X_test = scaler.transform(X_test_raw)        # evaluate strictly on unseen test set
 
     # 4. Baseline Comparisons
     print("\n[4/6] Training Baseline Models & Scalable Production Meta-Ensemble...")
@@ -457,8 +461,8 @@ def train_full_database_pipeline_v4(
 
     ensemble.fit(X_train, y_train)
 
-    # 5. Rigorous Evaluation on 15,000 Holdout Test Samples
-    print("\n[5/6] Evaluating on 15,000 Final Holdout Test Samples...")
+    # 5. Rigorous Evaluation on 20,000 Unseen Holdout Test Samples
+    print(f"\n[5/6] Evaluating on {X_test_raw.shape[0]:,} Unseen Holdout Test Samples...")
     y_test_pred = ensemble.predict(X_test)
     y_test_prob = ensemble.predict_proba(X_test)
 
@@ -488,6 +492,34 @@ def train_full_database_pipeline_v4(
     clf_report = classification_report(y_test, y_test_pred, target_names=label_encoder.classes_, digits=4)
     f3_per_class = fbeta_score(y_test, y_test_pred, beta=3.0, average=None)
 
+    # Save Confusion Matrix figure
+    try:
+        fig, ax = plt.subplots(figsize=(10, 8))
+        im = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+        ax.figure.colorbar(im, ax=ax)
+        ax.set(
+            xticks=np.arange(cm.shape[1]),
+            yticks=np.arange(cm.shape[0]),
+            xticklabels=label_encoder.classes_,
+            yticklabels=label_encoder.classes_,
+            title=f"Holdout Confusion Matrix (20% Unseen Test Set - {len(y_test):,} Samples)",
+            ylabel="Actual True Label",
+            xlabel="Predicted Label"
+        )
+        plt.setp(ax.get_xticklabels(), rotation=45, ha="right", rotation_mode="anchor")
+        fmt = 'd'
+        thresh = cm.max() / 2.0
+        for i in range(cm.shape[0]):
+            for j in range(cm.shape[1]):
+                ax.text(j, i, format(cm[i, j], fmt),
+                        ha="center", va="center",
+                        color="white" if cm[i, j] > thresh else "black")
+        fig.tight_layout()
+        fig.savefig(os.path.join(output_dir, "confusion_matrix.png"), dpi=150)
+        plt.close(fig)
+    except Exception as img_err:
+        print(f"      [!] Could not save confusion matrix figure: {img_err}")
+
     # Feature importances
     rf_fitted = ensemble.named_estimators_['rf']
     feature_importances = dict(zip(FEATURE_COLUMNS, rf_fitted.feature_importances_))
@@ -507,7 +539,7 @@ def train_full_database_pipeline_v4(
 
     # Build Final JSON Report
     final_report_json = {
-        "pipeline_version": "V4 Full Database Scalable Pipeline",
+        "pipeline_version": "V4 Full Database Scalable Pipeline (80/20 Ratio)",
         "database": {
             "source": "data/agriculture.db",
             "total_records": db_audit['total_records'],
@@ -519,9 +551,8 @@ def train_full_database_pipeline_v4(
         },
         "dataset_split": {
             "training_samples": int(X_train_raw.shape[0]),
-            "validation_samples": int(X_val_raw.shape[0]),
             "final_test_samples": int(X_test_raw.shape[0]),
-            "split_strategy": "70% Train / 15% Validation / 15% Test Stratified"
+            "split_strategy": "80% Train / 20% Test Stratified"
         },
         "model": {
             "architecture": "Weighted Soft-Voting Meta-Ensemble (250 RF + 250 ET + 250 HGB + Deep MLP)",
@@ -559,7 +590,7 @@ def train_full_database_pipeline_v4(
 
     # Save Master Text Report
     report_text = f"""================================================================================
- FULL DATABASE FERTILIZER ML TRAINING REPORT (V4)
+ FULL DATABASE FERTILIZER ML TRAINING REPORT (V4 - 80/20 SPLIT)
 ================================================================================
 Generated: {time.strftime('%Y-%m-%d %H:%M:%S')}
 Training Time: {elapsed:.2f} seconds | Peak RAM: {peak_ram:.2f} MB
@@ -573,9 +604,8 @@ Geographic Coverage          : {db_audit['states_count']} States, {db_audit['dis
 
 Dataset Split
 --------------------------------------------------------------------------------
-Training Samples (70%)       : {X_train_raw.shape[0]:,}
-Validation Samples (15%)     : {X_val_raw.shape[0]:,}
-Final Test Samples (15%)     : {X_test_raw.shape[0]:,} (Strictly Holdout)
+Training Samples (80%)       : {X_train_raw.shape[0]:,}
+Final Test Samples (20%)     : {X_test_raw.shape[0]:,} (Strictly Holdout Unseen)
 
 Target
 --------------------------------------------------------------------------------
@@ -595,7 +625,7 @@ Training Time                : {elapsed:.2f} seconds
 Peak RAM                     : {peak_ram:.2f} MB
 Model Size                   : ~404 MB (Serialized joblib ensemble)
 
-Validation (15,000 Holdout Test Samples)
+Validation (20,000 Holdout Test Samples)
 --------------------------------------------------------------------------------
 Holdout Top-1 Accuracy       : {test_acc*100:.3f}% ({sum(y_test_pred == y_test):,} / {len(y_test):,} correct)
 Macro F1-Score               : {test_f1_m:.5f} ({test_f1_m*100:.3f}%)
@@ -634,7 +664,7 @@ Status                       : CALIBRATED (Log Loss = {test_log_loss:.4f})
 ================================================================================
 PARTIALLY VALIDATED
   * Real Soil Database Training       : PASSED (Trained on full 10.85M database distributions)
-  * Technical & Leakage Validation    : PASSED (Zero data leakage, 70/15/15 split)
+  * Technical & Leakage Validation    : PASSED (Zero data leakage, 80/20 split)
   * Real-World Yield Trial Validation : NOT YET VALIDATED (Pending field trial logs)
 
 ================================================================================

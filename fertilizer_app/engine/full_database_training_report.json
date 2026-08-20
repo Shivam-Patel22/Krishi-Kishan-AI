@@ -1,5 +1,5 @@
 {
-  "pipeline_version": "V4 Full Database Scalable Pipeline",
+  "pipeline_version": "V4 Full Database Scalable Pipeline (80/20 Ratio)",
   "database": {
     "source": "data/agriculture.db",
     "total_records": 10853209,
@@ -10,10 +10,9 @@
     "target_classes_count": 8
   },
   "dataset_split": {
-    "training_samples": 69741,
-    "validation_samples": 14944,
-    "final_test_samples": 14945,
-    "split_strategy": "70% Train / 15% Validation / 15% Test Stratified"
+    "training_samples": 79704,
+    "final_test_samples": 19926,
+    "split_strategy": "80% Train / 20% Test Stratified"
   },
   "model": {
     "architecture": "Weighted Soft-Voting Meta-Ensemble (250 RF + 250 ET + 250 HGB + Deep MLP)",
@@ -23,21 +22,21 @@
       4.0,
       1.5
     ],
-    "training_time_seconds": 292.91,
-    "peak_ram_mb": 1001.92
+    "training_time_seconds": 718.51,
+    "peak_ram_mb": 887.21
   },
   "evaluation_metrics": {
-    "top1_accuracy_pct": 99.746,
-    "macro_f1": 0.99613,
-    "weighted_f1": 0.99746,
-    "macro_f3": 0.99604,
-    "weighted_f3": 0.99746,
+    "top1_accuracy_pct": 99.784,
+    "macro_f1": 0.99636,
+    "weighted_f1": 0.99784,
+    "macro_f3": 0.99649,
+    "weighted_f3": 0.99784,
     "top2_accuracy_pct": 100.0,
     "top3_accuracy_pct": 100.0,
-    "log_loss": 0.06801,
-    "macro_brier_score": 0.00193,
-    "baseline_dummy_accuracy_pct": 30.974,
-    "baseline_simple_rf_accuracy_pct": 99.224
+    "log_loss": 0.06684,
+    "macro_brier_score": 0.00182,
+    "baseline_dummy_accuracy_pct": 30.975,
+    "baseline_simple_rf_accuracy_pct": 99.473
   },
   "class_distribution": [
     {
@@ -84,83 +83,83 @@
   "feature_importances": [
     [
       "crop_n_demand",
-      0.12884303494262025
+      0.13029208142539805
     ],
     [
       "soil_ph",
-      0.10431900143389276
-    ],
-    [
-      "potassium",
-      0.09732350291622462
+      0.10689046017115282
     ],
     [
       "phosphorus",
-      0.09199166587987125
+      0.09769029140662859
+    ],
+    [
+      "potassium",
+      0.09323484295121844
     ],
     [
       "crop_p_demand",
-      0.051205720146427124
-    ],
-    [
-      "sulphur",
-      0.04557441233281979
+      0.048995248156088946
     ],
     [
       "net_n_deficit",
-      0.045429092927841905
+      0.047692586220150816
     ],
     [
-      "liebig_s_quotient",
-      0.04377988869993251
-    ],
-    [
-      "net_p_deficit",
-      0.043519207044020645
+      "sulphur",
+      0.0468792609064542
     ],
     [
       "net_k_deficit",
-      0.041353117289487665
+      0.042826261223687115
+    ],
+    [
+      "net_p_deficit",
+      0.04227853648740751
+    ],
+    [
+      "liebig_s_quotient",
+      0.04191321793488117
     ],
     [
       "crop_k_demand",
-      0.04080139649881247
+      0.039972746986687874
     ],
     [
       "crop_encoded",
-      0.039300630587494056
+      0.038418850621550725
     ],
     [
       "pk_ratio",
-      0.03699977394207327
+      0.03789944702636092
     ],
     [
       "acid_p_fixation_risk",
-      0.03614930425363904
+      0.03508255512766426
     ],
     [
       "nk_p_ratio",
-      0.028693701061678338
+      0.024972622034896405
     ],
     [
       "total_nutrient_sum",
-      0.02036074348777258
-    ],
-    [
-      "ph_deficit",
-      0.01746067962597545
+      0.021213430734561747
     ],
     [
       "np_k_ratio",
-      0.015216070447409559
+      0.016865594225475664
+    ],
+    [
+      "ph_deficit",
+      0.016795408661528406
     ],
     [
       "alkaline_volatilization_risk",
-      0.013573719169251606
+      0.013157961719167744
     ],
     [
       "nk_ratio",
-      0.013423981863584879
+      0.01288656928646098
     ]
   ],
   "final_status": "PARTIALLY VALIDATED (Trained on 10.85M National Soil Database; Target Labels are Domain-Rule-Derived)",

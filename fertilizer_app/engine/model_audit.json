@@ -1,7 +1,7 @@
 {
   "validation_level": "V3 Enterprise Real-World Validation Framework",
-  "timestamp": "2026-08-16 18:35:33",
-  "execution_seconds": 15.64,
+  "timestamp": "2026-08-20 12:45:41",
+  "execution_seconds": 78.31,
   "synthetic_rule_validation": {
     "5fold_cv_accuracy_pct": 99.969,
     "synthetic_holdout_accuracy_pct": 99.887,
@@ -21,16 +21,16 @@
     "feature_distribution_comparisons": {
       "nitrogen": {
         "synthetic": {
-          "min": 30.006744828193796,
-          "max": 749.910968553559,
-          "mean": 260.41178108587695,
-          "median": 220.23456856248288,
-          "std": 170.14707737212944,
-          "p5": 50.07289378188057,
-          "p25": 126.18742404276249,
-          "p50": 220.23456856248288,
-          "p75": 376.8163985672474,
-          "p95": 588.2884716679388
+          "min": 30.043603451734217,
+          "max": 749.9947079999166,
+          "mean": 244.15256657109845,
+          "median": 208.34491502612582,
+          "std": 161.2969543555287,
+          "p5": 47.7287654753642,
+          "p25": 119.02310027684688,
+          "p50": 208.34491502612582,
+          "p75": 339.5792908482948,
+          "p95": 543.0942868661962
         },
         "real": {
           "min": 121.76232911760381,
@@ -44,23 +44,23 @@
           "p75": 536.6928627306773,
           "p95": 699.078848944167
         },
-        "wasserstein_distance": 82.1901,
-        "ks_statistic": 0.4021,
+        "wasserstein_distance": 89.7607,
+        "ks_statistic": 0.3821,
         "ks_pvalue": 0.0,
         "distribution_alignment": "Moderate Shift"
       },
       "phosphorus": {
         "synthetic": {
-          "min": 2.504947679659388,
-          "max": 64.99591675711834,
-          "mean": 28.278262187092942,
-          "median": 22.976815192082764,
-          "std": 17.60539489985398,
-          "p5": 5.145897976318247,
-          "p25": 14.058646307972644,
-          "p50": 22.976815192082764,
-          "p75": 42.77684417919102,
-          "p95": 60.491596038777566
+          "min": 2.5010258579019364,
+          "max": 64.99367221674176,
+          "mean": 27.32547683933915,
+          "median": 22.11370653562362,
+          "std": 17.507062041005447,
+          "p5": 4.931344255739265,
+          "p25": 13.381905074810437,
+          "p50": 22.11370653562362,
+          "p75": 41.02167765101404,
+          "p95": 60.25835360403472
         },
         "real": {
           "min": 9.55264915419711,
@@ -74,23 +74,23 @@
           "p75": 27.060609037572206,
           "p95": 27.060609037572206
         },
-        "wasserstein_distance": 10.1034,
-        "ks_statistic": 0.4272,
+        "wasserstein_distance": 9.6738,
+        "ks_statistic": 0.4007,
         "ks_pvalue": 0.0,
         "distribution_alignment": "Moderate Shift"
       },
       "potassium": {
         "synthetic": {
-          "min": 35.03092884062741,
-          "max": 519.9933153683157,
-          "mean": 246.80160463588203,
-          "median": 226.4615450332961,
-          "std": 127.52339201138011,
-          "p5": 63.65401384173967,
-          "p25": 147.19985608108925,
-          "p50": 226.4615450332961,
-          "p75": 338.5592825286625,
-          "p95": 484.32188275587265
+          "min": 35.04814086784545,
+          "max": 519.9550275911979,
+          "mean": 241.08135684563175,
+          "median": 220.8014799509968,
+          "std": 127.31802056711538,
+          "p5": 60.90984346177407,
+          "p25": 142.38147461602603,
+          "p50": 220.8014799509968,
+          "p75": 329.27485130448537,
+          "p95": 482.9866134220285
         },
         "real": {
           "min": 42.83036618269753,
@@ -104,23 +104,23 @@
           "p75": 369.65211734682987,
           "p95": 369.65211734682987
         },
-        "wasserstein_distance": 49.2714,
-        "ks_statistic": 0.3306,
+        "wasserstein_distance": 49.7778,
+        "ks_statistic": 0.3486,
         "ks_pvalue": 0.0,
         "distribution_alignment": "Moderate Shift"
       },
       "soil_ph": {
         "synthetic": {
-          "min": 4.5000835555877,
-          "max": 9.49965258890854,
-          "mean": 6.73905959609786,
-          "median": 6.80054793353393,
-          "std": 0.7929102089645982,
-          "p5": 5.102718999126064,
-          "p25": 6.274997924535956,
-          "p50": 6.80054793353393,
-          "p75": 7.317740506358339,
-          "p95": 7.742140461873649
+          "min": 4.5,
+          "max": 9.2,
+          "mean": 6.798017611677601,
+          "median": 6.797639533513777,
+          "std": 0.6962310062143403,
+          "p5": 5.659006313848036,
+          "p25": 6.323517284808487,
+          "p50": 6.797639533513777,
+          "p75": 7.26639742915307,
+          "p95": 7.952887303707272
         },
         "real": {
           "min": 5.439126293746344,
@@ -134,23 +134,23 @@
           "p75": 6.324484645124792,
           "p95": 6.324484645124792
         },
-        "wasserstein_distance": 0.6024,
-        "ks_statistic": 0.7065,
+        "wasserstein_distance": 0.5982,
+        "ks_statistic": 0.7309,
         "ks_pvalue": 0.0,
         "distribution_alignment": "Moderate Shift"
       },
       "organic_carbon": {
         "synthetic": {
-          "min": 0.12008640597871237,
-          "max": 1.449951029763775,
-          "mean": 0.5797595572460937,
-          "median": 0.5148396013200343,
-          "std": 0.34469164671577457,
-          "p5": 0.15628292551353679,
-          "p25": 0.3085063865905191,
-          "p50": 0.5148396013200343,
-          "p75": 0.7297530240898128,
-          "p95": 1.3061029834383704
+          "min": 0.15002258577525857,
+          "max": 1.199969547065893,
+          "mean": 0.6772918325114035,
+          "median": 0.6798533291854285,
+          "std": 0.30257811607918467,
+          "p5": 0.2033323891827142,
+          "p25": 0.4169661018148716,
+          "p50": 0.6798533291854285,
+          "p75": 0.9377588232347875,
+          "p95": 1.1479314688101936
         },
         "real": {
           "min": 0.20834249730669918,
@@ -164,23 +164,23 @@
           "p75": 0.6058619585942723,
           "p95": 0.8567853115132638
         },
-        "wasserstein_distance": 0.1335,
-        "ks_statistic": 0.3651,
+        "wasserstein_distance": 0.2059,
+        "ks_statistic": 0.4259,
         "ks_pvalue": 0.0,
         "distribution_alignment": "Moderate Shift"
       },
       "electrical_conductivity": {
         "synthetic": {
-          "min": 0.08002553447209265,
-          "max": 3.3991522083814276,
-          "mean": 0.5920731838189868,
-          "median": 0.5331909635742627,
-          "std": 0.4579667406018187,
-          "p5": 0.12587300490187958,
-          "p25": 0.30595416055736324,
-          "p50": 0.5331909635742627,
-          "p75": 0.7627861802828819,
-          "p95": 0.9461026246749439
+          "min": 0.10001495165529556,
+          "max": 1.7999797748204787,
+          "mean": 0.9490681658673702,
+          "median": 0.9481869648249917,
+          "std": 0.4916030506030962,
+          "p5": 0.18281404937701423,
+          "p25": 0.5243243876268489,
+          "p50": 0.9481869648249917,
+          "p75": 1.3751217475246338,
+          "p95": 1.7154247934505185
         },
         "real": {
           "min": 0.8416124197926015,
@@ -194,22 +194,22 @@
           "p75": 0.8416124197926015,
           "p95": 0.8416124197926015
         },
-        "wasserstein_distance": 0.3578,
-        "ks_statistic": 0.8367,
+        "wasserstein_distance": 0.4209,
+        "ks_statistic": 0.5146,
         "ks_pvalue": 0.0,
         "distribution_alignment": "Moderate Shift"
       }
     },
     "covariate_shift": {
-      "domain_discrimination_accuracy_pct": 85.41,
-      "std_pct": 0.55,
-      "interpretation": "High Covariate Shift (>85%): Domain discriminator easily distinguishes synthetic from real records."
+      "domain_discrimination_accuracy_pct": 74.99,
+      "std_pct": 0.63,
+      "interpretation": "Moderate Covariate Shift (65% - 85%): Distributions share common ranges with some density variation."
     },
     "out_of_distribution_analysis": {
-      "total_evaluated_samples": 10000,
-      "in_distribution_count": 9500,
+      "total_evaluated_samples": 9594,
+      "in_distribution_count": 9114,
       "in_distribution_pct": 95.0,
-      "out_of_distribution_count": 500,
+      "out_of_distribution_count": 480,
       "out_of_distribution_pct": 5.0,
       "abstention_recommendation": "Flag warning for 5.0% OOD inputs requiring manual agronomist confirmation."
     }
@@ -261,45 +261,45 @@
   },
   "confidence_abstention": {
     "status": "CALIBRATED & EVALUATED",
-    "mean_model_confidence_pct": 96.48,
-    "median_model_confidence_pct": 97.84,
+    "mean_model_confidence_pct": 94.36,
+    "median_model_confidence_pct": 96.39,
     "validated_abstention_threshold": 0.7,
     "threshold_breakdown": [
       {
         "threshold": 0.5,
-        "retained_samples_pct": 100.0,
-        "accuracy_when_retained_pct": 99.975,
-        "abstained_pct": 0.0
+        "retained_samples_pct": 99.99,
+        "accuracy_when_retained_pct": 99.878,
+        "abstained_pct": 0.01
       },
       {
         "threshold": 0.6,
-        "retained_samples_pct": 99.96,
-        "accuracy_when_retained_pct": 99.987,
-        "abstained_pct": 0.04
+        "retained_samples_pct": 99.81,
+        "accuracy_when_retained_pct": 99.959,
+        "abstained_pct": 0.19
       },
       {
         "threshold": 0.7,
-        "retained_samples_pct": 99.9,
+        "retained_samples_pct": 99.08,
         "accuracy_when_retained_pct": 100.0,
-        "abstained_pct": 0.1
+        "abstained_pct": 0.92
       },
       {
         "threshold": 0.8,
-        "retained_samples_pct": 99.26,
+        "retained_samples_pct": 96.49,
         "accuracy_when_retained_pct": 100.0,
-        "abstained_pct": 0.74
+        "abstained_pct": 3.51
       },
       {
         "threshold": 0.9,
-        "retained_samples_pct": 93.67,
+        "retained_samples_pct": 83.56,
         "accuracy_when_retained_pct": 100.0,
-        "abstained_pct": 6.33
+        "abstained_pct": 16.44
       },
       {
         "threshold": 0.95,
-        "retained_samples_pct": 77.85,
+        "retained_samples_pct": 61.87,
         "accuracy_when_retained_pct": 100.0,
-        "abstained_pct": 22.15
+        "abstained_pct": 38.13
       }
     ],
     "abstention_policy": "Predictions with confidence < 0.70 are flagged with an advisory warning for manual agronomist review."
