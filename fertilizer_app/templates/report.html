@@ -140,7 +140,7 @@
             <!-- Main 2-Column Responsive Dashboard Layout -->
             <div class="report-main-grid">
                 
-                <!-- Left Column -->
+                <!-- Left Column: Diagnostic, Amendment & Meteorological Prescriptions -->
                 <div class="report-col">
                     <!-- 1. Soil Nutrient Status Matrix -->
                     <div class="card report-section-card">
@@ -224,23 +224,8 @@
                             <p id="repMicronutrients" class="amend-body">Adequate</p>
                         </div>
                     </div>
-                </div>
 
-                <!-- Right Column -->
-                <div class="report-col">
-                    <!-- 3. Agronomic Split Application Schedule -->
-                    <div class="card report-section-card">
-                        <div class="card-header">
-                            <h2 class="card-title"><span>📅</span> <span data-i18n="report.splitTitle">Agronomic Split Application Schedule</span></h2>
-                            <span class="badge badge-primary" data-i18n="report.splitBadge">3-Stage Plan</span>
-                        </div>
-                        <p class="section-lead-desc" data-i18n="report.splitDesc">
-                            Multi-stage split dosing enhances Nitrogen Use Efficiency (NUE) by up to 35% and minimizes environmental leaching.
-                        </p>
-                        <div class="split-timeline" id="repSplitTimeline"></div>
-                    </div>
-
-                    <!-- 4. Weather & Spray Safety Radar -->
+                    <!-- 3. Weather & Spray Safety Radar -->
                     <div class="card report-section-card">
                         <div class="card-header">
                             <h2 class="card-title"><span>🌤️</span> <span data-i18n="report.radarTitle">Agro-Meteorology & Spray Safety Radar</span></h2>
@@ -270,10 +255,25 @@
                     </div>
                 </div>
 
+                <!-- Right Column: Multi-Stage Split Application Schedule -->
+                <div class="report-col">
+                    <!-- 4. Agronomic Split Application Schedule -->
+                    <div class="card report-section-card">
+                        <div class="card-header">
+                            <h2 class="card-title"><span>📅</span> <span data-i18n="report.splitTitle">Agronomic Split Application Schedule</span></h2>
+                            <span class="badge badge-primary" data-i18n="report.splitBadge">3-Stage Plan</span>
+                        </div>
+                        <p class="section-lead-desc" data-i18n="report.splitDesc">
+                            Multi-stage split dosing enhances Nitrogen Use Efficiency (NUE) by up to 35% and minimizes environmental leaching.
+                        </p>
+                        <div class="split-timeline" id="repSplitTimeline"></div>
+                    </div>
+                </div>
+
             </div>
 
             <!-- AI Multi-Model Ensemble & Decision Factors -->
-            <div class="card report-section-card" style="margin-bottom: 1.75rem;">
+            <div class="card report-section-card">
                 <div class="card-header">
                     <div class="header-with-badge">
                         <h2 class="card-title"><span>🧠</span> <span data-i18n="report.aiTitle">AI Multi-Model Ensemble Confidence & Alternative Formulations</span></h2>
@@ -292,7 +292,7 @@
             </div>
 
             <!-- Explainable AI Scientific Rationale -->
-            <div class="card report-section-card" style="margin-bottom: 2.25rem;">
+            <div class="card report-section-card">
                 <div class="card-header">
                     <h2 class="card-title"><span>💡</span> <span data-i18n="report.rationaleTitle">Explainable AI Scientific Rationale</span></h2>
                     <span class="badge badge-accent" data-i18n="report.icarBadge">ICAR Stoichiometry</span>
