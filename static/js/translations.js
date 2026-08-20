@@ -184,9 +184,9 @@ const translations = {
         "footer.text": "Smart India Hackathon (SIH 2026) • Problem Statement PS-SW-002 • AI-Powered Precision Fertilizer Platform",
 
         // Fertilizer Names
-        "fert.Urea": "Urea (46% N)",
-        "fert.DAP": "DAP (18-46-0)",
-        "fert.MOP": "MOP (0-0-60)",
+        "fert.Urea": "Urea",
+        "fert.DAP": "DAP",
+        "fert.MOP": "MOP",
         "fert.NPK 10-26-26": "NPK (10-26-26)",
         "fert.NPK 12-32-16": "NPK (12-32-16)",
         "fert.NPK 20-20-0-13": "NPK (20-20-0-13)",
@@ -412,9 +412,9 @@ const translations = {
         "footer.text": "स्मार्ट इंडिया हैकाथॉन (SIH 2026) • समस्या विवरण PS-SW-002 • AI-संचालित सटीक उर्वरक मंच",
 
         // Fertilizer Names
-        "fert.Urea": "यूरिया (46% N)",
-        "fert.DAP": "डीएपी / DAP (18-46-0)",
-        "fert.MOP": "एमओपी / MOP (0-0-60)",
+        "fert.Urea": "यूरिया / Urea",
+        "fert.DAP": "डीएपी / DAP",
+        "fert.MOP": "एमओपी / MOP",
         "fert.NPK 10-26-26": "एनपीके (10-26-26)",
         "fert.NPK 12-32-16": "एनपीके (12-32-16)",
         "fert.NPK 20-20-0-13": "एनपीके (20-20-0-13)",
@@ -640,9 +640,9 @@ const translations = {
         "footer.text": "સ્માર્ટ ઇન્ડિયા હેકાથોન (SIH 2026) • પ્રોબ્લેમ સ્ટેટમેન્ટ PS-SW-002 • AI-આધારિત ચોક્કસ ખાતર પ્લેટફોર્મ",
 
         // Fertilizer Names
-        "fert.Urea": "યુરિયા (46% N)",
-        "fert.DAP": "ડીએપી / DAP (18-46-0)",
-        "fert.MOP": "એમઓપી / MOP (0-0-60)",
+        "fert.Urea": "યુરિયા / Urea",
+        "fert.DAP": "ડીએપી / DAP",
+        "fert.MOP": "એમઓપી / MOP",
         "fert.NPK 10-26-26": "એનપીકે (10-26-26)",
         "fert.NPK 12-32-16": "એનપીકે (12-32-16)",
         "fert.NPK 20-20-0-13": "એનપીકે (20-20-0-13)",
