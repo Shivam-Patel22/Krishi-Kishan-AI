@@ -208,7 +208,7 @@ function renderReport(data) {
     if (document.getElementById('repKBar')) document.getElementById('repKBar').style.width = `${Math.min(100, Math.max(15, (kVal / 280) * 100))}%`;
 
     // Secondary nutrients
-    const phRating = phVal < 6.0 ? (window.i18n ? window.i18n.t('report.statusAcidic') : 'Acidic') : (phVal > 7.8 ? (window.i18n ? window.i18n.t('report.statusAlkaline') : 'Alkaline') : (window.i18n ? window.i18n.t('report.statusNeutral') : 'Neutral/Optimum'));
+    const phRating = phVal < 6.0 ? (window.i18n ? window.i18n.t('report.statusAcidic') : 'Acidic') : (phVal > 7.8 ? (window.i18n ? window.i18n.t('report.statusAlkaline') : 'Alkaline') : (window.i18n ? window.i18n.t('report.statusNeutral') : 'Neutral'));
     const ocRating = ocVal < 0.5 ? (window.i18n ? window.i18n.t('report.statusLow') : 'Low') : (window.i18n ? window.i18n.t('report.statusAdequate') : 'Adequate');
     const ecRating = ecVal <= 1.0 ? (window.i18n ? window.i18n.t('report.statusSaltFree') : 'Salt-Free') : (window.i18n ? window.i18n.t('report.statusSaline') : 'Saline');
 
