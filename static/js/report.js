@@ -215,10 +215,6 @@ function renderReport(data) {
     if (document.getElementById('repPhVal')) document.getElementById('repPhVal').textContent = `${phVal.toFixed(1)} (${phRating})`;
     if (document.getElementById('repOcVal')) document.getElementById('repOcVal').textContent = `${ocVal.toFixed(2)}% (${ocRating})`;
     if (document.getElementById('repEcVal')) document.getElementById('repEcVal').textContent = `${ecVal.toFixed(2)} dS/m (${ecRating})`;
-    if (document.getElementById('repZnVal')) document.getElementById('repZnVal').textContent = `${parseFloat(soil.zinc || 0.80).toFixed(2)} ppm`;
-    if (document.getElementById('repBVal')) document.getElementById('repBVal').textContent = `${parseFloat(soil.boron || 0.50).toFixed(2)} ppm`;
-    if (document.getElementById('repSVal')) document.getElementById('repSVal').textContent = `${parseFloat(soil.sulphur || 12.0).toFixed(1)} ppm`;
-    if (document.getElementById('repFeVal')) document.getElementById('repFeVal').textContent = `${parseFloat(soil.iron || 6.0).toFixed(1)} ppm`;
 
     // 5. Agronomic Split Application Schedule (Horizontal Carousel Slider)
     renderSplitScheduleCarousel(splits);
