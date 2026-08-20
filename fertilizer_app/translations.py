@@ -48,8 +48,13 @@ FERT_TRANSLATIONS = {
     'Urea': {'hi': 'यूरिया / Urea', 'gu': 'યુરિયા / Urea'},
     'DAP': {'hi': 'डीएपी / DAP', 'gu': 'ડીએપી / DAP'},
     'MOP': {'hi': 'एमओपी / MOP', 'gu': 'એમઓપી / MOP'},
+    'NPK 19:19:19 Complex': {'hi': 'एनपीके (19-19-19) कॉम्प्लेक्स', 'gu': 'એનપીકે (19-19-19) કોમ્પ્લેક્સ'},
+    'NPK 19:19:19': {'hi': 'एनपीके (19-19-19)', 'gu': 'એનપીકે (19-19-19)'},
+    'NPK 10:26:26': {'hi': 'एनपीके (10-26-26)', 'gu': 'એનપીકે (10-26-26)'},
     'NPK 10-26-26': {'hi': 'एनपीके (10-26-26)', 'gu': 'એનપીકે (10-26-26)'},
+    'NPK 12:32:16': {'hi': 'एनपीके (12-32-16)', 'gu': 'એનપીકે (12-32-16)'},
     'NPK 12-32-16': {'hi': 'एनपीके (12-32-16)', 'gu': 'એનપીકે (12-32-16)'},
+    'NPK 20:20:0:13': {'hi': 'एनपीके (20-20-0-13)', 'gu': 'એનપીકે (20-20-0-13)'},
     'NPK 20-20-0-13': {'hi': 'एनपीके (20-20-0-13)', 'gu': 'એનપીકે (20-20-0-13)'},
     'SSP': {'hi': 'सिंगल सुपर फॉस्फेट (SSP)', 'gu': 'સિંગલ સુપર ફોસ્ફેટ (SSP)'},
     'Zinc Sulphate': {'hi': 'जिंक सल्फेट (21% Zn)', 'gu': 'ઝિંક સલ્ફેટ (21% Zn)'},
@@ -1921,9 +1926,31 @@ def localize_crop(name: str, lang: str = 'en') -> str:
 def localize_fertilizer(name: str, lang: str = 'en') -> str:
     if not name or lang == 'en':
         return name
-    for k, v in FERT_TRANSLATIONS.items():
-        if k in name:
-            return v.get(lang, name)
+
+    # Direct match
+    if name in FERT_TRANSLATIONS:
+        return FERT_TRANSLATIONS[name].get(lang, name)
+
+    # Multi-fertilizer combined formulation with '+'
+    if '+' in name:
+        parts = []
+        for part in name.split('+'):
+            part_trimmed = part.strip()
+            translated_part = part_trimmed
+            for k, v in FERT_TRANSLATIONS.items():
+                if part_trimmed == k or part_trimmed.startswith(k + ' ') or part_trimmed.startswith(k + '('):
+                    trans = v.get(lang, k)
+                    translated_part = part_trimmed.replace(k, trans, 1)
+                    break
+            parts.append(translated_part)
+        return ' + '.join(parts)
+
+    # Prefix match (longer keys checked first)
+    for k in sorted(FERT_TRANSLATIONS.keys(), key=lambda x: len(x), reverse=True):
+        if name == k or name.startswith(k + ' ') or name.startswith(k + '('):
+            trans = FERT_TRANSLATIONS[k].get(lang, k)
+            return name.replace(k, trans, 1)
+
     return name
 
 

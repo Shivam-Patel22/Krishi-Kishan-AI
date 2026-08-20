@@ -116,7 +116,7 @@ def download_recommendation_pdf_view(request, pk):
         if os.path.exists(edge_path):
             cmd = [
                 edge_path,
-                '--headless',
+                '--headless=new',
                 '--disable-gpu',
                 '--no-sandbox',
                 '--disable-dev-shm-usage',
