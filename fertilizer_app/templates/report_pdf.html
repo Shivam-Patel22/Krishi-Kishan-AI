@@ -365,14 +365,10 @@
                 <div class="progress-track"><div class="progress-fill fill-k" style="width: 65%;"></div></div>
             </div>
 
-            <div style="border-top: 1px solid #f1f5f9; padding-top: 6px; margin-top: 6px; font-size: 7pt; display: grid; grid-template-columns: 1fr 1fr; gap: 4px;">
+            <div style="border-top: 1px solid #f1f5f9; padding-top: 6px; margin-top: 6px; font-size: 7pt; display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;">
                 <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">{{ t.soil_ph_label }}</span> <strong>{{ rec.soil_test.soil_ph }}</strong></div>
                 <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">{{ t.organic_carbon_label }}</span> <strong>{{ rec.soil_test.organic_carbon_pct }}%</strong></div>
                 <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">{{ t.ec_label }}</span> <strong>{{ rec.soil_test.electrical_conductivity }} dS/m</strong></div>
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">{{ t.zinc_label }}</span> <strong>{{ rec.soil_test.zinc }} ppm</strong></div>
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">{{ t.boron_label }}</span> <strong>{{ rec.soil_test.boron }} ppm</strong></div>
-                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; display: block; font-size: 6pt; text-transform: uppercase; font-weight: 700;">{{ t.sulphur_label }}</span> <strong>{{ rec.soil_test.sulphur }} ppm</strong></div>
-                <div style="grid-column: span 2; display: flex; justify-content: space-between; align-items: center; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 6px;"><span style="color: #64748b; font-size: 6pt; text-transform: uppercase; font-weight: 700;">{{ t.iron_label }}</span> <strong>{{ rec.soil_test.iron|default:"6.0" }} ppm</strong></div>
             </div>
         </div>
 
