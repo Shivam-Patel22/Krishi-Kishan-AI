@@ -118,11 +118,13 @@ def download_recommendation_pdf_view(request, pk):
                 edge_path,
                 '--headless',
                 '--disable-gpu',
+                '--no-sandbox',
+                '--disable-dev-shm-usage',
                 '--no-pdf-header-footer',
                 f'--print-to-pdf={temp_pdf}',
                 html_url
             ]
-            subprocess.run(cmd, capture_output=True, timeout=10)
+            subprocess.run(cmd, capture_output=True, timeout=15)
 
             if os.path.exists(temp_pdf):
                 with open(temp_pdf, 'rb') as pdf_file:
@@ -130,7 +132,7 @@ def download_recommendation_pdf_view(request, pk):
 
                 crop_slug = rec.crop.name.replace(' ', '_').replace('/', '_')
                 response = HttpResponse(pdf_bytes, content_type='application/pdf')
-                response['Content-Disposition'] = f'attachment; filename="KrishiKisan_Fertilizer_Report_{crop_slug}_#{rec.id}.pdf"'
+                response['Content-Disposition'] = f'attachment; filename="KrishiKisan_Fertilizer_Report_{crop_slug}.pdf"'
                 return response
     finally:
         if os.path.exists(temp_html):
