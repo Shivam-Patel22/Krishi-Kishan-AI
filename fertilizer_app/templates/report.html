@@ -140,7 +140,7 @@
             <!-- Main 2-Column Responsive Dashboard Layout -->
             <div class="report-main-grid">
                 
-                <!-- Left Column: Diagnostic, Amendment & Meteorological Prescriptions -->
+                <!-- Left Column -->
                 <div class="report-col">
                     <!-- 1. Soil Nutrient Status Matrix -->
                     <div class="card report-section-card">
@@ -224,40 +224,11 @@
                             <p id="repMicronutrients" class="amend-body">Adequate</p>
                         </div>
                     </div>
-
-                    <!-- 3. Weather & Spray Safety Radar -->
-                    <div class="card report-section-card">
-                        <div class="card-header">
-                            <h2 class="card-title"><span>🌤️</span> <span data-i18n="report.radarTitle">Agro-Meteorology & Spray Safety Radar</span></h2>
-                        </div>
-                        <div class="weather-preview-box report-weather-box">
-                            <div class="weather-metric">
-                                <span class="w-label" data-i18n="weather.temp">Temperature</span>
-                                <span class="w-val" id="repWeatherTemp">28.5 °C</span>
-                            </div>
-                            <div class="weather-metric">
-                                <span class="w-label" data-i18n="weather.humidity">Humidity</span>
-                                <span class="w-val" id="repWeatherHumidity">62 %</span>
-                            </div>
-                            <div class="weather-metric">
-                                <span class="w-label" data-i18n="weather.rain">Rain Forecast</span>
-                                <span class="w-val" id="repWeatherRain">0.0 mm</span>
-                            </div>
-                            <div class="weather-metric">
-                                <span class="w-label" data-i18n="weather.wind">Wind Speed</span>
-                                <span class="w-val" id="repWeatherWind">8.5 km/h</span>
-                            </div>
-                        </div>
-                        <div class="weather-advisory-container">
-                            <span class="advisory-icon">📢</span>
-                            <p id="repWeatherAdvisory" class="weather-advisory-text"></p>
-                        </div>
-                    </div>
                 </div>
 
                 <!-- Right Column: Multi-Stage Split Application Schedule -->
                 <div class="report-col">
-                    <!-- 4. Agronomic Split Application Schedule -->
+                    <!-- 3. Agronomic Split Application Schedule -->
                     <div class="card report-section-card">
                         <div class="card-header">
                             <h2 class="card-title"><span>📅</span> <span data-i18n="report.splitTitle">Agronomic Split Application Schedule</span></h2>
@@ -270,6 +241,35 @@
                     </div>
                 </div>
 
+            </div>
+
+            <!-- Weather & Spray Safety Radar (Full Width) -->
+            <div class="card report-section-card">
+                <div class="card-header">
+                    <h2 class="card-title"><span>🌤️</span> <span data-i18n="report.radarTitle">Agro-Meteorology & Spray Safety Radar</span></h2>
+                </div>
+                <div class="weather-preview-box report-weather-box">
+                    <div class="weather-metric">
+                        <span class="w-label" data-i18n="weather.temp">Temperature</span>
+                        <span class="w-val" id="repWeatherTemp">28.5 °C</span>
+                    </div>
+                    <div class="weather-metric">
+                        <span class="w-label" data-i18n="weather.humidity">Humidity</span>
+                        <span class="w-val" id="repWeatherHumidity">62 %</span>
+                    </div>
+                    <div class="weather-metric">
+                        <span class="w-label" data-i18n="weather.rain">Rain Forecast</span>
+                        <span class="w-val" id="repWeatherRain">0.0 mm</span>
+                    </div>
+                    <div class="weather-metric">
+                        <span class="w-label" data-i18n="weather.wind">Wind Speed</span>
+                        <span class="w-val" id="repWeatherWind">8.5 km/h</span>
+                    </div>
+                </div>
+                <div class="weather-advisory-container">
+                    <span class="advisory-icon">📢</span>
+                    <p id="repWeatherAdvisory" class="weather-advisory-text"></p>
+                </div>
             </div>
 
             <!-- AI Multi-Model Ensemble & Decision Factors -->
